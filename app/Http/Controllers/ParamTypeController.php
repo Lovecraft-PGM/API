@@ -11,7 +11,8 @@ class ParamTypeController extends Controller
      */
     public function index()
     {
-        //
+         $paramtype = Paramtype::all() ; 
+        return response()->json($paramtype) ;
     }
 
     /**
@@ -27,15 +28,25 @@ class ParamTypeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+      
+        $paramtype=new Paramtype;   
+        $paramtype->name = $request -> name ;
+        $paramtype->range_min= $request ->range_min ;
+        $paramtype->range_max = $request -> range_max  ;
+        $paramtype-> save ();    // save
+        $data=[
+          'message' => 'Orderdetail created successfully',
+          'orderdetail' => $paramtype,
+        ];
+        return response()->json($data);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Paramtype $paramtype)
     {
-        //
+       return response()->json($paramtype);
     }
 
     /**
@@ -49,16 +60,30 @@ class ParamTypeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Paramtype $paramtype)
     {
-        //
+        $paramtype->name = $request -> name ;
+        $paramtype->range_min= $request ->range_min ;
+        $paramtype->range_max = $request -> range_max  ;
+        $paramtype-> save ();    // save
+        $data=[
+          'message' => 'Orderdetail update successfully',
+          'orderdetail' => $paramtype,
+        ];
+        return response()->json($data);
     }
+    
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Paramtype $paramtype)
     {
-        //
+          $paramtype->delete();
+        $data = [
+            'message' => 'orders deleted successfully',
+            'order' => $paramtype
+        ];
+        return response()->json($data);
     }
 }

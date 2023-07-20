@@ -11,7 +11,8 @@ class ParamController extends Controller
      */
     public function index()
     {
-        //
+        $param = Param::all() ; 
+        return response()->json($param) ;
     }
 
     /**
@@ -27,15 +28,26 @@ class ParamController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $param=new Param;   
+        $param->paramtype_id = $request -> paramtype_id ;
+        $param->name= $request ->name ;
+        $param->param_foreign = $request -> param_foreign  ;
+        $param->param_state= $request ->param_state;
+        $param-> save ();    // save
+        $data=[
+          'message' => 'Orderdetail created successfully',
+          'orderdetail' => $param,
+        ];
+        return response()->json($data);
+  
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Param $param)
     {
-        //
+        return response()->json($param);
     }
 
     /**
@@ -49,16 +61,31 @@ class ParamController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Param $param)
     {
-        //
+        $param=new Param;   
+        $param->paramtype_id = $request -> paramtype_id ;
+        $param->name= $request ->name ;
+        $param->param_foreign = $request -> param_foreign  ;
+        $param->param_state= $request ->param_state;
+        $param-> save ();    // save
+        $data=[
+          'message' => 'Orderdetail update successfully',
+          'orderdetail' => $param,
+        ];
+        return response()->json($data);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Param $param)
     {
-        //
+        $param->delete();
+        $data = [
+            'message' => 'orders deleted successfully',
+            'order' => $param
+        ];
+        return response()->json($data);
     }
 }

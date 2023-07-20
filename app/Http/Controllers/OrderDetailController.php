@@ -11,7 +11,8 @@ class OrderDetailController extends Controller
      */
     public function index()
     {
-        //
+        $orderdetail = Orderdetail::all() ; 
+        return response()->json($orderdetail) ;
     }
 
     /**
@@ -19,7 +20,7 @@ class OrderDetailController extends Controller
      */
     public function create()
     {
-        //
+       
     }
 
     /**
@@ -27,15 +28,27 @@ class OrderDetailController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $orderdetail=new Orderdetail;
+        $orderdetail->o_id= $request -> o_id ;
+        $orderdetail->product_id= $request ->product_id ;
+        $orderdetail->qty= $request -> qty  ;
+        $orderdetail->subtotal=$request ->subtotal;
+        $orderdetail->param_state= $request ->param_state;
+        $orderdetail-> save ();    // save
+        $data=[
+          'message' => 'Orderdetail created successfully',
+          'orderdetail' => $orderdetail,
+        ];
+        return response()->json($data);
+  
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Orderdetail $orderdetail)
     {
-        //
+        return response()->json($orderdetail);
     }
 
     /**
@@ -49,16 +62,33 @@ class OrderDetailController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Orderdetail $orderdetail)
     {
-        //
+        $orderdetail=new Orderdetail;
+        $orderdetail->o_id= $request -> o_id ;
+        $orderdetail->product_id= $request ->product_id ;
+        $orderdetail->qty= $request -> qty  ;
+        $orderdetail->subtotal=$request ->subtotal;
+        $orderdetail->param_state= $request ->param_state;
+        $orderdetail-> save ();    // save
+        $data=[
+          'message' => 'Orderdetail update successfully',
+          'orderdetail' => $orderdetail,
+        ];
+        return response()->json($data);
+  
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Orderdetail $orderdetail)
     {
-        //
+        $orderdetail->delete();
+        $data = [
+            'message' => 'orders deleted successfully',
+            'order' => $orderdetail
+        ];
+        return response()->json($data);
     }
 }
