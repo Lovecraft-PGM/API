@@ -8,4 +8,21 @@ use Illuminate\Database\Eloquent\Model;
 class Provider extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+
+        "legal_name",
+        "commercial_name",
+        "email",
+        "phone",
+        "address",
+        "param_city",
+        "contact_name",
+        "param_bank",
+        "param_account",
+        "account",
+        "param_state",
+        
+    ];
+    return $this->belongsToMany(Provider::class);
 }

@@ -8,4 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class ParamType extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        
+        "name",
+        "range_min",
+        "range_max",
+        
+    ];
+    return $this->belongsToMany(ParamType::class);
 }
