@@ -18,5 +18,9 @@ class Rating extends Model
         "param_state",
 
     ];
-    return $this->belongsToMany(Rating::class);
+
+    public function Rating (){
+        return $this->belongsToMany(Rating::class);
+    }
+   
 }

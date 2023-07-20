@@ -17,5 +17,9 @@ class Param extends Model
         "param_state",
         
     ];
-    return $this->belongsToMany(Param::class);
+
+    public function param (){
+        return $this->belongsToMany(Param::class);
+    }
+    
 }

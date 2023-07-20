@@ -24,5 +24,9 @@ class Provider extends Model
         "param_state",
         
     ];
-    return $this->belongsToMany(Provider::class);
+
+    public function provider (){
+        return $this->belongsToMany(Provider::class);
+    }
+    
 }

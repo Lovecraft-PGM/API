@@ -20,5 +20,10 @@ class Order extends Model
         "param_state",
         
     ];
-    return $this->belongsToMany(Order::class);
-}
+
+    public function order (){
+        return $this->belongsToMany(Order::class);
+    }
+  
+    }
+  

@@ -18,5 +18,11 @@ class OrderDetail extends Model
         "param_state",
         
     ];
-    return $this->belongsToMany(OrderDetail::class);
+
+    public function orderdetail (){
+        return $this->belongsToMany(OrderDetail::class);
+    }
+
+
+    
 }

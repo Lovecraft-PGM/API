@@ -28,5 +28,9 @@ class Product extends Model
         "param_state",
         
     ];
-    return $this->belongsToMany(Product::class);
+
+    public function product (){
+        return $this->belongsToMany(Product::class);
+    }
+    
 }

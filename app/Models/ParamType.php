@@ -16,5 +16,9 @@ class ParamType extends Model
         "range_max",
         
     ];
-    return $this->belongsToMany(ParamType::class);
+
+    public function paramType (){
+        return $this->belongsToMany(ParamType::class);
+    }
+    
 }
