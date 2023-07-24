@@ -34,11 +34,11 @@ class RatingController extends Controller
         $rating->product_id = $request ->product_id ;
         $rating->starts= $request-> starts  ;
         $rating->comments= $request-> comments  ;
-        $rating->param_state= $request-> addrparam_stateess  ;
+        $rating->param_state= $request-> param_state  ;
         $rating-> save ();    // save
         $data=[
-          'message' => 'Orderdetail created successfully',
-          'orderdetail' => $rating,
+          'message' => 'Rating created successfully',
+          'Rating' => $rating,
         ];
         return response()->json($data);
     }

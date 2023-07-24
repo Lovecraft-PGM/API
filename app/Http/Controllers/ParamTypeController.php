@@ -36,8 +36,8 @@ class ParamTypeController extends Controller
         $paramtype->range_max = $request -> range_max  ;
         $paramtype-> save ();    // save
         $data=[
-          'message' => 'Orderdetail created successfully',
-          'orderdetail' => $paramtype,
+          'message' => 'ParamType created successfully',
+          'ParamType' => $paramtype,
         ];
         return response()->json($data);
     }

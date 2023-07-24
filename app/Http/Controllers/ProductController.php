@@ -44,8 +44,8 @@ class ProductController extends Controller
         $product->param_state  = $request -> param_state   ;
         $product-> save ();    // save
         $data=[
-          'message' => 'Orderdetail created successfully',
-          'orderdetail' => $product,
+          'message' => 'Product created successfully',
+          'Product' => $product,
         ];
         return response()->json($data);
     }

@@ -44,8 +44,8 @@ class ProviderController extends Controller
         $provider->param_state= $request->param_state;
         $provider-> save ();    // save
         $data=[
-          'message' => 'Orderdetail created successfully',
-          'orderdetail' => $provider,
+          'message' => 'Provider created successfully',
+          'Provider' => $provider,
         ];
         return response()->json($data);
     }

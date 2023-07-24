@@ -3,16 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+//use App\Models\Useer;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-    $user = User ::all() ; 
+    public function index(){
+        $user = User ::all(); 
         return response()->json($user) ;
     }
 
@@ -29,21 +30,21 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        $user=new User;   
-        $user->first_name = $request -> first_name ;
+        $user=new User; 
+        $user->first_name = $request->first_name ;
         $user->last_name= $request ->last_name ;
         $user->birthday= $request-> birthday  ;
         $user->address= $request-> address  ;
-        $user->paramcity = $request-> paramcity   ;
-        $user->paramtypeuser= $request-> paramtypeuser  ;
+        $user->param_city = $request-> param_city   ;
+        $user->paramtype_user= $request-> paramtype_user  ;
         $user->email= $request-> email   ;
         $user->password= $request-> password   ;
         $user->param_rol = $request-> param_rol     ;
         $user->param_state= $request-> param_state   ;
         $user-> save ();    // save
         $data=[
-          'message' => 'Orderdetail created successfully',
-          'orderdetail' => $user,
+          'message' => 'User created successfully',
+          'User' => $user,
         ];
         return response()->json($data);
     }
@@ -53,7 +54,10 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-               return response()->json($user);
+        return response()->json([
+            'res'=> true,
+            'user'=>$user
+        ]);
     }
 
     /**
@@ -73,16 +77,16 @@ class UserController extends Controller
         $user->last_name= $request ->last_name ;
         $user->birthday= $request-> birthday  ;
         $user->address= $request-> address  ;
-        $user->paramcity = $request-> paramcity   ;
-        $user->paramtypeuser= $request-> paramtypeuser  ;
-        $user->email= $request-> email   ;
-        $user->password= $request-> password   ;
+        $user->param_city = $request-> param_city   ;
         $user->param_rol = $request-> param_rol     ;
         $user->param_state= $request-> param_state   ;
+        $user->paramtype_user= $request-> paramtype_user  ;
+        $user->email= $request-> email   ;
+        $user->password= $request-> password   ;
         $user-> save ();    // save
         $data=[
-          'message' => 'Orderdetail created successfully',
-          'orderdetail' => $user,
+          'message' => 'User updated successfully',
+          'User' => $user,
         ];
         return response()->json($data);
     }
@@ -94,9 +98,9 @@ class UserController extends Controller
     {
       $user->delete();
         $data = [
-            'message' => 'orders deleted successfully',
-            'order' => $user
+            'message' => 'User deleted successfully',
+            'User' => $user
         ];
-        return response()->json($user);
+        return response()->json($data);
     }
 }

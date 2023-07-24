@@ -35,8 +35,8 @@ class ParamController extends Controller
         $param->param_state= $request ->param_state;
         $param-> save ();    // save
         $data=[
-          'message' => 'Orderdetail created successfully',
-          'orderdetail' => $param,
+          'message' => 'Param created successfully',
+          'Param' => $param,
         ];
         return response()->json($data);
   
