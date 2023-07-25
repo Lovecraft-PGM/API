@@ -36,7 +36,7 @@ class UserController extends Controller
         $user->birthday= $request-> birthday  ;
         $user->address= $request-> address  ;
         $user->param_city = $request-> param_city   ;
-        $user->paramtype_user= $request-> paramtype_user  ;
+        $user->type_user= $request-> type_user  ;
         $user->email= $request-> email   ;
         $user->password= $request-> password   ;
         $user->param_rol = $request-> param_rol     ;
@@ -80,7 +80,7 @@ class UserController extends Controller
         $user->param_city = $request-> param_city   ;
         $user->param_rol = $request-> param_rol     ;
         $user->param_state= $request-> param_state   ;
-        $user->paramtype_user= $request-> paramtype_user  ;
+        $user->type_user= $request-> type_user  ;
         $user->email= $request-> email   ;
         $user->password= $request-> password   ;
         $user-> save ();    // save

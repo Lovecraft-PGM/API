@@ -29,12 +29,12 @@ class ProviderController extends Controller
     public function store(Request $request)
     {
         $provider=new Provider;   
-        $provider->namelegal = $request -> namelegal ;
-        $provider->namecommercial= $request ->namecommercial ;
+        $provider->legal_name = $request -> legal_name ;
+        $provider->commercial_name= $request ->commercial_name ;
         $provider->email= $request-> email  ;
         $provider->phone= $request-> phone  ;
         $provider->address= $request-> address  ;
-        $provider->name_contact= $request-> name_contact  ;
+        $provider->contact_name= $request-> contact_name  ;
         $provider->param_city= $request-> param_city   ;
         $provider->param_bank= $request-> param_bank   ;
         $provider->param_account= $request-> param_account    ;

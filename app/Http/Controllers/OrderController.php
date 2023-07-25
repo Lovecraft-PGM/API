@@ -31,7 +31,7 @@ class OrderController extends Controller
     public function store(Request $request)
     {
       $order=new Order;
-      $order->userid= $request ->userid;
+      $order->user_id= $request ->user_id;
       $order->code = $request ->   code;
       $order->date= $request ->  date;
       $order->total= $request ->   total;
