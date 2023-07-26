@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('param_rol');
             $table->string('param_state');
             $table->string('type_user');
+            $table->string('gender');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use Illuminate\Http\Request;
 //use App\Models\Useer;
 use App\Models\User;
@@ -40,6 +41,7 @@ class UserController extends Controller
         $user->email= $request-> email   ;
         $user->password= $request-> password   ;
         $user->param_rol = $request-> param_rol     ;
+        $user ->gender = $request->gender ;
         $user->param_state= $request-> param_state   ;
         $user-> save ();    // save
         $data=[
@@ -82,6 +84,7 @@ class UserController extends Controller
         $user->param_state= $request-> param_state   ;
         $user->type_user= $request-> type_user  ;
         $user->email= $request-> email   ;
+        $user->gender= $request-> gender   ;
         $user->password= $request-> password   ;
         $user-> save ();    // save
         $data=[

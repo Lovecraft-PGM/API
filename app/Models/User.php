@@ -24,9 +24,10 @@ class User extends Authenticatable implements JWTSubject
         "birthday",
         "address",
         "param_city",
-        "param_rol",
+        "param_rol", 
         "param_state",
         "type_user",
+        "gender",
         'email',
         'password'
     ];

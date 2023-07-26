@@ -4,7 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -54,6 +54,11 @@ class AuthController extends Controller
             "birthday" => $request->birthday,
             "address"=> $request->address,
             'email' => $request->email,
+            "param_city" => $request->param_city,
+            "param_rol" => $request->param_rol,
+            "param_state" => $request->param_state,
+            "gender" => $request->gender,
+            "type_user" => $request->type_user,
             'password' => Hash::make($request->password),
         ]);
 
