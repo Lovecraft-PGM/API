@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Controllers\ServiceController as OS;
 
 use Illuminate\Http\Request;
 //use App\Models\Useer;
@@ -14,8 +14,27 @@ class UserController extends Controller
      * Display a listing of the resource.
      */
     public function index(){
-        $user = User ::all(); 
-        return response()->json($user) ;
+        $users = User::all()->sortBy('id');
+        foreach ($users as $user){
+        if ($user->id != '1'){
+        $user['first_name'] = $user->first_name;
+        $user['last_name']= $user->last_name;
+        $user['birthday' ]= $user->birthday;     
+        $user['address']= $user->address;
+        $user['param_city']  = $user->param_city;
+        $user['type_user'] = $user ->type_user ;
+        $user['email'] =   $user -> email;  
+        $user['image'] =   $user -> image;  
+        $user['password'] = $user ->password ;
+        $user['param_rol']= $user ->param_rol ;
+        $user ['gender'] =$user ->gender ;
+        $user['param_state']=$user ->param_state ;
+        $data[] = $user; 
+        } 
+        
+          
+        }
+        return OS::frontendResponse('200','success', $data, null); ;
     }
 
     /**

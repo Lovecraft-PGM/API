@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Controllers\ServiceController as OS;
 use Illuminate\Http\Request;
 use App\Models\Provider;
 class ProviderController extends Controller
@@ -11,8 +11,29 @@ class ProviderController extends Controller
      */
     public function index()
     {
-        $provider = Provider ::all() ; 
-        return response()->json($provider) ;
+
+        $providers = provider::all()->sortBy('id');
+
+        foreach ($providers as $provider){
+        $provider['legal_name'] = $provider->legal_name ;
+        $provider['commercial_name']= $provider->commercial_name ;
+        $provider['email']= $provider-> email  ;
+        $provider['phone']= $provider-> phone  ;
+        $provider['address']= $provider-> address  ;
+        $provider['contact_name']= $provider-> contact_name  ;
+        $provider['param_city']= $provider-> param_city   ;
+        $provider['param_bank']= $provider-> param_bank   ;
+        $provider['param_account']= $provider-> param_account    ;
+        $provider['param_gender']= $provider-> param_gender   ;
+        $provider['param_subcategory']= $provider -> param_subcategory   ;
+        $provider['account']= $provider-> account    ;
+        $provider['param_state']= $provider->param_state;
+        $data[] = $provider; 
+
+        }
+
+
+        return OS::frontendResponse('200','success', $data, null); 
     }
 
     /**

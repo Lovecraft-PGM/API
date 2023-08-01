@@ -57,6 +57,7 @@ class AuthController extends Controller
             "param_city" => $request->param_city,
             "param_rol" => $request->param_rol,
             "param_state" => $request->param_state,
+            "image" => $request->image,
             "gender" => $request->gender,
             "type_user" => $request->type_user,
             'password' => Hash::make($request->password),

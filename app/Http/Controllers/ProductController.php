@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+use App\Http\Controllers\ServiceController as OS;
+
 
 use Illuminate\Http\Request;
 use App\Models\Product;
@@ -11,8 +13,25 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $product = Product ::all() ; 
-        return response()->json($product) ;
+        $products = Product::all()->sortBy('id');
+        foreach ($products as $product){
+        $product['reference'] = $product->reference;
+        $product['name']= $product->name;
+        $product['description' ]= $product->description;     
+        $product['stock']= $product->stock;
+        $product['price']  = $product->price;
+        $product['discount'] = $product ->discount ;
+        $product['tax'] =   $product -> tax;  
+        $product['images'] = $product ->images ;
+        $product['param_size']= $product ->param_size ;
+        $product['param_gender'] =$product ->param_gender ;
+        $product['param_subcategory']=$product ->param_subcategory ;
+        $product['param_color']=$product ->param_color ;
+        $product['param_state']=$product ->param_state ;
+        $data[] = $product; 
+    }
+    
+    return OS::frontendResponse('200','success', $data, null); 
     }
 
     /**
