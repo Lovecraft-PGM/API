@@ -6,19 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Param;
 class ParamController extends Controller
 {
-    public function orderList($params){
-        foreach($params as $param){
-            $data_param =[
-                'id' =>$param-> id,
-                'name' =>$param-> name,
-                'typeParam' =>$param-> paramtype_id,
-            ];
-
-            $data[] = $data_param;
-        }
-        return OS::frontendResponse('200', 'success', $data, null);
-    }
-    
+   
     public function countriesList(){
         $countries = Param::where ('','')->get();
 
@@ -28,7 +16,7 @@ class ParamController extends Controller
     public function departmentsList(){
         $departments = Param::where ('','')->get();
 
-        return $this->orderList($department);
+        return $this->orderList($departments);
     }
 
     public function citiesList(){
