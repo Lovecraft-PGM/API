@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Controllers\ServiceController as OS;
 use Illuminate\Http\Request;
 use App\Models\ParamType;
 
@@ -12,8 +12,16 @@ class ParamTypeController extends Controller
      */
     public function index()
     {
-         $paramtype = Paramtype::all() ; 
-        return response()->json($paramtype) ;
+        $paramtypes = Paramtype::all()->sortBy('id');
+        foreach ($paramtypes as $paramtype){
+
+        $paramtype['name'] = $paramtype -> name ;
+        $paramtype['range_min']= $paramtype ->range_min ;
+        $paramtype['range_max'] = $paramtype -> range_max  ;
+        $data[] = $paramtype; 
+    }
+    return OS::frontendResponse('200','success', $data, null); 
+
     }
 
     /**

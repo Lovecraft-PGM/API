@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Controllers\ServiceController as OS;
 use Illuminate\Http\Request;
 use App\Models\OrderDetail;
 class OrderDetailController extends Controller
@@ -9,11 +9,21 @@ class OrderDetailController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        $orderdetail = Orderdetail::all() ; 
-        return response()->json($orderdetail) ;
-    }
+    public function index(){
+        $ordersdetails = OrderDetail::all()->sortBy('id');
+        foreach ($ordersdetails as $orderdetail){
+        $orderdetail['o_id']= $orderdetail -> o_id ;
+        $orderdetail['product_id']= $orderdetail ->product_id ;
+        $orderdetail['qty']= $orderdetail -> qty  ;
+        $orderdetail['subtotal']=$orderdetail ->subtotal;
+        $orderdetail['param_state']= $orderdetail ->param_state;
+        $data[] = $orderdetail; 
+        }
+        return OS::frontendResponse('200','success', $data, null);
+        }
+
+
+    
 
     /**
      * Show the form for creating a new resource.

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Controllers\ServiceController as OS;
 use Illuminate\Http\Request;
 use App\Models\Rating;
 
@@ -12,8 +12,17 @@ class RatingController extends Controller
      */
     public function index()
     {
-        $rating = Rating ::all() ; 
-        return response()->json($rating) ;
+        $ratings = Rating::all()->sortBy('id');
+        foreach ($ratings as $rating){
+        $rating['user_id']  = $rating -> user_id ;
+        $rating['product_id'] = $rating ->product_id ;
+        $rating['starts']= $rating-> starts  ;
+        $rating['comments']= $rating-> comments  ;
+        $rating['param_state']= $rating-> param_state  ;
+        $data[] = $rating; 
+    }
+    return OS::frontendResponse('200','success', $data, null);
+
     }
 
     /**

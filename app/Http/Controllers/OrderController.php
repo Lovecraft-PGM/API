@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Controllers\ServiceController as OS;
 use GuzzleHttp\Psr7\Message;
 use Illuminate\Http\Request;
 use App\Models\Order;
@@ -13,8 +13,18 @@ class OrderController extends Controller
      */
     public function index()
     {
-        $order = Order::all() ; 
-        return response()->json($order) ;
+    $orders = Order::all()->sortBy('id');
+    foreach ($orders as $order){
+      $order['user_id']= $order ->user_id;
+      $order['code'] = $order ->   code;
+      $order['date']= $order ->  date;
+      $order['total']= $order ->   total;
+      $order['param_paymethod']= $order ->param_paymethod;
+      $order['param_status']= $order ->param_status;
+      $order['param_state']= $order ->param_state;
+      $data[] = $order; 
+     }
+     return OS::frontendResponse('200','success', $data, null);
     }
 
     /**

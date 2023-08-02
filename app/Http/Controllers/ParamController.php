@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Controllers\ServiceController as OS;
 use Illuminate\Http\Request;
 use App\Models\Param;
 class ParamController extends Controller
@@ -11,9 +11,18 @@ class ParamController extends Controller
      */
     public function index()
     {
-        $param = Param::all() ; 
-        return response()->json($param) ;
+        $params = Param::all()->sortBy('id');
+        foreach ($params as $param){
+        $param['paramtype_id'] = $param -> paramtype_id ;
+        $param['name']= $param ->name ;
+        $param['param_foreign'] = $param -> param_foreign  ;
+        $param['param_state']= $param ->param_state;
+        $data[] = $param; 
     }
+    return OS::frontendResponse('200','success', $data, null);
+   }
+
+    
 
     /**
      * Show the form for creating a new resource.
