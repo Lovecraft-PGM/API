@@ -6,9 +6,115 @@ use Illuminate\Http\Request;
 use App\Models\Param;
 class ParamController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    public function orderList($params){
+        foreach($params as $param){
+            $data_param =[
+                'id' =>$param-> id,
+                'name' =>$param-> name,
+                'typeParam' =>$param-> paramtype_id,
+            ];
+
+            $data[] = $data_param;
+        }
+        return OS::frontendResponse('200', 'success', $data, null);
+    }
+    
+    public function countriesList(){
+        $countries = Param::where ('','')->get();
+
+        return $this->orderList($countries);
+    }
+
+    public function departmentsList(){
+        $departments = Param::where ('','')->get();
+
+        return $this->orderList($department);
+    }
+
+    public function citiesList(){
+        $cities = Param::where ('','')->get();
+
+        return $this->orderList($cities);
+    }
+
+    public function typesOfUsersList(){
+        $typesUsers = Param::where ('','')->get();
+
+        return $this->orderList($typesUsers);
+    }
+
+    public function rolesList(){
+        $roles = Param::where ('','')->get();
+
+        return $this->orderList($roles);
+    }
+
+    public function statesList(){
+        $states = Param::where ('','')->get();
+
+        return $this->orderList($states);
+    }
+
+    public function banksList(){
+        $banks = Param::where ('','')->get();
+
+        return $this->orderList($banks);
+    }
+
+    public function typesOfBankAccountsList(){
+        $bankAccounts = Param::where ('','')->get();
+
+        return $this->orderList($bankAccounts);
+    }
+
+    public function sizesList(){
+        $sizes = Param::where ('','')->get();
+
+        return $this->orderList($sizes);
+    }
+
+    public function genderList(){
+        $genders = Param::where ('','')->get();
+
+        return $this->orderList($genders);
+    }
+
+    public function categoriesList(){
+        $categories = Param::where ('','')->get();
+
+        return $this->orderList($categories);
+    }
+
+    public function subcategoriesList(){
+        $subcategories = Param::where ('','')->get();
+
+        return $this->orderList($subcategories);
+    }
+
+    public function marksList(){
+        $marks = Param::where ('','')->get();
+
+        return $this->orderList($marks);
+    }
+
+    public function colorsList(){
+        $colors = Param::where ('','')->get();
+
+        return $this->orderList($colors );
+    }
+
+    public function paymentMethodsList(){
+        $payment = Param::where ('','')->get();
+
+        return $this->orderList($payment);
+    }
+
+    public function typesOfordersList(){
+        $orders = Param::where ('','')->get();
+
+        return $this->orderList($orders);
+    }
+
     public function index()
     {
         $params = Param::all()->sortBy('id');
@@ -22,19 +128,11 @@ class ParamController extends Controller
     return OS::frontendResponse('200','success', $data, null);
    }
 
-    
-
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $param=new Param;   
@@ -59,17 +157,13 @@ class ParamController extends Controller
         return response()->json($param);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+
     public function edit(string $id)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+  
     public function update(Request $request, Param $param)
     {
         $param=new Param;   
@@ -85,9 +179,7 @@ class ParamController extends Controller
         return response()->json($data);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+   
     public function destroy(Param $param)
     {
         $param->delete();
@@ -97,4 +189,5 @@ class ParamController extends Controller
         ];
         return response()->json($data);
     }
+
 }
