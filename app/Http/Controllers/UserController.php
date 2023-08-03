@@ -1,10 +1,13 @@
 <?php
 
 namespace App\Http\Controllers;
+<<<<<<< HEAD
 use App\Http\Controllers\Settings\ServiceController as OS;
 
+=======
+use App\Http\Controllers\ServiceController as OS;
+>>>>>>> feature
 use Illuminate\Http\Request;
-//use App\Models\Useer;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
