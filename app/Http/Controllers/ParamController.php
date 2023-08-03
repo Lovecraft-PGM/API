@@ -1,12 +1,26 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Http\Controllers\ServiceController as OS;
+use App\Http\Controllers\Settings\ServiceController as OS;
 use Illuminate\Http\Request;
 use App\Models\Param;
 class ParamController extends Controller
 {
-   
+    public function orderList($params){
+        foreach($params as $param){
+            $data_param =[
+                'id' =>$param-> id,
+                'name' =>$param-> name,
+                'typeParam' =>$param-> paramtype_id,
+            ];
+
+            $data[] = $data_param;
+        }
+        return OS::frontendResponse('200', 'success', $data, null);
+    }
+
+
+
     public function countriesList(){
         $countries = Param::where ('','')->get();
 
