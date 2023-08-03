@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Http\Controllers\ServiceController as OS;
-
 use Illuminate\Http\Request;
-//use App\Models\Useer;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 
