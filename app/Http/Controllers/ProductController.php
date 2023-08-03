@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Http\Controllers\Settings\ServiceController as OS;
+use App\Http\Controllers\ServiceController as OS;
 
 
 use Illuminate\Http\Request;
