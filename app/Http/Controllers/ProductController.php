@@ -11,9 +11,10 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
+    public function index(){
+        
         $products = Product::all()->sortBy('id');
+
         foreach ($products as $product){
         $product['reference'] = $product->reference;
         $product['name']= $product->name;
@@ -30,9 +31,16 @@ class ProductController extends Controller
         $product['param_state']=$product ->param_state ;
         $data[] = $product; 
     }
-    
-    return OS::frontendResponse('200','success', $data, null); 
+        if (count($products) == null) {
+            $data = $products;
+            return OS::frontendResponse('404', 'error',  $data, $msgError = 'Not Found.' );
+        }else{
+            return OS::frontendResponse('200','success', $data, null); 
+        }
     }
+    // if (count($products) == 0) {
+    //     return OS::frontendResponse('404', 'error', null, 'No se encontraron productos');
+    // }
 
     /**
      * Show the form for creating a new resource.

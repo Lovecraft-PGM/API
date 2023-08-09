@@ -120,6 +120,7 @@ class ParamController extends Controller
     public function index()
     {
         $params = Param::all()->sortBy('id');
+        
         foreach ($params as $param){
         $param['paramtype_id'] = $param -> paramtype_id ;
         $param['name']= $param ->name ;
@@ -127,7 +128,12 @@ class ParamController extends Controller
         $param['param_state']= $param ->param_state;
         $data[] = $param; 
     }
-    return OS::frontendResponse('200','success', $data, null);
+    if (count($params) == null) {
+        $data = $params;
+        return OS::frontendResponse('404', 'error',  $data, null );
+    }else{
+        return OS::frontendResponse('200','success', $data, null); 
+    }
    }
 
     public function create()

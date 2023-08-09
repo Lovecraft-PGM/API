@@ -13,14 +13,19 @@ class ParamTypeController extends Controller
     public function index()
     {
         $paramtypes = Paramtype::all()->sortBy('id');
-        foreach ($paramtypes as $paramtype){
 
+        foreach ($paramtypes as $paramtype){
         $paramtype['name'] = $paramtype -> name ;
         $paramtype['range_min']= $paramtype ->range_min ;
         $paramtype['range_max'] = $paramtype -> range_max  ;
         $data[] = $paramtype; 
     }
-    return OS::frontendResponse('200','success', $data, null); 
+    if (count($paramtypes) == null) {
+        $data = $paramtypes;
+        return OS::frontendResponse('404', 'error',  $data, $msgError = 'Not Found.' );
+    }else{
+        return OS::frontendResponse('200','success', $data, null); 
+    }
 
     }
 

@@ -13,6 +13,7 @@ class UserController extends Controller
     public function index()
     {
         $users = User::all()->sortBy('id');
+        
         foreach ($users as $user) {
             if ($user->id != '1') {
                 $user['first_name'] = $user->first_name;
@@ -30,7 +31,12 @@ class UserController extends Controller
                 $data[] = $user;
             }
         }
-        return OS::frontendResponse('200', 'success', $data, null);;
+       if (count($users) == null) {
+        $data = $users;
+        return OS::frontendResponse('404', 'error',  $data, $msgError = 'Not Found.' );
+    }else{
+        return OS::frontendResponse('200','success', $data, null); 
+    }
     }
 
     /**

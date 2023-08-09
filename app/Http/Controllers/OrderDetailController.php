@@ -10,16 +10,22 @@ class OrderDetailController extends Controller
      * Display a listing of the resource.
      */
     public function index(){
-        $ordersdetails = OrderDetail::all()->sortBy('id');
-        foreach ($ordersdetails as $orderdetail){
-        $orderdetail['o_id']= $orderdetail -> o_id ;
-        $orderdetail['product_id']= $orderdetail ->product_id ;
-        $orderdetail['qty']= $orderdetail -> qty  ;
-        $orderdetail['subtotal']=$orderdetail ->subtotal;
-        $orderdetail['param_state']= $orderdetail ->param_state;
-        $data[] = $orderdetail; 
+        $ordersDetails = OrderDetail::all()->sortBy('id');
+        
+        foreach ($ordersDetails as $orderDetail){
+        $orderDetail['o_id']= $orderDetail -> o_id ;
+        $orderDetail['product_id']= $orderDetail ->product_id ;
+        $orderDetail['qty']= $orderDetail -> qty  ;
+        $orderDetail['subtotal']=$orderDetail ->subtotal;
+        $orderDetail['param_state']= $orderDetail ->param_state;
+        $data[] = $orderDetail; 
         }
-        return OS::frontendResponse('200','success', $data, null);
+        if (count($ordersDetails) == null) {
+            $data = $ordersDetails;
+            return OS::frontendResponse('404', 'error',  $data, $msgError = 'Not Found.' );
+        }else{
+            return OS::frontendResponse('200','success', $data, null); 
+        }
         }
 
 

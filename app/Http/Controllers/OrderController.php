@@ -14,6 +14,7 @@ class OrderController extends Controller
     public function index()
     {
     $orders = Order::all()->sortBy('id');
+
     foreach ($orders as $order){
       $order['user_id']= $order ->user_id;
       $order['code'] = $order ->   code;
@@ -24,7 +25,12 @@ class OrderController extends Controller
       $order['param_state']= $order ->param_state;
       $data[] = $order; 
      }
-     return OS::frontendResponse('200','success', $data, null);
+     if (count($orders) == null) {
+      $data = $orders;
+      return OS::frontendResponse('404', 'error',  $data, $msgError = 'Not Found.' );
+  }else{
+      return OS::frontendResponse('200','success', $data, null); 
+  }
     }
 
     /**

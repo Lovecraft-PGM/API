@@ -13,6 +13,7 @@ class RatingController extends Controller
     public function index()
     {
         $ratings = Rating::all()->sortBy('id');
+        
         foreach ($ratings as $rating){
         $rating['user_id']  = $rating -> user_id ;
         $rating['product_id'] = $rating ->product_id ;
@@ -21,7 +22,12 @@ class RatingController extends Controller
         $rating['param_state']= $rating-> param_state  ;
         $data[] = $rating; 
     }
-    return OS::frontendResponse('200','success', $data, null);
+    if (count($ratings) == null) {
+        $data = $ratings;
+        return OS::frontendResponse('404', 'error',  $data, $msgError = 'Not Found.' );
+    }else{
+        return OS::frontendResponse('200','success', $data, null); 
+    }
 
     }
 

@@ -31,10 +31,12 @@ class ProviderController extends Controller
         $data[] = $provider; 
 
         }
-
-
-        return OS::frontendResponse('200','success', $data, null); 
-    }
+        if (count($providers) == null) {
+            $data = $providers;
+            return OS::frontendResponse('404', 'error',  $data, $msgError = 'Not Found.' );
+        }else{
+            return OS::frontendResponse('200','success', $data, null); 
+        }    }
 
     /**
      * Show the form for creating a new resource.
