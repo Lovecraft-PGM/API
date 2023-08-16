@@ -50,12 +50,13 @@ class OrderDetailController extends Controller
         $orderdetail->qty= $request -> qty  ;
         $orderdetail->subtotal=$request ->subtotal;
         $orderdetail->param_state= $request ->param_state;
-        $orderdetail-> save ();    // save
-        $data=[
-          'message' => 'Orderdetail created successfully',
-          'orderdetail' => $orderdetail,
-        ];
-        return response()->json($data);
+        $orderdetail-> save ();    // save 
+        $data[] = $orderdetail;
+        if ($data == null) {
+            return OS::frontendResponse('404', 'error',  $data, 'Detalle de orden Creado.' );
+        }else{
+            return OS::frontendResponse('201','success', $data, 'Detalle de orden no creado'); 
+        }
   
     }
 
@@ -64,7 +65,12 @@ class OrderDetailController extends Controller
      */
     public function show(Orderdetail $orderdetail)
     {
-        return response()->json($orderdetail);
+        $data[] = $orderdetail;
+        if ($data == null) {
+            return OS::frontendResponse('404', 'error',  $data, 'Detalles de ordenes no encontrados.' );
+        }else{
+            return OS::frontendResponse('200','success', $data, 'Detalles de ordenes encontrados.'); 
+        }
     }
 
     /**
@@ -87,12 +93,12 @@ class OrderDetailController extends Controller
         $orderdetail->subtotal=$request ->subtotal;
         $orderdetail->param_state= $request ->param_state;
         $orderdetail-> save ();    // save
-        $data=[
-          'message' => 'Orderdetail update successfully',
-          'orderdetail' => $orderdetail,
-        ];
-        return response()->json($data);
-  
+        $data[]= $orderdetail;
+        if ($data == null) {
+            return OS::frontendResponse('404', 'error',  $data, 'Detalle de orden no Actualizado.' );
+        }else{
+            return OS::frontendResponse('201','success', $data, 'Detalle de orden Actualizado correctamente.'); 
+        }
     }
 
     /**

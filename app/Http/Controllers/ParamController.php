@@ -119,21 +119,7 @@ class ParamController extends Controller
 
     public function index()
     {
-        $params = Param::all()->sortBy('id');
-        
-        foreach ($params as $param){
-        $param['paramtype_id'] = $param -> paramtype_id ;
-        $param['name']= $param ->name ;
-        $param['param_foreign'] = $param -> param_foreign  ;
-        $param['param_state']= $param ->param_state;
-        $data[] = $param; 
-    }
-    if (count($params) == null) {
-        $data = $params;
-        return OS::frontendResponse('404', 'error',  $data, null );
-    }else{
-        return OS::frontendResponse('200','success', $data, null); 
-    }
+  
    }
 
     public function create()
@@ -149,11 +135,12 @@ class ParamController extends Controller
         $param->param_foreign = $request -> param_foreign  ;
         $param->param_state= $request ->param_state;
         $param-> save ();    // save
-        $data=[
-          'message' => 'Param created successfully',
-          'Param' => $param,
-        ];
-        return response()->json($data);
+        $data[] = $param;
+        if ($data == null) {
+            return OS::frontendResponse('404', 'error',  $data, 'Parametro no creado.' );
+        }else{
+            return OS::frontendResponse('201','success', $data, 'Parametro creado correctamente.'); 
+        }
   
     }
 
@@ -162,7 +149,12 @@ class ParamController extends Controller
      */
     public function show(Param $param)
     {
-        return response()->json($param);
+        $data[] = $param;
+        if ($data == null) {
+            return OS::frontendResponse('404', 'error',  $data, 'Parametros no encontrados.' );
+        }else{
+            return OS::frontendResponse('200','success', $data, 'Parametros encontrados.'); 
+        }
     }
 
 
@@ -180,22 +172,20 @@ class ParamController extends Controller
         $param->param_foreign = $request -> param_foreign  ;
         $param->param_state= $request ->param_state;
         $param-> save ();    // save
-        $data=[
-          'message' => 'Orderdetail update successfully',
-          'orderdetail' => $param,
-        ];
-        return response()->json($data);
+        $data[]= $param;
+        if ($data == null) {
+            return OS::frontendResponse('404', 'error',  $data, 'Parametro no Actualizado.' );
+        }else{
+            return OS::frontendResponse('201','success', $data, 'Parametro Actualizado correctamente.'); 
+        }
     }
 
    
     public function destroy(Param $param)
     {
         $param->delete();
-        $data = [
-            'message' => 'orders deleted successfully',
-            'order' => $param
-        ];
-        return response()->json($data);
+        $data[] = $param;
+        return OS::frontendResponse('200','success', $data, 'Parametro eliminado'); 
     }
 
 }

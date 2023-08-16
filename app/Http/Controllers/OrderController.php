@@ -55,11 +55,12 @@ class OrderController extends Controller
       $order->param_status= $request ->param_status;
       $order->param_state= $request ->param_state;
       $order-> save ();    // save
-      $data=[
-        'message' => 'order created successfully',
-        'order' => $order,
-      ];
-      return response()->json($data);
+      $data[] = $order;
+        if ($data == null) {
+            return OS::frontendResponse('404', 'error',  $data, 'Orden no creada.' );
+        }else{
+            return OS::frontendResponse('201','success', $data, 'Orden creada correctamente.'); 
+        }
 
 
     }
@@ -69,7 +70,12 @@ class OrderController extends Controller
      */
     public function show(Order $order)
     {
-        return response()->json($order);
+      $data[] = $order;
+      if ($data == null) {
+          return OS::frontendResponse('404', 'error',  $data, 'Ordenes no encontradas.' );
+      }else{
+          return OS::frontendResponse('200','success', $data, 'Ordenes encontradas.'); 
+      }
     }
 
     /**
@@ -93,11 +99,12 @@ class OrderController extends Controller
         $order->param_status=$request->param_status;
         $order->param_state=$request->param_state;
         $order-> save ();    // save
-        $data=[
-          'message' => 'order updated successfully',
-          'orders' => $order,
-        ];
-        return response()->json($data);
+        $data[]= $order;
+        if ($data == null) {
+            return OS::frontendResponse('404', 'error',  $data, 'Orden no Actualizado.' );
+        }else{
+            return OS::frontendResponse('201','success', $data, 'Orden Actualizado correctamente.'); 
+        }
     }
 
     /**
@@ -106,10 +113,7 @@ class OrderController extends Controller
     public function destroy( Order $order)
     {
         $order->delete();
-        $data = [
-            'message' => 'orders deleted successfully',
-            'order' => $order
-        ];
-        return response()->json($data);
+        $data[] = $order;
+        return OS::frontendResponse('200','success', $data, 'Orden eliminada'); 
     }
 }

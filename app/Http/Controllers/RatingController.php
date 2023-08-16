@@ -50,12 +50,13 @@ class RatingController extends Controller
         $rating->starts= $request-> starts  ;
         $rating->comments= $request-> comments  ;
         $rating->param_state= $request-> param_state  ;
-        $rating-> save ();    // save
-        $data=[
-          'message' => 'Rating created successfully',
-          'Rating' => $rating,
-        ];
-        return response()->json($data);
+        $rating->save(); 
+        $data[] = $rating;
+        if ($data == null) {
+            return OS::frontendResponse('404', 'error',  $data, 'Rating no creado.' );
+        }else{
+            return OS::frontendResponse('201','success', $data, 'Rating creado correctamente.'); 
+        }
     }
 
     /**
@@ -63,7 +64,12 @@ class RatingController extends Controller
      */
     public function show(Rating $rating)
     {
-        return response()->json($rating);
+        $data[] = $rating;
+        if ($data == null) {
+            return OS::frontendResponse('404', 'error',  $data, 'Ratings no encontrados.' );
+        }else{
+            return OS::frontendResponse('200','success', $data, 'Ratings encontrados.'); 
+        }
     }
 
     /**
@@ -85,11 +91,12 @@ class RatingController extends Controller
         $rating->comments= $request-> comments  ;
         $rating->param_state= $request-> addrparam_stateess  ;
         $rating-> save ();    // save
-        $data=[
-          'message' => 'Orderdetail update successfully',
-          'orderdetail' => $rating,
-        ];
-        return response()->json($data);
+        $data[]= $rating;
+        if ($data == null) {
+            return OS::frontendResponse('404', 'error',  $data, 'Rating no Actualizado.' );
+        }else{
+            return OS::frontendResponse('201','success', $data, 'Rating Actualizado correctamente.'); 
+        }
     }
 
     /**
@@ -98,10 +105,7 @@ class RatingController extends Controller
     public function destroy(Rating $rating)
     {
         $rating->delete();
-        $data = [
-            'message' => 'orders deleted successfully',
-            'order' => $rating
-        ];
-        return response()->json($rating);
+        $data[] = $rating;
+        return OS::frontendResponse('200','success', $data, 'Rating deleted successfully.'); 
     }
 }

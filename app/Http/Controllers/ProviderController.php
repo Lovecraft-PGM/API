@@ -66,11 +66,12 @@ class ProviderController extends Controller
         $provider->account= $request-> account    ;
         $provider->param_state= $request->param_state;
         $provider-> save ();    // save
-        $data=[
-          'message' => 'Provider created successfully',
-          'Provider' => $provider,
-        ];
-        return response()->json($data);
+        $data[] = $provider;
+        if ($data == null) {
+            return OS::frontendResponse('404', 'error',  $data, 'Proveedor no creado.' );
+        }else{
+            return OS::frontendResponse('201','success', $data, 'Proveedor creado correctamente.'); 
+        }
     }
 
     /**
@@ -108,11 +109,8 @@ class ProviderController extends Controller
         $provider->account= $request-> account    ;
         $provider->param_state= $request->param_state;
         $provider-> save ();    // save
-        $data=[
-          'message' => 'Orderdetail update successfully',
-          'orderdetail' => $provider,
-        ];
-        return response()->json($data);
+        $data[]= $provider;
+        return OS::frontendResponse('200','success', $data, 'Proveedor actualizado'); 
     }
 
     /**
@@ -121,10 +119,7 @@ class ProviderController extends Controller
     public function destroy(Provider $provider)
     {
         $provider->delete();
-        $data = [
-            'message' => 'orders deleted successfully',
-            'order' => $provider
-        ];
-        return response()->json($provider);
+        $data[] = $provider;
+        return OS::frontendResponse('200','success', $data, 'Proveedor eliminado'); 
     }
 }

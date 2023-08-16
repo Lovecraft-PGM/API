@@ -22,7 +22,7 @@ class ParamTypeController extends Controller
     }
     if (count($paramtypes) == null) {
         $data = $paramtypes;
-        return OS::frontendResponse('404', 'error',  $data, $msgError = 'Not Found.' );
+        return OS::frontendResponse('404', 'error',  $data, $msgError = 'Tipo de Parametro no encontrado.' );
     }else{
         return OS::frontendResponse('200','success', $data, null); 
     }
@@ -48,11 +48,12 @@ class ParamTypeController extends Controller
         $paramtype->range_min= $request ->range_min ;
         $paramtype->range_max = $request -> range_max  ;
         $paramtype-> save ();    // save
-        $data=[
-          'message' => 'ParamType created successfully',
-          'ParamType' => $paramtype,
-        ];
-        return response()->json($data);
+        $data[] = $paramtype;
+        if ($data == null) {
+            return OS::frontendResponse('404', 'error',  $data, 'Tipo de Parametro no creado.' );
+        }else{
+            return OS::frontendResponse('201','success', $data, 'Tipo de Parametro creado correctamente.'); 
+        }
     }
 
     /**
@@ -60,7 +61,12 @@ class ParamTypeController extends Controller
      */
     public function show(Paramtype $paramtype)
     {
-       return response()->json($paramtype);
+        $data[] = $paramtype;
+        if ($data == null) {
+            return OS::frontendResponse('404', 'error',  $data, 'Tipos de Parametros  no encontrados.' );
+        }else{
+            return OS::frontendResponse('200','success', $data, 'Tipos de Parametros encontrados.'); 
+        }
     }
 
     /**
@@ -80,11 +86,12 @@ class ParamTypeController extends Controller
         $paramtype->range_min= $request ->range_min ;
         $paramtype->range_max = $request -> range_max  ;
         $paramtype-> save ();    // save
-        $data=[
-          'message' => 'Orderdetail update successfully',
-          'orderdetail' => $paramtype,
-        ];
-        return response()->json($data);
+        $data[] = $paramtype;
+        if ($data == null) {
+            return OS::frontendResponse('404', 'error',  $data, 'Tipo de Parametro no Actualizado.' );
+        }else{
+            return OS::frontendResponse('201','success', $data, 'Tipo de Parametro Actualizado correctamente.'); 
+        }
     }
     
 
@@ -94,10 +101,7 @@ class ParamTypeController extends Controller
     public function destroy(Paramtype $paramtype)
     {
           $paramtype->delete();
-        $data = [
-            'message' => 'orders deleted successfully',
-            'order' => $paramtype
-        ];
-        return response()->json($data);
+          $data[] = $paramtype;
+          return OS::frontendResponse('200','success', $data, 'Tipo de Parametro eliminado'); 
     }
 }

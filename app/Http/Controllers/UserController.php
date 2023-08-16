@@ -33,10 +33,10 @@ class UserController extends Controller
         }
        if (count($users) == null) {
         $data[] = $users;
-        return OS::frontendResponse('404', 'error',  $data, 'Not Found.' );
-    }else{
+        return OS::frontendResponse('404', 'error',  $data, 'Usuarios no encontrado.' );
+        }else{
         return OS::frontendResponse('200','success', $data, null); 
-    }
+        }
     }
 
     /**
@@ -64,12 +64,12 @@ class UserController extends Controller
         $user->param_rol = $request->param_rol;
         $user->gender = $request->gender;
         $user->param_state = $request->param_state;
+        $user->save(); 
         $data[] = $user;
-        if ($user == null) {
-            $data[] = $user;
-            return OS::frontendResponse('404', 'error',  $data, 'Not Create' );
+        if ($data == null) {
+            return OS::frontendResponse('404', 'error',  $data, 'Usuario no creado.' );
         }else{
-            return OS::frontendResponse('200','success', $data, 'User created successfully'); 
+            return OS::frontendResponse('201','success', $data, 'Usuario creado correctamente.'); 
         }
     }
 
@@ -80,11 +80,10 @@ class UserController extends Controller
     {
 
         $data[] = $user;
-        if ($user == null) {
-            $data[] = $user;
-            return OS::frontendResponse('404', 'error',  $data, 'Not Found.' );
+        if ($data == null) {
+            return OS::frontendResponse('404', 'error',  $data, 'Usuarios no encontrados.' );
         }else{
-            return OS::frontendResponse('200','success', $data, 'User Founded'); 
+            return OS::frontendResponse('200','success', $data, 'Usuarios encontrados.'); 
         }
     }
 
@@ -115,7 +114,12 @@ class UserController extends Controller
         $user->password = $request->password;
         $user->save();    // save
         $data[]= $user;
-        return OS::frontendResponse('200','success', $data, 'User Update Success'); 
+        if ($data == null) {
+            return OS::frontendResponse('404', 'error',  $data, 'Usuario no Actualizado.' );
+        }else{
+            return OS::frontendResponse('201','success', $data, 'Usuario Actualizado correctamente.'); 
+        }
+    
     }
 
     /**
@@ -124,10 +128,7 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        $data = [
-            'message' => 'User deleted successfully',
-            'User' => $user
-        ];
-        return response()->json($data);
+        $data[] = $user;
+        return OS::frontendResponse('200','success', $data, 'Usuario eliminado'); 
     }
 }

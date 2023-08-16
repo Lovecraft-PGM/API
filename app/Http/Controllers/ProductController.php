@@ -33,7 +33,7 @@ class ProductController extends Controller
     }
         if (count($products) == null) {
             $data = $products;
-            return OS::frontendResponse('404', 'error',  $data, $msgError = 'Not Found.' );
+            return OS::frontendResponse('404', 'error',  $data, $msgError = 'Productos no encontrado.' );
         }else{
             return OS::frontendResponse('200','success', $data, null); 
         }
@@ -70,11 +70,12 @@ class ProductController extends Controller
         $product->param_color   = $request -> param_color    ;
         $product->param_state  = $request -> param_state   ;
         $product-> save ();    // save
-        $data=[
-          'message' => 'Product created successfully',
-          'Product' => $product,
-        ];
-        return response()->json($data);
+        $data[] = $product;
+        if ($data == null) {
+            return OS::frontendResponse('404', 'error',  $data, 'Producto no creado.' );
+        }else{
+            return OS::frontendResponse('201','success', $data, 'Producto creado correctamente.'); 
+        }
     }
 
     /**
@@ -82,7 +83,12 @@ class ProductController extends Controller
      */
     public function show( Product $product)
     {
-        return response()->json($product);
+        $data[] = $product;
+        if ($data == null) {
+            return OS::frontendResponse('404', 'error',  $data, 'Producto no encontrados.' );
+        }else{
+            return OS::frontendResponse('200','success', $data, 'Producto encontrados.'); 
+        }
     }
 
     /**
@@ -114,12 +120,12 @@ class ProductController extends Controller
         $product->param_color   = $request -> param_color    ;
         $product->param_state  = $request -> param_state   ;
         $product-> save ();    // save
-        $data=[
-          'message' => 'Orderdetail update successfully',
-          'orderdetail' => $product,
-        ];
-        return response()->json($data);
-    
+        $data[] = $product;
+        if ($data == null) {
+            return OS::frontendResponse('404', 'error',  $data, 'Producto no Actualizado.' );
+        }else{
+            return OS::frontendResponse('201','success', $data, 'Producto Actualizado correctamente.'); 
+        }
     }
 
     /**
@@ -128,10 +134,7 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         $product->delete();
-        $data = [
-            'message' => 'orders deleted successfully',
-            'order' => $product
-        ];
-        return response()->json($product);
+        $data[] = $product;
+        return OS::frontendResponse('200','success', $data, 'Producto eliminado'); 
     }
 }
