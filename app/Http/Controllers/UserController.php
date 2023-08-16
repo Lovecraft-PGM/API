@@ -32,8 +32,8 @@ class UserController extends Controller
             }
         }
        if (count($users) == null) {
-        $data = $users;
-        return OS::frontendResponse('404', 'error',  $data, $msgError = 'Not Found.' );
+        $data[] = $users;
+        return OS::frontendResponse('404', 'error',  $data, 'Not Found.' );
     }else{
         return OS::frontendResponse('200','success', $data, null); 
     }
@@ -64,12 +64,13 @@ class UserController extends Controller
         $user->param_rol = $request->param_rol;
         $user->gender = $request->gender;
         $user->param_state = $request->param_state;
-        $user->save();    // save
-        $data = [
-            'message' => 'User created successfully',
-            'User' => $user,
-        ];
-        return response()->json($data);
+        $data[] = $user;
+        if ($user == null) {
+            $data[] = $user;
+            return OS::frontendResponse('404', 'error',  $data, 'Not Create' );
+        }else{
+            return OS::frontendResponse('200','success', $data, 'User created successfully'); 
+        }
     }
 
     /**
@@ -77,11 +78,16 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return response()->json([
-            'res' => true,
-            'user' => $user
-        ]);
+
+        $data[] = $user;
+        if ($user == null) {
+            $data[] = $user;
+            return OS::frontendResponse('404', 'error',  $data, 'Not Found.' );
+        }else{
+            return OS::frontendResponse('200','success', $data, 'User Founded'); 
+        }
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -108,11 +114,8 @@ class UserController extends Controller
         $user->gender = $request->gender;
         $user->password = $request->password;
         $user->save();    // save
-        $data = [
-            'message' => 'User updated successfully',
-            'User' => $user,
-        ];
-        return response()->json($data);
+        $data[]= $user;
+        return OS::frontendResponse('200','success', $data, 'User Update Success'); 
     }
 
     /**
