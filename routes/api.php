@@ -81,3 +81,23 @@ Route::get('orders/{order}',[OrderController::class,'show']);
 Route::post('orders',[OrderController::class,'store']);
 Route::put('orders/{order}',[OrderController::class,'update']);
 Route::delete('orders/{order}',[OrderController::class,'destroy']);
+
+
+
+//Routes Gets Param Lits
+Route::get('countries',[ParamController::class,'countriesList']);
+Route::get('departments',[ParamController::class,'departmentsList']);
+Route::get('cities',[ParamController::class,'citiesList']);
+Route::get('typesUsers',[ParamController::class,'typesOfUsersList']);
+Route::get('roles',[ParamController::class,'rolesList']);
+Route::get('states',[ParamController::class,'statesList']);
+Route::get('banks',[ParamController::class,'banksList']);
+Route::get('typesBankAccounts',[ParamController::class,'typesOfBankAccountsList']);
+Route::get('sizes',[ParamController::class,'sizesList']);
+Route::get('gender',[ParamController::class,'genderList']);
+Route::get('categories',[ParamController::class,'categoriesList']);
+Route::get('subcategories',[ParamController::class,'subcategoriesList']);
+Route::get('marks',[ParamController::class,'marksList']);
+Route::get('colors',[ParamController::class,'colorsList']);
+Route::get('paymentMethods',[ParamController::class,'paymentMethodsList']);
+Route::get('typesOrders',[ParamController::class,'typesOfordersList']);

@@ -16,7 +16,14 @@ class ParamController extends Controller
 
                 $data[] = $data_param;
             }
-            return OS::frontendResponse('200', 'success', $data, null);
+
+            if (!is_null($data)) {
+                return OS::frontendResponse('200','success', $data, null); 
+                
+            }else{
+                return OS::frontendResponse('404', 'error',  $data,  'no encontrado.' );
+            }
+    
         }
 
 
@@ -128,7 +135,7 @@ class ParamController extends Controller
         $data[] = $param; 
      }
         if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data,  'parametros nos encontrados.' );
+            return OS::frontendResponse('404', 'error',  $data,  'parametros no encontrados.' );
         }else{
             return OS::frontendResponse('200','success', $data, null); 
         }
@@ -152,7 +159,7 @@ class ParamController extends Controller
         if ($data == null) {
             return OS::frontendResponse('404', 'error',  $data, 'Parametro no creado.' );
         }else{
-            return OS::frontendResponse('201','success', $data, 'Parametro creado correctamente.'); 
+            return OS::frontendResponse('200','success', $data, 'Parametro creado correctamente.'); 
         }
   
     }
@@ -189,7 +196,7 @@ class ParamController extends Controller
         if ($data == null) {
             return OS::frontendResponse('404', 'error',  $data, 'Parametro no Actualizado.' );
         }else{
-            return OS::frontendResponse('201','success', $data, 'Parametro Actualizado correctamente.'); 
+            return OS::frontendResponse('200','success', $data, 'Parametro Actualizado correctamente.'); 
         }
     }
 

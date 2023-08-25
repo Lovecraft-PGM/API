@@ -15,7 +15,7 @@ class UserController extends Controller
         $users = User::all()->sortBy('id');
         
         foreach ($users as $user) {
-            if ($user->id != '1') {
+            // if ($user->id != '1') {
                 $user['first_name'] = $user->first_name;
                 $user['last_name'] = $user->last_name;
                 $user['birthday'] = $user->birthday;
@@ -29,7 +29,7 @@ class UserController extends Controller
                 $user['gender'] = $user->gender;
                 $user['param_state'] = $user->param_state;
                 $data[] = $user;
-            }
+            // }
         }
        if (count($users) == null) {
         $data[] = $users;

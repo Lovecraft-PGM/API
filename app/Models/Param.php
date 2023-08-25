@@ -13,7 +13,7 @@ class Param extends Model
 
         "paramtype_id",
         "name",
-        "param_foreing",
+        "param_foreign",
         "param_state",
         
     ];
