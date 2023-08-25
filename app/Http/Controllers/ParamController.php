@@ -6,130 +6,129 @@ use Illuminate\Http\Request;
 use App\Models\Param;
 class ParamController extends Controller
 {
-    public function orderList($params){
-        foreach($params as $param){
-            $data_param =[
-                'id' =>$param-> id,
-                'name' =>$param-> name,
-                'typeParam' =>$param-> paramtype_id,
-            ];
+        public function orderList($params){
+            foreach($params as $param){
+                $data_param =[
+                    'id' =>$param-> id,
+                    'name' =>$param-> name,
+                    'typeParam' =>$param-> paramtype_id,
+                ];
 
-            $data[] = $data_param;
+                $data[] = $data_param;
+            }
+            return OS::frontendResponse('200', 'success', $data, null);
         }
-        return OS::frontendResponse('200', 'success', $data, null);
-    }
 
 
 
-    public function countriesList(){
-        $countries = Param::where ('1','')->get();
+        public function countriesList(){
+            $countries = Param::where ('paramtype_id','1')->get();
 
-        return $this->orderList($countries);
-    }
+            return $this->orderList($countries);
+        }
 
-    public function departmentsList(){
-        $departments = Param::where ('','')->get();
+        public function departmentsList(){
+            $departments = Param::where ('paramtype_id','2')->get();
 
-        return $this->orderList($departments);
-    }
+            return $this->orderList($departments);
+        }
 
-    public function citiesList(){
-        $cities = Param::where ('','')->get();
+        public function citiesList(){
+            $cities = Param::where ('paramtype_id','14')->get();
 
-        return $this->orderList($cities);
-    }
+            return $this->orderList($cities);
+        }
 
-    public function typesOfUsersList(){
-        $typesUsers = Param::where ('','')->get();
+        public function typesOfUsersList(){
+            $typesUsers = Param::where ('paramtype_id','3')->get();
 
-        return $this->orderList($typesUsers);
-    }
+            return $this->orderList($typesUsers);
+        }
 
-    public function rolesList(){
-        $roles = Param::where ('','')->get();
+        public function rolesList(){
+            $roles = Param::where ('paramtype_id','15')->get();
 
-        return $this->orderList($roles);
-    }
+            return $this->orderList($roles);
+        }
 
-    public function statesList(){
-        $states = Param::where ('','')->get();
+        public function statesList(){
+            $states = Param::where ('paramtype_id','9')->get();
 
-        return $this->orderList($states);
-    }
+            return $this->orderList($states);
+        }
 
-    public function banksList(){
-        $banks = Param::where ('','')->get();
+        public function banksList(){
+            $banks = Param::where ('paramtype_id','11')->get();
 
-        return $this->orderList($banks);
-    }
+            return $this->orderList($banks);
+        }
 
-    public function typesOfBankAccountsList(){
-        $bankAccounts = Param::where ('','')->get();
+        public function typesOfBankAccountsList(){
+            $bankAccounts = Param::where ('paramtype_id','12')->get();
 
-        return $this->orderList($bankAccounts);
-    }
+            return $this->orderList($bankAccounts);
+        }
 
-    public function sizesList(){
-        $sizes = Param::where ('','')->get();
+        public function sizesList(){
+            $sizes = Param::where ('paramtype_id','6')->get();
 
-        return $this->orderList($sizes);
-    }
+            return $this->orderList($sizes);
+        }
 
-    public function genderList(){
-        $genders = Param::where ('','')->get();
+        public function genderList(){
+            $genders = Param::where ('paramtype_id','7')->get();
 
-        return $this->orderList($genders);
-    }
+            return $this->orderList($genders);
+        }
 
-    public function categoriesList(){
-        $categories = Param::where ('','')->get();
+        public function categoriesList(){
+            $categories = Param::where ('paramtype_id','5')->get();
 
-        return $this->orderList($categories);
-    }
+            return $this->orderList($categories);
+        }
 
-    public function subcategoriesList(){
-        $subcategories = Param::where ('','')->get();
+        public function subcategoriesList(){
+            $subcategories = Param::where ('paramtype_id','13')->get();
 
-        return $this->orderList($subcategories);
-    }
+            return $this->orderList($subcategories);
+        }
 
-    public function marksList(){
-        $marks = Param::where ('','')->get();
+        public function marksList(){
+            $marks = Param::where ('paramtype_id','4')->get();
 
-        return $this->orderList($marks);
-    }
+            return $this->orderList($marks);
+        }
 
-    public function colorsList(){
-        $colors = Param::where ('','')->get();
+        public function colorsList(){
+            $colors = Param::where ('paramtype_id','8')->get();
 
-        return $this->orderList($colors );
-    }
+            return $this->orderList($colors );
+        }
 
-    public function paymentMethodsList(){
-        $payment = Param::where ('','')->get();
+        public function paymentMethodsList(){
+            $payment = Param::where ('paramtype_id','16')->get();
 
-        return $this->orderList($payment);
-    }
+            return $this->orderList($payment);
+        }
 
-    public function typesOfordersList(){
-        $orders = Param::where ('','')->get();
+        public function typesOfordersList(){
+            $orders = Param::where ('paramtype_id','10')->get();
 
-        return $this->orderList($orders);
-    }
+            return $this->orderList($orders);
+        }
 
-    public function index(Request $request){
+    public function index(){
         $params = Param::all()->sortBy('id');
 
         foreach ($params as $param){
         $param['paramtype_id'] = $param->paramtype_id;
         $param['name']= $param->name;
-        $param['param_foreign ' ]= $param->param_foreign ;     
-        $param['param_state  ']= $param->param_state  ;
-      
+        $param['param_foreing']= $param->param_foreing;     
+        $param['param_state']= $param->param_state;
         $data[] = $param; 
-    }
+     }
         if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, $msgError = 'parametros no encontrado.' );
+            return OS::frontendResponse('404', 'error',  $data,  'parametros nos encontrados.' );
         }else{
             return OS::frontendResponse('200','success', $data, null); 
         }
