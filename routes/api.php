@@ -69,7 +69,7 @@ Route::put('ratings/{rating}',[RatingController::class,'update']);
 Route::delete('ratings/{rating}',[RatingController::class,'destroy']);
 
 //Routes Param Types
-Route::get('ParamTypes',[ParamTypeController::class,'index']);
+Route::get('paramTypes',[ParamTypeController::class,'index']);
 Route::get('paramTypes/{type}',[ParamTypeController::class,'show']);
 Route::post('paramTypes',[ParamTypeController::class,'store']);
 Route::put('paramTypes/{type}',[ParamTypeController::class,'update']);
