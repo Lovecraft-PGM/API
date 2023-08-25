@@ -3,26 +3,26 @@
 namespace App\Http\Controllers;
 use App\Http\Controllers\ServiceController as OS;
 use Illuminate\Http\Request;
-use App\Models\ParamType;
+use App\Models\paramType;
 
-class ParamTypeController extends Controller
+class paramTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $paramtypes = ParamType::all()->sortBy('id');
+        $paramTypes = paramType::all()->sortBy('id');
 
-        foreach ($paramtypes as $paramtype){
-        $paramtype['name'] = $paramtype -> name ;
-        $paramtype['range_min']= $paramtype ->range_min ;
-        $paramtype['range_max'] = $paramtype -> range_max  ;
-        $data[] = $paramtype; 
+        foreach ($paramTypes as $paramType){
+        $paramType['name'] = $paramType -> name ;
+        $paramType['range_min']= $paramType ->range_min ;
+        $paramType['range_max'] = $paramType -> range_max  ;
+        $data[] = $paramType; 
     }
-    if (count($paramtypes) == null) {
-        $data = $paramtypes;
-        return OS::frontendResponse('404', 'error',  $data, $msgError = 'Tipo de Parametro no encontrado.' );
+    if (count($paramTypes) == null) {
+        $data = $paramTypes;
+        return OS::frontendResponse('404', 'error',  $data,  'Tipo de Parametro no encontrado.' );
     }else{
         return OS::frontendResponse('200','success', $data, null); 
     }
@@ -43,12 +43,12 @@ class ParamTypeController extends Controller
     public function store(Request $request)
     {
       
-        $paramtype=new ParamType;   
-        $paramtype->name = $request -> name ;
-        $paramtype->range_min= $request ->range_min ;
-        $paramtype->range_max = $request -> range_max  ;
-        $paramtype-> save ();    // save
-        $data[] = $paramtype;
+        $paramType=new paramType;   
+        $paramType->name = $request -> name ;
+        $paramType->range_min= $request ->range_min ;
+        $paramType->range_max = $request -> range_max  ;
+        $paramType-> save ();    // save
+        $data[] = $paramType;
         if ($data == null) {
             return OS::frontendResponse('404', 'error',  $data, 'Tipo de Parametro no creado.' );
         }else{
@@ -59,13 +59,14 @@ class ParamTypeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ParamType $paramtype)
+    public function show(paramType $paramType)
     {
-        $data[] = $paramtype;
+
+            $data[] = $paramType;
         if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, 'Tipos de Parametros  no encontrados.' );
+            return OS::frontendResponse('404', 'error',  $data, 'tipos de parametros no encontrados.' );
         }else{
-            return OS::frontendResponse('200','success', $data, 'Tipos de Parametros encontrados.'); 
+            return OS::frontendResponse('200','success', $data, ' tipos de parametros Parametros encontrados.'); 
         }
     }
 
@@ -80,13 +81,13 @@ class ParamTypeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ParamType $paramtype)
+    public function update(Request $request, paramType $paramType)
     {
-        $paramtype->name = $request -> name ;
-        $paramtype->range_min= $request ->range_min ;
-        $paramtype->range_max = $request -> range_max  ;
-        $paramtype-> save ();    // save
-        $data[] = $paramtype;
+        $paramType->name = $request -> name ;
+        $paramType->range_min= $request ->range_min ;
+        $paramType->range_max = $request -> range_max  ;
+        $paramType-> save ();    // save
+        $data[] = $paramType;
         if ($data == null) {
             return OS::frontendResponse('404', 'error',  $data, 'Tipo de Parametro no Actualizado.' );
         }else{
@@ -98,10 +99,10 @@ class ParamTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ParamType $paramtype)
+    public function destroy(paramType $paramType)
     {
-          $paramtype->delete();
-          $data[] = $paramtype;
+          $paramType->delete();
+          $data[] = $paramType;
           return OS::frontendResponse('200','success', $data, 'Tipo de Parametro eliminado'); 
     }
 }

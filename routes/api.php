@@ -70,10 +70,10 @@ Route::delete('ratings/{rating}',[RatingController::class,'destroy']);
 
 //Routes Param Types
 Route::get('paramTypes',[ParamTypeController::class,'index']);
-Route::get('paramTypes/{type}',[ParamTypeController::class,'show']);
+Route::get('paramTypes/{paramType}',[ParamTypeController::class,'show']);
 Route::post('paramTypes',[ParamTypeController::class,'store']);
-Route::put('paramTypes/{type}',[ParamTypeController::class,'update']);
-Route::delete('paramTypes/{type}',[ParamTypeController::class,'destroy']);
+Route::put('paramTypes/{paramType}',[ParamTypeController::class,'update']);
+Route::delete('paramTypes/{paramType}',[ParamTypeController::class,'destroy']);
 
 //Routes orders Details
 Route::get('orders',[OrderController::class,'index']);
