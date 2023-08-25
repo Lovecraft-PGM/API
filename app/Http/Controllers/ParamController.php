@@ -22,7 +22,7 @@ class ParamController extends Controller
 
 
     public function countriesList(){
-        $countries = Param::where ('','')->get();
+        $countries = Param::where ('1','')->get();
 
         return $this->orderList($countries);
     }
@@ -117,16 +117,30 @@ class ParamController extends Controller
         return $this->orderList($orders);
     }
 
-    public function index()
-    {
-  
-   }
+    public function index(Request $request){
+        $params = Param::all()->sortBy('id');
+
+        foreach ($params as $param){
+        $param['paramtype_id'] = $param->paramtype_id;
+        $param['name']= $param->name;
+        $param['param_foreign ' ]= $param->param_foreign ;     
+        $param['param_state  ']= $param->param_state  ;
+      
+        $data[] = $param; 
+    }
+        if ($data == null) {
+            return OS::frontendResponse('404', 'error',  $data, $msgError = 'parametros no encontrado.' );
+        }else{
+            return OS::frontendResponse('200','success', $data, null); 
+        }
+
+    }
 
     public function create()
     {
         //
     }
-
+    
     public function store(Request $request)
     {
         $param=new Param;   
