@@ -9,7 +9,7 @@ use  App\Http\controllers\ProductController;
 
 class ServiceController extends Controller
 {
-    static function frontendResponse($status, $type, $data = null, $msgError = null)
+    static function frontendResponse($status, $type, $data , $msgError = null)
     {
 
         $response = [

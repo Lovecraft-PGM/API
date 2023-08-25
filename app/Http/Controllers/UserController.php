@@ -80,10 +80,11 @@ class UserController extends Controller
     {
 
         $data[] = $user;
-        if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, 'Usuarios no encontrados.' );
-        }else{
+        if (!empty($data)) {
             return OS::frontendResponse('200','success', $data, 'Usuarios encontrados.'); 
+        }else{
+            return OS::frontendResponse('404', 'error',  $data, 'Usuarios no encontrados.' );
+
         }
     }
 
