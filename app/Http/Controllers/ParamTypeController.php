@@ -12,7 +12,7 @@ class ParamTypeController extends Controller
      */
     public function index()
     {
-        $paramtypes = Paramtype::all()->sortBy('id');
+        $paramtypes = ParamType::all()->sortBy('id');
 
         foreach ($paramtypes as $paramtype){
         $paramtype['name'] = $paramtype -> name ;
@@ -43,7 +43,7 @@ class ParamTypeController extends Controller
     public function store(Request $request)
     {
       
-        $paramtype=new Paramtype;   
+        $paramtype=new ParamType;   
         $paramtype->name = $request -> name ;
         $paramtype->range_min= $request ->range_min ;
         $paramtype->range_max = $request -> range_max  ;
@@ -59,7 +59,7 @@ class ParamTypeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Paramtype $paramtype)
+    public function show(ParamType $paramtype)
     {
         $data[] = $paramtype;
         if ($data == null) {
@@ -80,7 +80,7 @@ class ParamTypeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Paramtype $paramtype)
+    public function update(Request $request, ParamType $paramtype)
     {
         $paramtype->name = $request -> name ;
         $paramtype->range_min= $request ->range_min ;
@@ -98,7 +98,7 @@ class ParamTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Paramtype $paramtype)
+    public function destroy(ParamType $paramtype)
     {
           $paramtype->delete();
           $data[] = $paramtype;
