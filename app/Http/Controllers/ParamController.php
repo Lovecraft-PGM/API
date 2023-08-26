@@ -6,6 +6,7 @@ use App\Http\Controllers\ServiceController as OS;
 use Illuminate\Http\Request;
 use App\Models\Param;
 
+
 class ParamController extends Controller
 {
     public function orderList($params)
@@ -144,13 +145,15 @@ class ParamController extends Controller
     }
 
     public function index()
-    {
+    {   
+
+
         $params = Param::all()->sortBy('id');
 
         foreach ($params as $param) {
             $param['paramtype_id'] = $param->paramtype_id;
             $param['name'] = $param->name;
-            $param['param_foreing'] = $param->param_foreing;
+            $param['param_foreign'] = $param->param_foreign;
             $param['param_state'] = $param->param_state;
             $data[] = $param;
         }
@@ -170,9 +173,25 @@ class ParamController extends Controller
     public function store(Request $request)
     {
 
-       $SQL= "SELECT MAX(id) FROM params WHERE paramtype_id =1 "; 
-       
+
+        $SQL= "SELECT p.Id, p.name, pt.range_min, pt.range_max
+        FROM params p
+        INNER JOIN param_types pt ON p.paramtype_id = pt.Id
+        WHERE p.paramtype_id = 2;";
+        
+
+
+        if($SQL != $SQL){
+
+        }
+
+       $SQL1= "SELECT MAX(id) FROM params WHERE paramtype_id =2 "; 
+
+     
+
+      
         $param = new Param;
+        $param->id =$request->id ;
         $param->paramtype_id = $request->paramtype_id;
         $param->name = $request->name;
         $param->param_foreign = $request->param_foreign;

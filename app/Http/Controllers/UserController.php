@@ -26,7 +26,7 @@ class UserController extends Controller
                 $user['image'] =   $user->image;
                 $user['password'] = $user->password;
                 $user['param_rol'] = $user->param_rol;
-                $user['gender'] = $user->gender;
+                $user['param_gender'] = $user->param_gender;
                 $user['param_state'] = $user->param_state;
                 $data[] = $user;
             // }
@@ -62,7 +62,7 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->password = $request->password;
         $user->param_rol = $request->param_rol;
-        $user->gender = $request->gender;
+        $user->param_gender = $request->param_gender;
         $user->param_state = $request->param_state;
         $user->save(); 
         $data[] = $user;
@@ -111,7 +111,7 @@ class UserController extends Controller
         $user->param_state = $request->param_state;
         $user->type_user = $request->type_user;
         $user->email = $request->email;
-        $user->gender = $request->gender;
+        $user->param_gender = $request->param_gender;
         $user->password = $request->password;
         $user->save();    // save
         $data[]= $user;

@@ -24,7 +24,6 @@ class ProviderController extends Controller
         $provider['param_city']= $provider-> param_city   ;
         $provider['param_bank']= $provider-> param_bank   ;
         $provider['param_account']= $provider-> param_account    ;
-        $provider['param_gender']= $provider-> param_gender   ;
         $provider['param_subcategory']= $provider -> param_subcategory   ;
         $provider['account']= $provider-> account    ;
         $provider['param_state']= $provider->param_state;
@@ -61,7 +60,6 @@ class ProviderController extends Controller
         $provider->param_city= $request-> param_city   ;
         $provider->param_bank= $request-> param_bank   ;
         $provider->param_account= $request-> param_account    ;
-        $provider->param_gender= $request-> param_gender   ;
         $provider->param_subcategory= $request -> param_subcategory   ;
         $provider->account= $request-> account    ;
         $provider->param_state= $request->param_state;
@@ -104,7 +102,6 @@ class ProviderController extends Controller
         $provider->param_city= $request-> param_city   ;
         $provider->param_bank= $request-> param_bank   ;
         $provider->param_account= $request-> param_account    ;
-        $provider->param_gender= $request-> param_gender   ;
         $provider->param_subcategory= $request -> param_subcategory   ;
         $provider->account= $request-> account    ;
         $provider->param_state= $request->param_state;
