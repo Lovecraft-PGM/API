@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\ServiceController as OS;
 use Illuminate\Http\Request;
 use App\Models\Param;
+use App\Models\ParamType;
 
 
 class ParamController extends Controller
@@ -23,11 +24,9 @@ class ParamController extends Controller
 
         if (!empty($data)) {
             return OS::frontendResponse('200', 'success', $data, null);
-
         } else {
             return OS::frontendResponse('404', 'error', $data = null, 'no encontrado.');
         }
-
     }
 
 
@@ -145,7 +144,7 @@ class ParamController extends Controller
     }
 
     public function index()
-    {   
+    {
 
 
         $params = Param::all()->sortBy('id');
@@ -162,7 +161,6 @@ class ParamController extends Controller
         } else {
             return OS::frontendResponse('200', 'success', $data, null);
         }
-
     }
 
     public function create()
@@ -173,37 +171,25 @@ class ParamController extends Controller
     public function store(Request $request)
     {
 
+        $typeparam = ParamType::find($id);
+        $lastparamId = Param::where('Paramtype_id', $typeparam->id)->max('id');
+        $idparam = $lastparamId + 1;
 
-        $SQL= "SELECT p.Id, p.name, pt.range_min, pt.range_max
-        FROM params p
-        INNER JOIN param_types pt ON p.paramtype_id = pt.Id
-        WHERE p.paramtype_id = 2;";
-        
+        if ($idparam >= $typeparam->range_min && $idparam <= $typeparam->range_max) {
 
+            $param = new Param;
+            $param->id = $request->id;
+            $param->paramtype_id = $request->paramtype_id;
+            $param->name = $request->name;
+            $param->param_foreign = $request->param_foreign;
+            $param->param_state = $request->param_state;
+            $param->save(); // save
+            $data[] = $param;
 
-        if($SQL != $SQL){
-
-        }
-
-       $SQL1= "SELECT MAX(id) FROM params WHERE paramtype_id =2 "; 
-
-     
-
-      
-        $param = new Param;
-        $param->id =$request->id ;
-        $param->paramtype_id = $request->paramtype_id;
-        $param->name = $request->name;
-        $param->param_foreign = $request->param_foreign;
-        $param->param_state = $request->param_state;
-        $param->save(); // save
-        $data[] = $param;
-        if ($data == null) {
-            return OS::frontendResponse('404', 'error', $data, 'Parametro no creado.');
-        } else {
             return OS::frontendResponse('200', 'success', $data, 'Parametro creado correctamente.');
+        } else {
+            return OS::frontendResponse('400', 'error', [], 'Parametro no creado correctamente(no hay espacio dentro de los parametros)');
         }
-
     }
 
     /**
@@ -249,5 +235,4 @@ class ParamController extends Controller
         $data[] = $param;
         return OS::frontendResponse('200', 'success', $data, 'Parametro eliminado');
     }
-
 }
