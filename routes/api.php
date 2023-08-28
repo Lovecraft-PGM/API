@@ -46,7 +46,7 @@ Route::delete('products/{product}',[ProductController::class,'destroy']);
 //Routes Params
 Route::get('params',[ParamController::class,'index']);
 Route::get('params/{param}',[ParamController::class,'show']);
-Route::post('params/{id}',[ParamController::class,'store']);
+Route::post('params/{paramTypeId}',[ParamController::class,'store']);
 Route::put('params/{param}',[ParamController::class,'update']);
 Route::delete('params/{param}',[ParamController::class,'destroy']);
 

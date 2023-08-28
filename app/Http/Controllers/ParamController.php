@@ -168,18 +168,18 @@ class ParamController extends Controller
         //
     }
 
-    public function store(Request $request,$id )
+    public function store(Request $request,$paramTypeId )
     {
         
-        $typeparam = ParamType::find($id);
-        $lastparamId = Param::where('Paramtype_id', $typeparam->id)->max('id');
-        $idparam = $lastparamId + 1;
+        $typeParam = ParamType::find($paramTypeId);
+        $lastParamId = Param::where('Paramtype_id', $typeParam->id)->max('id');
+        $idParam = $lastParamId + 1;
 
-        if ($idparam >= $typeparam->range_min && $idparam <= $typeparam->range_max) {
+        if ($idParam >= $typeParam->range_min && $idParam <= $typeParam->range_max) {
 
             $param = new Param;
-            $param->id = $idparam ;
-            $param->paramtype_id = $typeparam-> id;
+            $param->id = $idParam ;
+            $param->paramtype_id = $typeParam-> id;
             $param->name = $request->name;
             $param->param_foreign = $request->param_foreign;
             $param->param_state = $request->param_state;
