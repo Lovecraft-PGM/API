@@ -26,13 +26,9 @@ use App\Http\Controllers\API\AuthController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::controller(AuthController::class)->group(function () {
-Route::post('login', 'login');
-Route::post('register', 'register');
-Route::post('logout', 'logout');
-Route::post('refresh', 'refresh');
-});
 
+Route::middleware('X_API_KEY')->group( function () {
+ 
 //Routes user
 Route::get('users',[UserController::class,'index']);
 Route::get('users/{user}',[UserController::class,'show']);
@@ -50,7 +46,7 @@ Route::delete('products/{product}',[ProductController::class,'destroy']);
 //Routes Params
 Route::get('params',[ParamController::class,'index']);
 Route::get('params/{param}',[ParamController::class,'show']);
-Route::post('params',[ParamController::class,'store']);
+Route::post('params/{id}',[ParamController::class,'store']);
 Route::put('params/{param}',[ParamController::class,'update']);
 Route::delete('params/{param}',[ParamController::class,'destroy']);
 
@@ -82,8 +78,6 @@ Route::post('orders',[OrderController::class,'store']);
 Route::put('orders/{order}',[OrderController::class,'update']);
 Route::delete('orders/{order}',[OrderController::class,'destroy']);
 
-
-
 //Routes Gets Param Lits
 Route::get('countries',[ParamController::class,'countriesList']);
 Route::get('departments',[ParamController::class,'departmentsList']);
@@ -101,3 +95,15 @@ Route::get('marks',[ParamController::class,'marksList']);
 Route::get('colors',[ParamController::class,'colorsList']);
 Route::get('paymentMethods',[ParamController::class,'paymentMethodsList']);
 Route::get('typesOrders',[ParamController::class,'typesOfordersList']);
+
+
+});
+
+
+Route::controller(AuthController::class)->group(function () {
+Route::post('login', 'login');
+Route::post('register', 'register');
+Route::post('logout', 'logout');
+Route::post('refresh', 'refresh');
+});
+

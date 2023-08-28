@@ -10,7 +10,6 @@ class Param extends Model
     use HasFactory;
 
     protected $fillable = [
-        "id",
         "paramtype_id",
         "name",
         "param_foreign",
