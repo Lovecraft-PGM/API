@@ -14,11 +14,11 @@ class Param extends Model
         "name",
         "param_foreign",
         "param_state",
-        
+
     ];
 
     public function param (){
         return $this->belongsToMany(Param::class);
     }
-    
+
 }

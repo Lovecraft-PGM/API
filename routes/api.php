@@ -28,7 +28,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware('X_API_KEY')->group( function () {
- 
+
 //Routes user
 Route::get('users',[UserController::class,'index']);
 Route::get('users/{user}',[UserController::class,'show']);
@@ -46,7 +46,7 @@ Route::delete('products/{product}',[ProductController::class,'destroy']);
 //Routes Params
 Route::get('params',[ParamController::class,'index']);
 Route::get('params/{param}',[ParamController::class,'show']);
-Route::post('params/{paramTypeId}',[ParamController::class,'store']);
+Route::post('params',[ParamController::class,'store']);
 Route::put('params/{param}',[ParamController::class,'update']);
 Route::delete('params/{param}',[ParamController::class,'destroy']);
 
