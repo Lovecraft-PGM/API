@@ -168,10 +168,10 @@ class ParamController extends Controller
         //
     }
 
-    public function store(Request $request,$paramTypeId )
+    public function store(Request $request )
     {
-        
-        $typeParam = ParamType::find($paramTypeId);
+
+        $typeParam = ParamType::find($request->paramTypeId);
         $lastParamId = Param::where('Paramtype_id', $typeParam->id)->max('id');
         $idParam = $lastParamId + 1;
 
@@ -214,18 +214,21 @@ class ParamController extends Controller
 
     public function update(Request $request, Param $param)
     {
-        $param = new Param;
+
         $param->paramtype_id = $request->paramtype_id;
         $param->name = $request->name;
         $param->param_foreign = $request->param_foreign;
         $param->param_state = $request->param_state;
         $param->save(); // save
         $data[] = $param;
-        if ($data == null) {
-            return OS::frontendResponse('404', 'error', $data, 'Parametro no Actualizado.');
-        } else {
-            return OS::frontendResponse('200', 'success', $data, 'Parametro Actualizado correctamente.');
+        if (!empty($data)) {
+        return OS::frontendResponse('200', 'success', $data, 'Parametro Actualizado correctamente.');
+
+        }else{
+
+        return OS::frontendResponse('404', 'error', $data=[], 'Parametro no Actualizado.');
         }
+
     }
 
 
