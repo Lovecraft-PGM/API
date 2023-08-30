@@ -126,10 +126,19 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $user)
+    public function destroy(Request $request,User $user)
     {
-        $user->delete();
-        $data[] = $user;
-        return OS::frontendResponse('200','success', $data, 'Usuario eliminado'); 
+        $user = User::find($request->id);
+
+        if ($user->param_state != 1652) {
+
+            $param_state = $user->param_state;
+            $user->param_state = 1652;
+            $user->save();
+            $data[] = $user;
+            return OS::frontendResponse('200', 'success', $data, 'Usuario desactivado correctamente.');
+        }else{
+            return OS::frontendResponse('400', 'error', [], 'El usuario ya se encuentra inactivo.');
+        }
     }
 }
