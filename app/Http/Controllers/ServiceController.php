@@ -15,6 +15,7 @@ class ServiceController extends Controller
         $response = [
             'status' => $status,
             'type' => $type
+            
         ];
         if (!is_null($data))
             $response['data'] = $data;

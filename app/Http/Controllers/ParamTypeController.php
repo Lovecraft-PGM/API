@@ -3,16 +3,16 @@
 namespace App\Http\Controllers;
 use App\Http\Controllers\ServiceController as OS;
 use Illuminate\Http\Request;
-use App\Models\paramType;
+use App\Models\ParamType;
 
-class paramTypeController extends Controller
+class ParamTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $paramTypes = paramType::all()->sortBy('id');
+        $paramTypes = ParamType::all()->sortBy('id');
 
         foreach ($paramTypes as $paramType){
         $paramType['name'] = $paramType -> name ;
@@ -43,7 +43,7 @@ class paramTypeController extends Controller
     public function store(Request $request)
     {
       
-        $paramType=new paramType;   
+        $paramType=new ParamType;   
         $paramType->name = $request -> name ;
         $paramType->range_min= $request ->range_min ;
         $paramType->range_max = $request -> range_max  ;
@@ -59,7 +59,7 @@ class paramTypeController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(paramType $paramType)
+    public function show(ParamType $paramType)
     {
 
             $data[] = $paramType;
@@ -81,7 +81,7 @@ class paramTypeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, paramType $paramType)
+    public function update(Request $request, ParamType $paramType)
     {
         $paramType->name = $request -> name ;
         $paramType->range_min= $request ->range_min ;
@@ -99,10 +99,19 @@ class paramTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(paramType $paramType)
+    public function destroy(ParamType $paramType, Request $request)
     {
-          $paramType->delete();
-          $data[] = $paramType;
-          return OS::frontendResponse('200','success', $data, 'Tipo de Parametro eliminado'); 
+        $paramType = ParamType::find($request->id);
+
+        if ($paramType->param_state != 1652) {
+
+            $param_state = $paramType->param_state;
+            $paramType->param_state = 1652;
+            $paramType->save();
+            $data[] = $paramType;
+            return OS::frontendResponse('200', 'success', $data, 'Usuario desactivado correctamente.');
+        }else{
+            return OS::frontendResponse('400', 'error', [], 'El usuario ya se encuentra inactivo.');
+        } 
     }
 }

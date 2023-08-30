@@ -236,6 +236,6 @@ class ParamController extends Controller
     {
         $param->delete();
         $data[] = $param;
-        return OS::frontendResponse('200', 'success', $data, 'Parametro eliminado');
+        return OS::frontendResponse('no esta llegando el msg', 'success', $data, 'Parametro eliminado');
     }
 }

@@ -131,10 +131,19 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy(Product $product, Request $request)
     {
-        $product->delete();
-        $data[] = $product;
-        return OS::frontendResponse('200','success', $data, 'Producto eliminado'); 
+        $product = Product::find($request->id);
+
+        if ($product->param_state != 1652) {
+
+            $param_state = $product->param_state;
+            $product->param_state = 1652;
+            $product->save();
+            $data[] = $product;
+            return OS::frontendResponse('200', 'success', $data, 'Usuario desactivado correctamente.');
+        }else{
+            return OS::frontendResponse('400', 'error', [], 'El usuario ya se encuentra inactivo.');
+        }
     }
 }

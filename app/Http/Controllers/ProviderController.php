@@ -113,10 +113,19 @@ class ProviderController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Provider $provider)
+    public function destroy(Provider $provider, Request $request)
     {
-        $provider->delete();
-        $data[] = $provider;
-        return OS::frontendResponse('200','success', $data, 'Proveedor eliminado'); 
+        $provider = Provider::find($request->id);
+
+        if ($provider->param_state != 1652) {
+
+            $param_state = $provider->param_state;
+            $provider->param_state = 1652;
+            $provider->save();
+            $data[] = $provider;
+            return OS::frontendResponse('200', 'success', $data, 'Usuario desactivado correctamente.');
+        }else{
+            return OS::frontendResponse('400', 'error', [], 'El usuario ya se encuentra inactivo.');
+        }
     }
 }

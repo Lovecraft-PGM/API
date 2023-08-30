@@ -110,10 +110,19 @@ class OrderController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy( Order $order)
+    public function destroy( Order $order, Request $request)
     {
-        $order->delete();
-        $data[] = $order;
-        return OS::frontendResponse('200','success', $data, 'Orden eliminada'); 
+        $order = Order::find($request->id);
+
+        if ($order->param_state != 1652) {
+
+            $param_state = $order->param_state;
+            $order->param_state = 1652;
+            $order->save();
+            $data[] = $order;
+            return OS::frontendResponse('200', 'success', $data, 'Usuario desactivado correctamente.');
+        }else{
+            return OS::frontendResponse('400', 'error', [], 'El usuario ya se encuentra inactivo.');
+        }
     }
 }

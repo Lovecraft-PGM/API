@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 use App\Http\Controllers\ServiceController as OS;
 use Illuminate\Http\Request;
-use App\Models\OrderDetail;
-class OrderDetailController extends Controller
+use App\Models\orderDetail;
+class orderDetailController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(){
-        $ordersDetails = OrderDetail::all()->sortBy('id');
+        $ordersDetails = orderDetail::all()->sortBy('id');
         
         foreach ($ordersDetails as $orderDetail){
         $orderDetail['o_id']= $orderDetail -> o_id ;
@@ -44,14 +44,14 @@ class OrderDetailController extends Controller
      */
     public function store(Request $request)
     {
-        $orderdetail=new Orderdetail;
-        $orderdetail->o_id= $request -> o_id ;
-        $orderdetail->product_id= $request ->product_id ;
-        $orderdetail->qty= $request -> qty  ;
-        $orderdetail->subtotal=$request ->subtotal;
-        $orderdetail->param_state= $request ->param_state;
-        $orderdetail-> save ();    // save 
-        $data[] = $orderdetail;
+        $orderDetail=new orderDetail;
+        $orderDetail->o_id= $request -> o_id ;
+        $orderDetail->product_id= $request ->product_id ;
+        $orderDetail->qty= $request -> qty  ;
+        $orderDetail->subtotal=$request ->subtotal;
+        $orderDetail->param_state= $request ->param_state;
+        $orderDetail-> save ();    // save 
+        $data[] = $orderDetail;
         if ($data == null) {
             return OS::frontendResponse('404', 'error',  $data, 'Detalle de orden Creado.' );
         }else{
@@ -63,9 +63,9 @@ class OrderDetailController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Orderdetail $orderdetail)
+    public function show(orderDetail $orderDetail)
     {
-        $data[] = $orderdetail;
+        $data[] = $orderDetail;
         if ($data == null) {
             return OS::frontendResponse('404', 'error',  $data, 'Detalles de ordenes no encontrados.' );
         }else{
@@ -84,16 +84,16 @@ class OrderDetailController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Orderdetail $orderdetail)
+    public function update(Request $request, orderDetail $orderDetail)
     {
-        $orderdetail=new Orderdetail;
-        $orderdetail->o_id= $request -> o_id ;
-        $orderdetail->product_id= $request ->product_id ;
-        $orderdetail->qty= $request -> qty  ;
-        $orderdetail->subtotal=$request ->subtotal;
-        $orderdetail->param_state= $request ->param_state;
-        $orderdetail-> save ();    // save
-        $data[]= $orderdetail;
+        $orderDetail=new orderDetail;
+        $orderDetail->o_id= $request -> o_id ;
+        $orderDetail->product_id= $request ->product_id ;
+        $orderDetail->qty= $request -> qty  ;
+        $orderDetail->subtotal=$request ->subtotal;
+        $orderDetail->param_state= $request ->param_state;
+        $orderDetail-> save ();    // save
+        $data[]= $orderDetail;
         if ($data == null) {
             return OS::frontendResponse('404', 'error',  $data, 'Detalle de orden no Actualizado.' );
         }else{
@@ -104,13 +104,19 @@ class OrderDetailController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Orderdetail $orderdetail)
+    public function destroy(orderDetail $orderDetail, Request $request)
     {
-        $orderdetail->delete();
-        $data = [
-            'message' => 'orders deleted successfully',
-            'order' => $orderdetail
-        ];
-        return response()->json($data);
+        $orderDetail = orderDetail::find($request->id);
+
+        if ($orderDetail->param_state != 1652) {
+
+            $param_state = $orderDetail->param_state;
+            $orderDetail->param_state = 1652;
+            $orderDetail->save();
+            $data[] = $orderDetail;
+            return OS::frontendResponse('200', 'success', $data, 'Usuario desactivado correctamente.');
+        }else{
+            return OS::frontendResponse('400', 'error', [], 'El usuario ya se encuentra inactivo.');
+        }
     }
 }

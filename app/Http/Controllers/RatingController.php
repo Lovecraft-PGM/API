@@ -102,10 +102,19 @@ class RatingController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Rating $rating)
+    public function destroy(Rating $rating, Request $request)
     {
-        $rating->delete();
-        $data[] = $rating;
-        return OS::frontendResponse('200','success', $data, 'Rating deleted successfully.'); 
+        $rating = Rating::find($request->id);
+
+        if ($rating->param_state != 1652) {
+
+            $param_state = $rating->param_state;
+            $rating->param_state = 1652;
+            $rating->save();
+            $data[] = $rating;
+            return OS::frontendResponse('200', 'success', $data, 'Usuario desactivado correctamente.');
+        }else{
+            return OS::frontendResponse('400', 'error', [], 'El usuario ya se encuentra inactivo.');
+        }
     }
 }
