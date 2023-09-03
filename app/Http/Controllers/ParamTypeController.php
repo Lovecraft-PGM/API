@@ -42,17 +42,22 @@ class ParamTypeController extends Controller
      */
     public function store(Request $request)
     {
-      
+
+        $lastRangeMax = ParamType::max('range_max')+1;
+        $lastId = ParamType::latest('id')->first()->id;
+        $newId = $lastId + 1;
+
         $paramType=new ParamType;   
+        $paramType->id = $newId;
         $paramType->name = $request -> name ;
-        $paramType->range_min= $request ->range_min ;
-        $paramType->range_max = $request -> range_max  ;
-        $paramType-> save ();    // save
+        $paramType->range_min = $lastRangeMax ;
+        $paramType->range_max = $lastRangeMax + $request->input('amount');
+        $paramType-> save ();     // save
         $data[] = $paramType;
         if ($data == null) {
             return OS::frontendResponse('404', 'error',  $data, 'Tipo de Parametro no creado.' );
         }else{
-            return OS::frontendResponse('201','success', $data, 'Tipo de Parametro creado correctamente.'); 
+            return OS::frontendResponse('200','success', $data, 'Tipo de Parametro creado correctamente.'); 
         }
     }
 
