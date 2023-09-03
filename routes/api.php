@@ -24,7 +24,7 @@ Route::middleware('X_API_KEY')->group(function () {
     Route::resource('providers', ProviderController::class);
     Route::resource('ratings', RatingController::class);
     Route::resource('paramTypes', ParamTypeController::class);
-    Route::resource('orders', OrderDetailController::class);
+    Route::resource('orders', OrderController::class);
     Route::resource('orders', OrderController::class);
     Route::get('countries',[ParamController::class,'countriesList']);
     Route::get('departments',[ParamController::class,'departmentsList']);

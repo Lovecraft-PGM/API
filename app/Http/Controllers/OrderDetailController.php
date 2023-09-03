@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 use App\Http\Controllers\ServiceController as OS;
 use Illuminate\Http\Request;
-use App\Models\orderDetail;
-class orderDetailController extends Controller
+use App\Models\OrderDetail;
+class OrderDetailController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(){
-        $ordersDetails = orderDetail::all()->sortBy('id');
+        $ordersDetails = OrderDetail::all()->sortBy('id');
         
         foreach ($ordersDetails as $orderDetail){
         $orderDetail['o_id']= $orderDetail -> o_id ;
