@@ -22,9 +22,9 @@ class OrderDetailController extends Controller
         }
         if (count($ordersDetails) == null) {
             $data = $ordersDetails;
-            return OS::frontendResponse('404', 'error',  $data, $msgError = 'Not Found.' );
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'No encontrado' );
         }else{
-            return OS::frontendResponse('200','success', $data, null); 
+            return OS::frontendResponse('200','success', $data, $msg = 'Encontrado'); 
         }
         }
 
@@ -53,9 +53,9 @@ class OrderDetailController extends Controller
         $orderDetail-> save ();    // save 
         $data[] = $orderDetail;
         if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, 'Detalle de orden Creado.' );
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Detalle de orden Creado.' );
         }else{
-            return OS::frontendResponse('201','success', $data, 'Detalle de orden no creado'); 
+            return OS::frontendResponse('201','success', $data, $msg = 'Detalle de orden no creado'); 
         }
   
     }
@@ -67,9 +67,9 @@ class OrderDetailController extends Controller
     {
         $data[] = $orderDetail;
         if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, 'Detalles de ordenes no encontrados.' );
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Detalles de ordenes no encontrados.' );
         }else{
-            return OS::frontendResponse('200','success', $data, 'Detalles de ordenes encontrados.'); 
+            return OS::frontendResponse('200','success', $data, $msg = 'Detalles de ordenes encontrados.'); 
         }
     }
 
@@ -95,9 +95,9 @@ class OrderDetailController extends Controller
         $orderDetail-> save ();    // save
         $data[]= $orderDetail;
         if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, 'Detalle de orden no Actualizado.' );
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Detalle de orden no Actualizado.' );
         }else{
-            return OS::frontendResponse('201','success', $data, 'Detalle de orden Actualizado correctamente.'); 
+            return OS::frontendResponse('201','success', $data, $msg = 'Detalle de orden Actualizado correctamente.'); 
         }
     }
 
@@ -114,9 +114,9 @@ class OrderDetailController extends Controller
             $orderDetail->param_state = 1652;
             $orderDetail->save();
             $data[] = $orderDetail;
-            return OS::frontendResponse('200', 'success', $data, 'Usuario desactivado correctamente.');
+            return OS::frontendResponse('200', 'success', $data, $msg = 'Usuario desactivado correctamente.');
         }else{
-            return OS::frontendResponse('400', 'error', [], 'El usuario ya se encuentra inactivo.');
+            return OS::frontendResponse('400', 'error', [], $msg = 'El usuario ya se encuentra inactivo.');
         }
     }
 }

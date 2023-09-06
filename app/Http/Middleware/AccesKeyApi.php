@@ -16,7 +16,7 @@ class AccesKeyApi
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $apikey = $request->headers->get('x_api_key');
+        $apikey = $request->get('key');
 
         if ($apikey != env('X_API_KEY')){
             return response()->json(['message' => 'No autorizado']); 

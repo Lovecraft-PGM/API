@@ -33,9 +33,9 @@ class UserController extends Controller
         }
        if (count($users) == null) {
         $data[] = $users;
-        return OS::frontendResponse('404', 'error',  $data, 'Usuarios no encontrado.' );
+        return OS::frontendResponse('404', 'error',  $data, $msg ='Usuarios no encontrado.' );
         }else{
-        return OS::frontendResponse('200','success', $data, null); 
+        return OS::frontendResponse('200','success', $data, $msg = 'Usuarios encontrado.'); 
         }
     }
 
@@ -67,9 +67,9 @@ class UserController extends Controller
         $user->save(); 
         $data[] = $user;
         if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, 'Usuario no creado.' );
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Usuario no creado.' );
         }else{
-            return OS::frontendResponse('201','success', $data, 'Usuario creado correctamente.'); 
+            return OS::frontendResponse('200','success', $data, $msg = 'Usuario creado correctamente.'); 
         }
     }
 
@@ -81,9 +81,9 @@ class UserController extends Controller
 
         $data[] = $user;
         if (!empty($data)) {
-            return OS::frontendResponse('200','success', $data, 'Usuarios encontrados.'); 
+            return OS::frontendResponse('200','success', $data, $msg = 'Usuarios encontrados.'); 
         }else{
-            return OS::frontendResponse('404', 'error',  $data, 'Usuarios no encontrados.' );
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Usuarios no encontrados.' );
 
         }
     }
@@ -116,9 +116,9 @@ class UserController extends Controller
         $user->save();    // save
         $data[]= $user;
         if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, 'Usuario no Actualizado.' );
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Usuario no Actualizado.' );
         }else{
-            return OS::frontendResponse('201','success', $data, 'Usuario Actualizado correctamente.'); 
+            return OS::frontendResponse('200','success', $data, $msg = 'Usuario Actualizado correctamente.'); 
         }
     
     }
@@ -136,9 +136,9 @@ class UserController extends Controller
             $user->param_state = 1652;
             $user->save();
             $data[] = $user;
-            return OS::frontendResponse('200', 'success', $data, 'Usuario desactivado correctamente.');
+            return OS::frontendResponse('200', 'success', $data, $msg = 'Usuario desactivado correctamente.');
         }else{
-            return OS::frontendResponse('400', 'error', [], 'El usuario ya se encuentra inactivo.');
+            return OS::frontendResponse('400', 'error', [], $msg = 'El usuario ya se encuentra inactivo.');
         }
     }
 }

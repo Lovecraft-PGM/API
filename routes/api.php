@@ -18,6 +18,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware('X_API_KEY')->group(function () {
+<<<<<<< Updated upstream
     Route::resource('users', UserController::class);
     Route::resource('products', ProductController::class);
     Route::resource('params', ParamController::class);
@@ -26,6 +27,8 @@ Route::middleware('X_API_KEY')->group(function () {
     Route::resource('paramTypes', ParamTypeController::class);
     Route::resource('orders', OrderController::class);
     Route::resource('orders', OrderController::class);
+=======
+>>>>>>> Stashed changes
     Route::get('countries',[ParamController::class,'countriesList']);
     Route::get('departments',[ParamController::class,'departmentsList']);
     Route::get('cities',[ParamController::class,'citiesList']);
@@ -42,6 +45,14 @@ Route::middleware('X_API_KEY')->group(function () {
     Route::get('colors',[ParamController::class,'colorsList']);
     Route::get('paymentMethods',[ParamController::class,'paymentMethodsList']);
     Route::get('typesOrders',[ParamController::class,'typesOfordersList']);
+    Route::resource('users', UserController::class);
+    Route::resource('products', ProductController::class);
+    Route::resource('params', ParamController::class);
+    Route::resource('providers', ProviderController::class);
+    Route::resource('ratings', RatingController::class);
+    Route::resource('paramTypes', ParamTypeController::class);
+    Route::resource('orders', OrderDetailController::class);
+    Route::resource('orders', OrderController::class);
 });
 
 Route::controller(AuthController::class)->group(function () {

@@ -24,9 +24,9 @@ class RatingController extends Controller
     }
     if (count($ratings) == null) {
         $data = $ratings;
-        return OS::frontendResponse('404', 'error',  $data, $msgError = 'Not Found.' );
+        return OS::frontendResponse('404', 'error',  $data, $msg = 'No encontrado.' );
     }else{
-        return OS::frontendResponse('200','success', $data, null); 
+        return OS::frontendResponse('200','success', $data, $msg = 'Encontrado.'); 
     }
 
     }
@@ -53,9 +53,9 @@ class RatingController extends Controller
         $rating->save(); 
         $data[] = $rating;
         if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, 'Rating no creado.' );
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Rating no creado.' );
         }else{
-            return OS::frontendResponse('201','success', $data, 'Rating creado correctamente.'); 
+            return OS::frontendResponse('200','success', $data, $msg = 'Rating creado correctamente.'); 
         }
     }
 
@@ -66,9 +66,9 @@ class RatingController extends Controller
     {
         $data[] = $rating;
         if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, 'Ratings no encontrados.' );
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Ratings no encontrados.' );
         }else{
-            return OS::frontendResponse('200','success', $data, 'Ratings encontrados.'); 
+            return OS::frontendResponse('200','success', $data, $msg = 'Ratings encontrados.'); 
         }
     }
 
@@ -93,9 +93,9 @@ class RatingController extends Controller
         $rating-> save ();    // save
         $data[]= $rating;
         if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, 'Rating no Actualizado.' );
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Rating no Actualizado.' );
         }else{
-            return OS::frontendResponse('201','success', $data, 'Rating Actualizado correctamente.'); 
+            return OS::frontendResponse('200','success', $data, $msg = 'Rating Actualizado correctamente.'); 
         }
     }
 
@@ -112,9 +112,9 @@ class RatingController extends Controller
             $rating->param_state = 1652;
             $rating->save();
             $data[] = $rating;
-            return OS::frontendResponse('200', 'success', $data, 'Usuario desactivado correctamente.');
+            return OS::frontendResponse('200', 'success', $data, $msg = 'Usuario desactivado correctamente.');
         }else{
-            return OS::frontendResponse('400', 'error', [], 'El usuario ya se encuentra inactivo.');
+            return OS::frontendResponse('400', 'error', [], $msg = 'El usuario ya se encuentra inactivo.');
         }
     }
 }

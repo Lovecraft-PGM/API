@@ -23,9 +23,9 @@ class ParamController extends Controller
         }
 
         if (!empty($data)) {
-            return OS::frontendResponse('200', 'success', $data, null);
+            return OS::frontendResponse('200', 'success', $data,  $msg = 'Encontrado');
         } else {
-            return OS::frontendResponse('404', 'error', $data = null, 'no encontrado.');
+            return OS::frontendResponse('404', 'error', $data = null,  $msg ='No encontrado.');
         }
     }
 
@@ -157,9 +157,9 @@ class ParamController extends Controller
             $data[] = $param;
         }
         if ($data == null) {
-            return OS::frontendResponse('404', 'error', $data, 'parametros no encontrados.');
+            return OS::frontendResponse('404', 'error', $data,  $msg = 'Parametros no encontrados.');
         } else {
-            return OS::frontendResponse('200', 'success', $data, null);
+            return OS::frontendResponse('200', 'success', $data, $msg = 'Parametros encontrados');
         }
     }
 
@@ -186,9 +186,9 @@ class ParamController extends Controller
             $param->save(); // save
             $data[] = $param;
 
-            return OS::frontendResponse('200', 'success', $data, 'Parametro creado correctamente.');
+            return OS::frontendResponse('200', 'success', $data, $msg = 'Parametro creado correctamente.');
         } else {
-            return OS::frontendResponse('400', 'error', [], 'Parametro no creado correctamente(no hay espacio dentro de los parametros)');
+            return OS::frontendResponse('400', 'error', [], $msg = 'Parametro no creado correctamente(no hay espacio dentro de los parametros)');
         }
     }
 
@@ -199,9 +199,9 @@ class ParamController extends Controller
     {
         $data[] = $param;
         if ($data == null) {
-            return OS::frontendResponse('404', 'error', $data, 'Parametros no encontrados.');
+            return OS::frontendResponse('404', 'error', $data, $msg = 'Parametro no encontrado.');
         } else {
-            return OS::frontendResponse('200', 'success', $data, 'Parametros encontrados.');
+            return OS::frontendResponse('200', 'success', $data, $msg = 'Parametro encontrado.');
         }
     }
 
@@ -222,11 +222,11 @@ class ParamController extends Controller
         $param->save(); // save
         $data[] = $param;
         if (!empty($data)) {
-        return OS::frontendResponse('200', 'success', $data, 'Parametro Actualizado correctamente.');
+        return OS::frontendResponse('200', 'success', $data, $msg = 'Parametro Actualizado correctamente.');
 
         }else{
 
-        return OS::frontendResponse('404', 'error', $data=[], 'Parametro no Actualizado.');
+        return OS::frontendResponse('404', 'error', $data=[], $msg = 'Parametro no Actualizado.');
         }
 
     }
@@ -236,6 +236,6 @@ class ParamController extends Controller
     {
         $param->delete();
         $data[] = $param;
-        return OS::frontendResponse('no esta llegando el msg', 'success', $data, 'Parametro eliminado');
+        return OS::frontendResponse('200', 'success', $data, $msg = 'Parametro eliminado');
     }
 }

@@ -9,7 +9,7 @@ use  App\Http\controllers\ProductController;
 
 class ServiceController extends Controller
 {
-    static function frontendResponse($status, $type, $data , $msgError = null)
+    static function frontendResponse($status, $type, $data , $msg = null)
     {
 
         $response = [
@@ -21,8 +21,12 @@ class ServiceController extends Controller
             $response['data'] = $data;
             
         if ($response['type'] == 'error') {
-            if (!is_null($msgError))
-                $response['error'] = ['message' => $msgError];
+            if (!is_null($msg))
+                $response['error'] = ['message' => $msg];
+        }
+        if ($response['type'] == 'success') {
+            if (!is_null($msg))
+            $response['success'] = ['message' => $msg];
         }
         return response()->json($response);
     }
