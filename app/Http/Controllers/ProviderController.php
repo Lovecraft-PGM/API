@@ -32,11 +32,18 @@ class ProviderController extends Controller
         }
         if (count($providers) == null) {
             $data = $providers;
+<<<<<<< Updated upstream
             return OS::frontendResponse('404', 'error',  $data, $msg = 'No encontrado.' );
         }else{
             return OS::frontendResponse('200','success', $data, $msg = 'Encontrado.'); 
         }    
     }
+=======
+            return OS::frontendResponse('404', 'error',  $data, $msg =  'Proveedores no encontrados' );
+        }else{
+            return OS::frontendResponse('200','success', $data, $msg = 'Proveedores  encontrados'); 
+        }    }
+>>>>>>> Stashed changes
 
     /**
      * Show the form for creating a new resource.
@@ -108,7 +115,11 @@ class ProviderController extends Controller
         $provider->param_state= $request->param_state;
         $provider-> save ();    // save
         $data[]= $provider;
+<<<<<<< Updated upstream
         return OS::frontendResponse('200','success', $data, $msg = 'Proveedor actualizado.'); 
+=======
+        return OS::frontendResponse('200','success', $data, $msg = 'Proveedor actualizado'); 
+>>>>>>> Stashed changes
     }
 
     /**
@@ -116,17 +127,21 @@ class ProviderController extends Controller
      */
     public function destroy(Provider $provider, Request $request)
     {
-        $provider = Provider::find($request->id);
 
         if ($provider->param_state != 1652) {
 
-            $param_state = $provider->param_state;
             $provider->param_state = 1652;
             $provider->save();
             $data[] = $provider;
+<<<<<<< Updated upstream
             return OS::frontendResponse('200', 'success', $data, $msg = 'Usuario desactivado correctamente.');
         }else{
             return OS::frontendResponse('400', 'error', [], $msg = 'El usuario ya se encuentra inactivo.');
+=======
+            return OS::frontendResponse('200', 'success', $data, $msg = 'Proveedor desactivado correctamente.');
+        }else{
+            return OS::frontendResponse('400', 'error', [], $msg = 'El Proveedor ya se encuentra inactivo.');
+>>>>>>> Stashed changes
         }
     }
 }

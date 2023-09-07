@@ -22,9 +22,15 @@ class ParamTypeController extends Controller
     }
     if (count($paramTypes) == null) {
         $data = $paramTypes;
+<<<<<<< Updated upstream
         return OS::frontendResponse('404', 'error',  $data,  $msg = 'Tipo de Parametro no encontrado.' );
     }else{
         return OS::frontendResponse('200','success', $data, $msg = 'Tipo de Parametro encontrado.'); 
+=======
+        return OS::frontendResponse('404', 'error',  $data, $msg = 'Tipo de Parametro no encontrado.' );
+    }else{
+        return OS::frontendResponse('200','success', $data,$msg = 'Tipo de Parametro encontrado.'); 
+>>>>>>> Stashed changes
     }
 
     }
@@ -52,6 +58,7 @@ class ParamTypeController extends Controller
         $paramType->name = $request -> name ;
         $paramType->range_min = $lastRangeMax ;
         $paramType->range_max = $lastRangeMax + $request->input('amount');
+<<<<<<< Updated upstream
         if ($paramType-> save()) {
                $data[] = $paramType;
             return OS::frontendResponse('200','success', $data, $msg = 'Tipo de Parametro creado correctamente.'); 
@@ -59,6 +66,14 @@ class ParamTypeController extends Controller
              $data[] = null;
             return OS::frontendResponse('404', 'error',  $data, $msg = 'Tipo de Parametro no creado.' );
             
+=======
+        $paramType-> save ();     // save
+        $data[] = $paramType;
+        if ($data == null) {
+            return OS::frontendResponse('404', 'error',  $data, $msg ='Tipo de Parametro no creado.' );
+        }else{
+            return OS::frontendResponse('200','success', $data, $msg ='Tipo de Parametro creado correctamente.'); 
+>>>>>>> Stashed changes
         }
     }
 
@@ -70,9 +85,15 @@ class ParamTypeController extends Controller
 
             $data[] = $paramType;
         if ($data == null) {
+<<<<<<< Updated upstream
             return OS::frontendResponse('404', 'error',  $data, $msg = 'tipos de parametros no encontrados.' );
         }else{
             return OS::frontendResponse('200','success', $data, $msg = ' tipos de parametros Parametros encontrados.'); 
+=======
+            return OS::frontendResponse('404', 'error',  $data, $msg ='tipos de parametros no encontrados.' );
+        }else{
+            return OS::frontendResponse('200','success', $data, $msg =' tipos de parametros Parametros encontrados.'); 
+>>>>>>> Stashed changes
         }
     }
 
@@ -95,9 +116,15 @@ class ParamTypeController extends Controller
         $paramType-> save ();    // save
         $data[] = $paramType;
         if ($data == null) {
+<<<<<<< Updated upstream
             return OS::frontendResponse('404', 'error',  $data, $msg = 'Tipo de Parametro no Actualizado.' );
         }else{
             return OS::frontendResponse('200','success', $data, $msg = 'Tipo de Parametro Actualizado correctamente.'); 
+=======
+            return OS::frontendResponse('404', 'error',  $data,$msg ='Tipo de Parametro no Actualizado.' );
+        }else{
+            return OS::frontendResponse('200','success', $data, $msg ='Tipo de Parametro Actualizado correctamente.'); 
+>>>>>>> Stashed changes
         }
     }
     
@@ -107,17 +134,21 @@ class ParamTypeController extends Controller
      */
     public function destroy(ParamType $paramType, Request $request)
     {
-        $paramType = ParamType::find($request->id);
+    
 
         if ($paramType->param_state != 1652) {
-
-            $param_state = $paramType->param_state;
             $paramType->param_state = 1652;
             $paramType->save();
             $data[] = $paramType;
+<<<<<<< Updated upstream
             return OS::frontendResponse('200', 'success', $data, $msg = 'Usuario desactivado correctamente.');
         }else{
             return OS::frontendResponse('400', 'error', [], $msg = 'El usuario ya se encuentra inactivo.');
+=======
+            return OS::frontendResponse('200', 'success', $data, $msg ='paramType desactivado correctamente.');
+        }else{
+            return OS::frontendResponse('400', 'error', [], $msg ='El paramType ya se encuentra inactivo.');
+>>>>>>> Stashed changes
         } 
     }
 }
