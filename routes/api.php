@@ -18,7 +18,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware('X_API_KEY')->group(function () {
-<<<<<<< Updated upstream
     Route::get('countries',[ParamController::class,'countriesList']);
     Route::get('departments',[ParamController::class,'departmentsList']);
     Route::get('cities',[ParamController::class,'citiesList']);
@@ -43,34 +42,6 @@ Route::middleware('X_API_KEY')->group(function () {
     Route::resource('paramTypes', ParamTypeController::class);
     Route::resource('orders', OrderDetailController::class);
     Route::resource('orders', OrderController::class);
-=======
-Route::get('countries',[ParamController::class,'countriesList']);
-Route::get('departments',[ParamController::class,'departmentsList']);
-Route::get('cities',[ParamController::class,'citiesList']);
-Route::get('typesUsers',[ParamController::class,'typesOfUsersList']);
-Route::get('roles',[ParamController::class,'rolesList']);
-Route::get('states',[ParamController::class,'statesList']);
-Route::get('banks',[ParamController::class,'banksList']);
-Route::get('typesBankAccounts',[ParamController::class,'typesOfBankAccountsList']);
-Route::get('sizes',[ParamController::class,'sizesList']);
-Route::get('gender',[ParamController::class,'genderList']);
-Route::get('categories',[ParamController::class,'categoriesList']);
-Route::get('subcategories',[ParamController::class,'subcategoriesList']);
-Route::get('marks',[ParamController::class,'marksList']);
-Route::get('colors',[ParamController::class,'colorsList']);
-Route::get('paymentMethods',[ParamController::class,'paymentMethodsList']);
-Route::get('typesOrders',[ParamController::class,'typesOfordersList']);
-Route::resource('users', UserController::class);
-Route::resource('products', ProductController::class);
-Route::resource('params', ParamController::class);
-Route::resource('providers', ProviderController::class);
-Route::resource('rating', RatingController::class);
-Route::resource('paramTypes', ParamTypeController::class);
-Route::resource('orders', OrderController::class);
-Route::resource('orderDetail', OrderDetailController::class);
-
-
->>>>>>> Stashed changes
 });
 
 Route::controller(AuthController::class)->group(function () {

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\ServiceController as OS;
 use Illuminate\Http\Request;
 use App\Models\Param;
-use App\Models\ParamType;
 
 
 class ParamController extends Controller
@@ -16,7 +15,7 @@ class ParamController extends Controller
             $data_param = [
                 'id' => $param->id,
                 'name' => $param->name,
-                'typeParam' => $param->paramtype_id,
+                'typeParam' => $param->param_id,
             ];
 
             $data[] = $data_param;
@@ -33,112 +32,112 @@ class ParamController extends Controller
 
     public function countriesList()
     {
-        $countries = Param::where('paramtype_id', '1')->get();
+        $countries = Param::where('param_id', '1')->get();
 
         return $this->orderList($countries);
     }
 
     public function departmentsList()
     {
-        $departments = Param::where('paramtype_id', '2')->get();
+        $departments = Param::where('param_id', '2')->get();
 
         return $this->orderList($departments);
     }
 
     public function citiesList()
     {
-        $cities = Param::where('paramtype_id', '14')->get();
+        $cities = Param::where('param_id', '14')->get();
 
         return $this->orderList($cities);
     }
 
     public function typesOfUsersList()
     {
-        $typesUsers = Param::where('paramtype_id', '3')->get();
+        $typesUsers = Param::where('param_id', '3')->get();
 
         return $this->orderList($typesUsers);
     }
 
     public function rolesList()
     {
-        $roles = Param::where('paramtype_id', '15')->get();
+        $roles = Param::where('param_id', '15')->get();
 
         return $this->orderList($roles);
     }
 
     public function statesList()
     {
-        $states = Param::where('paramtype_id', '9')->get();
+        $states = Param::where('param_id', '9')->get();
 
         return $this->orderList($states);
     }
 
     public function banksList()
     {
-        $banks = Param::where('paramtype_id', '11')->get();
+        $banks = Param::where('param_id', '11')->get();
 
         return $this->orderList($banks);
     }
 
     public function typesOfBankAccountsList()
     {
-        $bankAccounts = Param::where('paramtype_id', '12')->get();
+        $bankAccounts = Param::where('param_id', '12')->get();
 
         return $this->orderList($bankAccounts);
     }
 
     public function sizesList()
     {
-        $sizes = Param::where('paramtype_id', '6')->get();
+        $sizes = Param::where('param_id', '6')->get();
 
         return $this->orderList($sizes);
     }
 
     public function genderList()
     {
-        $genders = Param::where('paramtype_id', '7')->get();
+        $genders = Param::where('param_id', '7')->get();
 
         return $this->orderList($genders);
     }
 
     public function categoriesList()
     {
-        $categories = Param::where('paramtype_id', '5')->get();
+        $categories = Param::where('param_id', '5')->get();
 
         return $this->orderList($categories);
     }
 
     public function subcategoriesList()
     {
-        $subcategories = Param::where('paramtype_id', '13')->get();
+        $subcategories = Param::where('param_id', '13')->get();
 
         return $this->orderList($subcategories);
     }
 
     public function marksList()
     {
-        $marks = Param::where('paramtype_id', '4')->get();
+        $marks = Param::where('param_id', '4')->get();
 
         return $this->orderList($marks);
     }
 
     public function colorsList()
     {
-        $colors = Param::where('paramtype_id', '8')->get();
+        $colors = Param::where('param_id', '8')->get();
 
         return $this->orderList($colors);
     }
 
     public function paymentMethodsList()
     {
-        $payment = Param::where('paramtype_id', '16')->get();
+        $payment = Param::where('param_id', '16')->get();
 
         return $this->orderList($payment);
     }
 
     public function typesOfordersList()
     {
-        $orders = Param::where('paramtype_id', '10')->get();
+        $orders = Param::where('param_id', '10')->get();
 
         return $this->orderList($orders);
     }
@@ -150,7 +149,7 @@ class ParamController extends Controller
         $params = Param::all()->sortBy('id');
 
         foreach ($params as $param) {
-            $param['paramtype_id'] = $param->paramtype_id;
+            $param['param_id'] = $param->param_id;
             $param['name'] = $param->name;
             $param['param_foreign'] = $param->param_foreign;
             $param['param_state'] = $param->param_state;
@@ -171,15 +170,15 @@ class ParamController extends Controller
     public function store(Request $request )
     {
 
-        $typeParam = ParamType::find($request->paramTypeId);
-        $lastParamId = Param::where('Paramtype_id', $typeParam->id)->max('id');
+        $typeParam = param::find($request->paramId);
+        $lastParamId = Param::where('param_id', $typeParam->id)->max('id');
         $idParam = $lastParamId + 1;
 
         if ($idParam >= $typeParam->range_min && $idParam <= $typeParam->range_max) {
 
             $param = new Param;
             $param->id = $idParam ;
-            $param->paramtype_id = $typeParam-> id;
+            $param->param_id = $typeParam-> id;
             $param->name = $request->name;
             $param->param_foreign = $request->param_foreign;
             $param->param_state = $request->param_state;
@@ -215,7 +214,7 @@ class ParamController extends Controller
     public function update(Request $request, Param $param)
     {
 
-        $param->paramtype_id = $request->paramtype_id;
+        $param->param_id = $request->param_id;
         $param->name = $request->name;
         $param->param_foreign = $request->param_foreign;
         $param->param_state = $request->param_state;
@@ -234,8 +233,13 @@ class ParamController extends Controller
 
     public function destroy(Param $param)
     {
-        $param->delete();
-        $data[] = $param;
-        return OS::frontendResponse('200', 'success', $data, $msg = 'Parametro eliminado');
+        if ($param->param_state != 1652) {
+            $param->param_state = 1652;
+            $param->save();
+            $data[] = $param;
+            return OS::frontendResponse('200', 'success', $data, $msg = 'El parametro desactivado correctamente.');
+        }else{
+            return OS::frontendResponse('400', 'error', [], $msg = 'El parametro ya se encuentra inactivo.');
+        } 
     }
 }

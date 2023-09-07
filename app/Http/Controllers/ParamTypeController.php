@@ -107,8 +107,6 @@ class ParamTypeController extends Controller
      */
     public function destroy(ParamType $paramType, Request $request)
     {
-    
-
         if ($paramType->param_state != 1652) {
             $paramType->param_state = 1652;
             $paramType->save();

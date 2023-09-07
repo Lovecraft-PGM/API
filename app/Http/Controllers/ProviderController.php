@@ -116,9 +116,7 @@ class ProviderController extends Controller
      */
     public function destroy(Provider $provider, Request $request)
     {
-
         if ($provider->param_state != 1652) {
-
             $provider->param_state = 1652;
             $provider->save();
             $data[] = $provider;

@@ -105,7 +105,6 @@ class RatingController extends Controller
     public function destroy(Rating $rating, Request $request)
     {
       if ($rating->param_state != 1652) {
-            // Cambia el estado solo si no es 1652
             $rating->param_state = 1652;
             $rating->save();
             $data[] = $rating;
