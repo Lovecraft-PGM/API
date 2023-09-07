@@ -33,15 +33,9 @@ class ProductController extends Controller
     }
         if (count($products) == null) {
             $data = $products;
-<<<<<<< Updated upstream
             return OS::frontendResponse('404', 'error',  $data, $msg = 'Productos no encontrado.' );
         }else{
             return OS::frontendResponse('200','success', $data, $msg = 'Productos encontrados'); 
-=======
-            return OS::frontendResponse('404', 'error',  $data, $msg = 'Productos no encontrados.' );
-        }else{
-            return OS::frontendResponse('200','success', $data, $msg = 'Productos  encontrados.'); 
->>>>>>> Stashed changes
         }
     }
     // if (count($products) == 0) {
@@ -78,15 +72,9 @@ class ProductController extends Controller
         $product-> save ();    // save
         $data[] = $product;
         if ($data == null) {
-<<<<<<< Updated upstream
             return OS::frontendResponse('404', 'error',  $data, $msg = 'Producto no creado.' );
         }else{
             return OS::frontendResponse('201','success', $data, $msg = 'Producto creado correctamente.'); 
-=======
-            return OS::frontendResponse('404', 'error',  $data, $msg ='Producto no creado.' );
-        }else{
-            return OS::frontendResponse('200','success', $data, $msg ='Producto creado correctamente.'); 
->>>>>>> Stashed changes
         }
     }
 
@@ -97,15 +85,9 @@ class ProductController extends Controller
     {
         $data[] = $product;
         if ($data == null) {
-<<<<<<< Updated upstream
             return OS::frontendResponse('404', 'error',  $data, $msg = 'Producto no encontrados.' );
         }else{
             return OS::frontendResponse('200','success', $data, $msg = 'Producto encontrados.'); 
-=======
-            return OS::frontendResponse('404', 'error',  $data, $msg ='Producto no encontrados.' );
-        }else{
-            return OS::frontendResponse('200','success', $data, $msg ='Producto encontrados.'); 
->>>>>>> Stashed changes
         }
     }
 
@@ -140,15 +122,9 @@ class ProductController extends Controller
         $product-> save ();    // save
         $data[] = $product;
         if ($data == null) {
-<<<<<<< Updated upstream
             return OS::frontendResponse('404', 'error',  $data, $msg = 'Producto no Actualizado.' );
         }else{
             return OS::frontendResponse('201','success', $data, $msg = 'Producto Actualizado correctamente.'); 
-=======
-            return OS::frontendResponse('404', 'error',  $data, $msg ='Producto no Actualizado.' );
-        }else{
-            return OS::frontendResponse('200','success', $data,$msg = 'Producto Actualizado correctamente.'); 
->>>>>>> Stashed changes
         }
     }
 
@@ -161,15 +137,9 @@ class ProductController extends Controller
             $product->param_state = 1652;
             $product->save();
             $data[] = $product;
-<<<<<<< Updated upstream
             return OS::frontendResponse('200', 'success', $data, $msg = 'Usuario desactivado correctamente.');
         }else{
             return OS::frontendResponse('400', 'error', [], $msg = 'El usuario ya se encuentra inactivo.');
-=======
-            return OS::frontendResponse('200', 'success', $data, $msg ='Producto desactivado correctamente.');
-        }else{
-            return OS::frontendResponse('400', 'error', [], $msg ='El Producto ya se encuentra inactivo.');
->>>>>>> Stashed changes
         }
     }
 }

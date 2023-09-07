@@ -22,15 +22,9 @@ class OrderDetailController extends Controller
         }
         if (count($ordersDetails) == null) {
             $data = $ordersDetails;
-<<<<<<< Updated upstream
             return OS::frontendResponse('404', 'error',  $data, $msg = 'No encontrado' );
         }else{
             return OS::frontendResponse('200','success', $data, $msg = 'Encontrado'); 
-=======
-            return OS::frontendResponse('404', 'error',  $data, $msgError = 'No encontrado.' );
-        }else{
-            return OS::frontendResponse('200','success', $data, $msg = 'Encontrado.'); 
->>>>>>> Stashed changes
         }
         }
 
@@ -59,15 +53,9 @@ class OrderDetailController extends Controller
         $orderDetail-> save ();    // save 
         $data[] = $orderDetail;
         if ($data == null) {
-<<<<<<< Updated upstream
             return OS::frontendResponse('404', 'error',  $data, $msg = 'Detalle de orden Creado.' );
         }else{
             return OS::frontendResponse('201','success', $data, $msg = 'Detalle de orden no creado'); 
-=======
-            return OS::frontendResponse('404', 'error',  $data, $msg ='Detalle de orden Creado.' );
-        }else{
-            return OS::frontendResponse('200','success', $data, $msg ='Detalle de orden no creado'); 
->>>>>>> Stashed changes
         }
   
     }
@@ -79,15 +67,9 @@ class OrderDetailController extends Controller
     {
         $data[] = $orderDetail;
         if ($data == null) {
-<<<<<<< Updated upstream
             return OS::frontendResponse('404', 'error',  $data, $msg = 'Detalles de ordenes no encontrados.' );
         }else{
             return OS::frontendResponse('200','success', $data, $msg = 'Detalles de ordenes encontrados.'); 
-=======
-            return OS::frontendResponse('404', 'error',  $data, $msg ='Detalles de ordenes no encontrados.' );
-        }else{
-            return OS::frontendResponse('200','success', $data,$msg = 'Detalles de ordenes encontrados.'); 
->>>>>>> Stashed changes
         }
     }
 
@@ -113,15 +95,9 @@ class OrderDetailController extends Controller
         $orderDetail-> save ();    // save
         $data[]= $orderDetail;
         if ($data == null) {
-<<<<<<< Updated upstream
             return OS::frontendResponse('404', 'error',  $data, $msg = 'Detalle de orden no Actualizado.' );
         }else{
             return OS::frontendResponse('201','success', $data, $msg = 'Detalle de orden Actualizado correctamente.'); 
-=======
-            return OS::frontendResponse('404', 'error',  $data, $msg ='Detalle de orden no Actualizado.' );
-        }else{
-            return OS::frontendResponse('200','success', $data,$msg = 'Detalle de orden Actualizado correctamente.'); 
->>>>>>> Stashed changes
         }
     }
 
@@ -135,15 +111,9 @@ class OrderDetailController extends Controller
             $orderDetail->param_state = 1652;
             $orderDetail->save();
             $data[] = $orderDetail;
-<<<<<<< Updated upstream
             return OS::frontendResponse('200', 'success', $data, $msg = 'Usuario desactivado correctamente.');
         }else{
             return OS::frontendResponse('400', 'error', [], $msg = 'El usuario ya se encuentra inactivo.');
-=======
-            return OS::frontendResponse('200', 'success', $data, $msg ='orderDetail desactivado correctamente.');
-        }else{
-            return OS::frontendResponse('400', 'error', [], $msg ='El orderDetail ya se encuentra inactivo.');
->>>>>>> Stashed changes
         }
     }
 }

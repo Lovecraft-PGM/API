@@ -24,15 +24,9 @@ class RatingController extends Controller
     }
     if (count($ratings) == null) {
         $data = $ratings;
-<<<<<<< Updated upstream
         return OS::frontendResponse('404', 'error',  $data, $msg = 'No encontrado.' );
     }else{
         return OS::frontendResponse('200','success', $data, $msg = 'Encontrado.'); 
-=======
-        return OS::frontendResponse('404', 'error',  $data, $msg = 'No encontrado' );
-    }else{
-        return OS::frontendResponse('200','success', $data, $msg = 'Encontrado'); 
->>>>>>> Stashed changes
     }
 
     }
@@ -59,15 +53,9 @@ class RatingController extends Controller
         $rating->save(); 
         $data[] = $rating;
         if ($data == null) {
-<<<<<<< Updated upstream
             return OS::frontendResponse('404', 'error',  $data, $msg = 'Rating no creado.' );
         }else{
             return OS::frontendResponse('200','success', $data, $msg = 'Rating creado correctamente.'); 
-=======
-            return OS::frontendResponse('404', 'error',  $data, $msg ='Rating no creado.' );
-        }else{
-            return OS::frontendResponse('200','success', $data, $msg ='Rating creado correctamente.'); 
->>>>>>> Stashed changes
         }
     }
 
@@ -78,15 +66,9 @@ class RatingController extends Controller
     {
         $data[] = $rating;
         if ($data == null) {
-<<<<<<< Updated upstream
             return OS::frontendResponse('404', 'error',  $data, $msg = 'Ratings no encontrados.' );
         }else{
             return OS::frontendResponse('200','success', $data, $msg = 'Ratings encontrados.'); 
-=======
-            return OS::frontendResponse('404', 'error',  $data, $msg ='Ratings no encontrados.' );
-        }else{
-            return OS::frontendResponse('200','success', $data,$msg = 'Ratings encontrados.'); 
->>>>>>> Stashed changes
         }
     }
 
@@ -111,15 +93,9 @@ class RatingController extends Controller
         $rating-> save ();    // save
         $data[]= $rating;
         if ($data == null) {
-<<<<<<< Updated upstream
             return OS::frontendResponse('404', 'error',  $data, $msg = 'Rating no Actualizado.' );
         }else{
             return OS::frontendResponse('200','success', $data, $msg = 'Rating Actualizado correctamente.'); 
-=======
-            return OS::frontendResponse('404', 'error',  $data, $msg ='Rating no Actualizado.' );
-        }else{
-            return OS::frontendResponse('200','success', $data, $msg ='Rating Actualizado correctamente.'); 
->>>>>>> Stashed changes
         }
     }
 
@@ -133,15 +109,9 @@ class RatingController extends Controller
             $rating->param_state = 1652;
             $rating->save();
             $data[] = $rating;
-<<<<<<< Updated upstream
             return OS::frontendResponse('200', 'success', $data, $msg = 'Usuario desactivado correctamente.');
         }else{
             return OS::frontendResponse('400', 'error', [], $msg = 'El usuario ya se encuentra inactivo.');
-=======
-            return OS::frontendResponse('200', 'success', $data, $msg ='rating desactivado correctamente.');
-        } else {
-            return OS::frontendResponse('400', 'error', [], $msg ='El rating ya se encuentra inactivo.');
->>>>>>> Stashed changes
         }
     }
 }
