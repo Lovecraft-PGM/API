@@ -233,6 +233,7 @@ class ParamController extends Controller
 
     public function destroy(Param $param)
     {
+<<<<<<< 22c7e04c8f9e0f0bea947654cac78562729ba9bb
         if ($param->param_state != 1652) {
             $param->param_state = 1652;
             $param->save();
@@ -241,5 +242,10 @@ class ParamController extends Controller
         }else{
             return OS::frontendResponse('400', 'error', [], $msg = 'El parametro ya se encuentra inactivo.');
         } 
+=======
+        $param->delete();
+        $data[] = $param;
+        return OS::frontendResponse('200', 'success', $data, $msg = 'Parametro eliminado');
+>>>>>>> API.V.2.0
     }
 }

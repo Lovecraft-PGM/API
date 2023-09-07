@@ -117,9 +117,15 @@ class OrderController extends Controller
             $order->param_state = 1652;
             $order->save();
             $data[] = $order;
+<<<<<<< 22c7e04c8f9e0f0bea947654cac78562729ba9bb
             return OS::frontendResponse('200', 'success', $data, $msg = 'La orden desactivado correctamente.');
         }else{
             return OS::frontendResponse('400', 'error', [], $msg = 'La orden ya se encuentra inactivo.');
+=======
+            return OS::frontendResponse('200', 'success', $data, $msg = 'Usuario desactivado correctamente.');
+        }else{
+            return OS::frontendResponse('400', 'error', [], $msg = 'El usuario ya se encuentra inactivo.');
+>>>>>>> API.V.2.0
         }
     }
 }

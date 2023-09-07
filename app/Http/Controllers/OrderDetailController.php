@@ -111,9 +111,15 @@ class OrderDetailController extends Controller
             $orderDetail->param_state = 1652;
             $orderDetail->save();
             $data[] = $orderDetail;
+<<<<<<< 22c7e04c8f9e0f0bea947654cac78562729ba9bb
             return OS::frontendResponse('200', 'success', $data, $msg = 'El detalle de la orden se desactivado correctamente.');
         }else{
             return OS::frontendResponse('400', 'error', [], $msg = 'El detalle de la orden ya se encuentra inactivo.');
+=======
+            return OS::frontendResponse('200', 'success', $data, $msg = 'Usuario desactivado correctamente.');
+        }else{
+            return OS::frontendResponse('400', 'error', [], $msg = 'El usuario ya se encuentra inactivo.');
+>>>>>>> API.V.2.0
         }
     }
 }
