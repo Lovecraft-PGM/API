@@ -17,7 +17,7 @@ class Provider extends Model
         "phone",
         "address",
         "param_city",
-        "contact_name",
+        "name_contact",
         "param_bank",
         "param_account",
         "account",

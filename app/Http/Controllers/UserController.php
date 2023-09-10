@@ -76,19 +76,15 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
-    {
+    public function show(User $user){
+        
+        $data[] = $user;
+        if (!empty($data)) {
+            return OS::frontendResponse('200','success', $data, $msg = 'Usuario encontrado.'); 
+        }else{
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Usuario no encontrado.' );
 
-        // $data[] = $user;
-
-        dd('holius'); 
-
-        // if (!empty($data)) {
-        //     return OS::frontendResponse('200','success', $data, $msg = 'Usuario encontrado.'); 
-        // }else{
-        //     return OS::frontendResponse('404', 'error',  $data, $msg = 'Usuario no encontrado.' );
-
-        // }
+        }
     }
 
 
@@ -135,7 +131,7 @@ class UserController extends Controller
             $user->param_state = 1652;
             $user->save();
             $data[] = $user;
-            return OS::frontendResponse('200', 'success', $data, $msg = 'Usuario desactivado correctamente.');
+            return OS::frontendResponse('200', 'success', $data, $msg = 'El usuario se ha desactivado correctamente.');
         }else{
             return OS::frontendResponse('404', 'error', [], $msg = 'El usuario ya se encuentra inactivo.');
         }

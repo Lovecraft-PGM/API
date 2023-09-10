@@ -89,7 +89,7 @@ class RatingController extends Controller
         $rating->product_id = $request ->product_id ;
         $rating->starts= $request-> starts  ;
         $rating->comments= $request-> comments  ;
-        $rating->param_state= $request-> addrparam_stateess  ;
+        $rating->param_state= $request-> param_state  ;
         $rating-> save ();    // save
         $data[]= $rating;
         if ($data == null) {
@@ -108,7 +108,7 @@ class RatingController extends Controller
             $rating->param_state = 1652;
             $rating->save();
             $data[] = $rating;
-            return OS::frontendResponse('200', 'success', $data, $msg = 'La calificaión se desactivado correctamente.');
+            return OS::frontendResponse('200', 'success', $data, $msg = 'La calificaión se ha desactivado correctamente.');
         }else{
             return OS::frontendResponse('404', 'error', [], $msg = 'La calificaión ya se encuentra inactiva.');
         }

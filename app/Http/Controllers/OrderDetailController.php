@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 use App\Http\Controllers\ServiceController as OS;
 use Illuminate\Http\Request;
-use App\Models\orderDetail;
+use App\Models\OrderDetail;
 class orderDetailController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(){
-        $ordersDetails = orderDetail::all()->sortBy('id');
+        $ordersDetails = OrderDetail::all()->sortBy('id');
         
         foreach ($ordersDetails as $orderDetail){
         $orderDetail['o_id']= $orderDetail -> o_id ;
@@ -22,9 +22,9 @@ class orderDetailController extends Controller
         }
         if (count($ordersDetails) == null) {
             $data = $ordersDetails;
-            return OS::frontendResponse('404', 'error',  $data, $msg = 'Detalles de ordenes no encontra.' );
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Detalles de ordenes no encontradas.' );
         }else{
-            return OS::frontendResponse('200','success', $data, $msg = 'Detalles de ordenes encontra.'); 
+            return OS::frontendResponse('200','success', $data, $msg = 'Detalles de ordenes encontradas.'); 
         }
         }
 
@@ -44,7 +44,7 @@ class orderDetailController extends Controller
      */
     public function store(Request $request)
     {
-        $orderDetail=new orderDetail;
+        $orderDetail=new OrderDetail;
         $orderDetail->o_id= $request -> o_id ;
         $orderDetail->product_id= $request ->product_id ;
         $orderDetail->qty= $request -> qty  ;
@@ -53,9 +53,9 @@ class orderDetailController extends Controller
         $orderDetail-> save ();    // save 
         $data[] = $orderDetail;
         if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, $msg = 'Detalle de orden Creado.' );
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Detalle de orden no creado' );
         }else{
-            return OS::frontendResponse('200','success', $data, $msg = 'Detalle de orden no creado'); 
+            return OS::frontendResponse('200','success', $data, $msg = 'Detalle de orden creado.'); 
         }
   
     }
@@ -63,13 +63,14 @@ class orderDetailController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(orderDetail $orderDetail)
-    {
-        $data[] = $orderDetail;
-        if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, $msg = 'Detalle de ordene no encontrado.' );
+    public function show(OrderDetail $orderDetail, $id){
+
+        //$orderDetail = orderDetail::find(request('id'));
+        $data = orderDetail::find($id);
+        if (!empty($data)) {
+            return OS::frontendResponse('200','success', $data, $msg = 'Detalle de orden encontrado.'); 
         }else{
-            return OS::frontendResponse('200','success', $data, $msg = 'Detalle de ordene encontrado.'); 
+            return OS::frontendResponse('404', 'error',  NULL, $msg = 'Detalle de orden no encontrado.' );
         }
     }
 
@@ -84,9 +85,8 @@ class orderDetailController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, orderDetail $orderDetail)
-    {
-        $orderDetail=new orderDetail;
+    public function update(Request $request, $id){
+        $data = orderDetail::find($id);
         $orderDetail->o_id= $request -> o_id ;
         $orderDetail->product_id= $request ->product_id ;
         $orderDetail->qty= $request -> qty  ;
@@ -104,17 +104,17 @@ class orderDetailController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(orderDetail $orderDetail, Request $request)
-    {
-        $orderDetail = orderDetail::find($request->id);
+    public function destroy($id, Request $request){
+        
+        $orderDetail = orderDetail::find($id);
 
         if ($orderDetail->param_state != 1652) {
             $orderDetail->param_state = 1652;
             $orderDetail->save();
             $data[] = $orderDetail;
-            return OS::frontendResponse('200', 'success', $data, 'Detalle de orden desactivado correctamente.');
+            return OS::frontendResponse('200', 'success', $data, 'El detalle de orden se ha desactivado correctamente.');
         }else{
-            return OS::frontendResponse('404', 'error', [], 'El detalle de orden ya se encuentra inactivo.');
+            return OS::frontendResponse('404', 'error', NULL, 'El detalle de orden ya se encuentra inactivo.');
         }
     }
 }

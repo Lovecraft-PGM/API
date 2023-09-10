@@ -56,6 +56,7 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $product=new Product;   
+        $product->provider_id = $request -> provider_id ;
         $product->reference = $request -> reference ;
         $product->name= $request ->name ;
         $product->description = $request -> description  ;
@@ -67,6 +68,7 @@ class ProductController extends Controller
         $product->param_size  = $request -> param_size   ;
         $product->param_gender  = $request -> param_gender   ;
         $product->param_subcategory  = $request -> param_subcategory   ;
+        $product->param_mark  = $request -> param_mark   ;
         $product->param_color   = $request -> param_color    ;
         $product->param_state  = $request -> param_state   ;
         $product-> save ();    // save
@@ -85,9 +87,9 @@ class ProductController extends Controller
     {
         $data[] = $product;
         if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, $msg = 'Producto no encontrados.' );
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Producto no encontrado.' );
         }else{
-            return OS::frontendResponse('200','success', $data, $msg = 'Producto encontrados.'); 
+            return OS::frontendResponse('200','success', $data, $msg = 'Producto encontrado.'); 
         }
     }
 
@@ -134,9 +136,9 @@ class ProductController extends Controller
             $product->param_state = 1652;
             $product->save();
             $data[] = $product;
-            return OS::frontendResponse('200', 'success', $data, $msg = 'El producto se desactivado correctamente.');
+            return OS::frontendResponse('200', 'success', $data, $msg = 'El producto se ha desactivado correctamente.');
         }else{
-            return OS::frontendResponse('400', 'error', [], $msg = 'El producto ya se encuentra inactivo.');
+            return OS::frontendResponse('404', 'error', [], $msg = 'El producto ya se encuentra inactivo.');
         }
     }
 }

@@ -20,11 +20,10 @@ class ProviderController extends Controller
         $provider['email']= $provider-> email  ;
         $provider['phone']= $provider-> phone  ;
         $provider['address']= $provider-> address  ;
-        $provider['contact_name']= $provider-> contact_name  ;
         $provider['param_city']= $provider-> param_city   ;
+        $provider['name_contact']= $provider-> name_contact  ;
         $provider['param_bank']= $provider-> param_bank   ;
         $provider['param_account']= $provider-> param_account    ;
-        $provider['param_subcategory']= $provider -> param_subcategory   ;
         $provider['account']= $provider-> account    ;
         $provider['param_state']= $provider->param_state;
         $data[] = $provider; 
@@ -56,11 +55,10 @@ class ProviderController extends Controller
         $provider->email= $request-> email  ;
         $provider->phone= $request-> phone  ;
         $provider->address= $request-> address  ;
-        $provider->contact_name= $request-> contact_name  ;
         $provider->param_city= $request-> param_city   ;
+        $provider->name_contact= $request-> name_contact  ;
         $provider->param_bank= $request-> param_bank   ;
         $provider->param_account= $request-> param_account    ;
-        $provider->param_subcategory= $request -> param_subcategory   ;
         $provider->account= $request-> account    ;
         $provider->param_state= $request->param_state;
         $provider-> save ();    // save
@@ -93,16 +91,15 @@ class ProviderController extends Controller
      */
     public function update(Request $request, Provider $provider)
     {
-        $provider->namelegal = $request -> namelegal ;
-        $provider->namecommercial= $request ->namecommercial ;
+        $provider->legal_name = $request -> legal_name ;
+        $provider->commercial_name= $request ->commercial_name ;
         $provider->email= $request-> email  ;
         $provider->phone= $request-> phone  ;
         $provider->address= $request-> address  ;
-        $provider->name_contact= $request-> name_contact  ;
         $provider->param_city= $request-> param_city   ;
+        $provider->name_contact= $request-> name_contact  ;
         $provider->param_bank= $request-> param_bank   ;
         $provider->param_account= $request-> param_account    ;
-        $provider->param_subcategory= $request -> param_subcategory   ;
         $provider->account= $request-> account    ;
         $provider->param_state= $request->param_state;
         $provider-> save ();    // save
@@ -119,9 +116,9 @@ class ProviderController extends Controller
             $provider->param_state = 1652;
             $provider->save();
             $data[] = $provider;
-            return OS::frontendResponse('200', 'success', $data, $msg = 'El proveedor se desactivado correctamente.');
+            return OS::frontendResponse('200', 'success', $data, $msg = 'El proveedor se ha desactivado correctamente.');
         }else{
-            return OS::frontendResponse('400', 'error', [], $msg = 'El proveedor ya se encuentra inactivo.');
+            return OS::frontendResponse('404', 'error', [], $msg = 'El proveedor ya se encuentra inactivo.');
         }
     }
 }

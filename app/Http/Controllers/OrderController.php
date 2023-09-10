@@ -29,7 +29,7 @@ class OrderController extends Controller
       $data = $orders;
       return OS::frontendResponse('404', 'error',  $data, $msg = 'Ordenes no encontradas.' );
     }else{
-      return OS::frontendResponse('200','success', $data, $msg = 'Ordenes no encontradas'); 
+      return OS::frontendResponse('200','success', $data, $msg = 'Ordenes encontradas'); 
     }
     }
 
@@ -91,7 +91,7 @@ class OrderController extends Controller
      */
     public function update(Request $request, Order $order)
     {
-        $order->userid= $request ->userid;
+        $order->user_id= $request ->user_id;
         $order->code = $request ->code;
         $order->date= $request ->date;
         $order->total= $request ->total;
@@ -101,9 +101,9 @@ class OrderController extends Controller
         $order-> save ();    // save
         $data[]= $order;
         if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, $msg = 'Orden no actualizado.' );
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Orden no actualizada.' );
         }else{
-            return OS::frontendResponse('200','success', $data, $msg = 'Orden actualizado correctamente.'); 
+            return OS::frontendResponse('200','success', $data, $msg = 'Orden actualizada correctamente.'); 
         }
     }
 
@@ -116,9 +116,9 @@ class OrderController extends Controller
             $order->param_state = 1652;
             $order->save();
             $data[] = $order;
-            return OS::frontendResponse('200', 'success', $data, $msg = 'La orden desactivado correctamente.');
+            return OS::frontendResponse('200', 'success', $data, $msg = 'La orden se ha desactivado correctamente.');
         }else{
-            return OS::frontendResponse('404', 'error', [], $msg = 'La orden ya se encuentra inactivo.');
+            return OS::frontendResponse('404', 'error', [], $msg = 'La orden ya se encuentra inactiva.');
         }
     }
 }

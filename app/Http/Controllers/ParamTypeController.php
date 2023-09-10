@@ -104,8 +104,7 @@ class ParamTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ParamType $paramType)
-    {
+    /*public function destroy(ParamType $paramType){
         if ($paramType->param_state != 1652) {
             $paramType->param_state = 1652;
             $paramType->save();
@@ -114,5 +113,5 @@ class ParamTypeController extends Controller
         }else{
             return OS::frontendResponse('404', 'error', [],  $msg = 'El usuario ya se encuentra inactivo.');
         } 
-    }
+    }*/
 }
