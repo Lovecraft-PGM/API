@@ -32,11 +32,10 @@ class ProviderController extends Controller
         }
         if (count($providers) == null) {
             $data = $providers;
-            return OS::frontendResponse('404', 'error',  $data, $msg = 'No encontrado.' );
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Proveedores no encontrados.' );
         }else{
-            return OS::frontendResponse('200','success', $data, $msg = 'Encontrado.'); 
-        }    
-    }
+            return OS::frontendResponse('200','success', $data, $msg = 'Prooveedores encontrados.'); 
+        }    }
 
     /**
      * Show the form for creating a new resource.
@@ -108,7 +107,7 @@ class ProviderController extends Controller
         $provider->param_state= $request->param_state;
         $provider-> save ();    // save
         $data[]= $provider;
-        return OS::frontendResponse('200','success', $data, $msg = 'Proveedor actualizado.'); 
+        return OS::frontendResponse('200','success', $data, $msg = 'Proveedor actualizado'); 
     }
 
     /**
@@ -120,9 +119,9 @@ class ProviderController extends Controller
             $provider->param_state = 1652;
             $provider->save();
             $data[] = $provider;
-            return OS::frontendResponse('200', 'success', $data, $msg = 'Usuario desactivado correctamente.');
+            return OS::frontendResponse('200', 'success', $data, $msg = 'El proveedor se desactivado correctamente.');
         }else{
-            return OS::frontendResponse('400', 'error', [], $msg = 'El usuario ya se encuentra inactivo.');
+            return OS::frontendResponse('400', 'error', [], $msg = 'El proveedor ya se encuentra inactivo.');
         }
     }
 }

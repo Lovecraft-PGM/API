@@ -12,7 +12,7 @@ class RatingController extends Controller
      */
     public function index()
     {
-        $ratings = rating::all()->sortBy('id');
+        $ratings = Rating::all()->sortBy('id');
         
         foreach ($ratings as $rating){
         $rating['user_id']  = $rating -> user_id ;
@@ -24,9 +24,9 @@ class RatingController extends Controller
     }
     if (count($ratings) == null) {
         $data = $ratings;
-        return OS::frontendResponse('404', 'error',  $data, $msg = 'No encontrado.' );
+        return OS::frontendResponse('404', 'error',  $data, $msg = 'Calificaiones encontradas.' );
     }else{
-        return OS::frontendResponse('200','success', $data, $msg = 'Encontrado.'); 
+        return OS::frontendResponse('200','success', $data, $msg = 'Calificaiones encontradas.'); 
     }
 
     }
@@ -53,9 +53,9 @@ class RatingController extends Controller
         $rating->save(); 
         $data[] = $rating;
         if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, $msg = 'Rating no creado.' );
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Calificaión no creada.' );
         }else{
-            return OS::frontendResponse('200','success', $data, $msg = 'Rating creado correctamente.'); 
+            return OS::frontendResponse('200','success', $data, $msg = 'Calificaión creada correctamente.'); 
         }
     }
 
@@ -66,9 +66,9 @@ class RatingController extends Controller
     {
         $data[] = $rating;
         if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, $msg = 'Ratings no encontrados.' );
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Calificaión no encontrado.' );
         }else{
-            return OS::frontendResponse('200','success', $data, $msg = 'Ratings encontrados.'); 
+            return OS::frontendResponse('200','success', $data, $msg = 'Calificaión encontrado.'); 
         }
     }
 
@@ -93,24 +93,24 @@ class RatingController extends Controller
         $rating-> save ();    // save
         $data[]= $rating;
         if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, $msg = 'Rating no Actualizado.' );
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Calificaión no actualizado.' );
         }else{
-            return OS::frontendResponse('200','success', $data, $msg = 'Rating Actualizado correctamente.'); 
+            return OS::frontendResponse('200','success', $data, $msg = 'Calificaión actualizado correctamente.'); 
         }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Rating $rating, Request $request)
+    public function destroy(Rating $rating)
     {
-      if ($rating->param_state != 1652) {
+        if ($rating->param_state != 1652) {
             $rating->param_state = 1652;
             $rating->save();
             $data[] = $rating;
-            return OS::frontendResponse('200', 'success', $data, $msg = 'Usuario desactivado correctamente.');
+            return OS::frontendResponse('200', 'success', $data, $msg = 'La calificaión se desactivado correctamente.');
         }else{
-            return OS::frontendResponse('400', 'error', [], $msg = 'El usuario ya se encuentra inactivo.');
+            return OS::frontendResponse('404', 'error', [], $msg = 'La calificaión ya se encuentra inactiva.');
         }
     }
 }

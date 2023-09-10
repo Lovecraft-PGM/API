@@ -22,7 +22,6 @@ class AccesKeyApi
             return response()->json(['message' => 'No autorizado']); 
         }
                 
-
         return $next($request);
     }
 }

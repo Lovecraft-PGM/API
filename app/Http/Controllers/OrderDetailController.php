@@ -3,14 +3,14 @@
 namespace App\Http\Controllers;
 use App\Http\Controllers\ServiceController as OS;
 use Illuminate\Http\Request;
-use App\Models\OrderDetail;
-class OrderDetailController extends Controller
+use App\Models\orderDetail;
+class orderDetailController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index(){
-        $ordersDetails = OrderDetail::all()->sortBy('id');
+        $ordersDetails = orderDetail::all()->sortBy('id');
         
         foreach ($ordersDetails as $orderDetail){
         $orderDetail['o_id']= $orderDetail -> o_id ;
@@ -22,9 +22,9 @@ class OrderDetailController extends Controller
         }
         if (count($ordersDetails) == null) {
             $data = $ordersDetails;
-            return OS::frontendResponse('404', 'error',  $data, $msg = 'No encontrado' );
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Detalles de ordenes no encontra.' );
         }else{
-            return OS::frontendResponse('200','success', $data, $msg = 'Encontrado'); 
+            return OS::frontendResponse('200','success', $data, $msg = 'Detalles de ordenes encontra.'); 
         }
         }
 
@@ -55,7 +55,7 @@ class OrderDetailController extends Controller
         if ($data == null) {
             return OS::frontendResponse('404', 'error',  $data, $msg = 'Detalle de orden Creado.' );
         }else{
-            return OS::frontendResponse('201','success', $data, $msg = 'Detalle de orden no creado'); 
+            return OS::frontendResponse('200','success', $data, $msg = 'Detalle de orden no creado'); 
         }
   
     }
@@ -67,9 +67,9 @@ class OrderDetailController extends Controller
     {
         $data[] = $orderDetail;
         if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, $msg = 'Detalles de ordenes no encontrados.' );
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Detalle de ordene no encontrado.' );
         }else{
-            return OS::frontendResponse('200','success', $data, $msg = 'Detalles de ordenes encontrados.'); 
+            return OS::frontendResponse('200','success', $data, $msg = 'Detalle de ordene encontrado.'); 
         }
     }
 
@@ -95,9 +95,9 @@ class OrderDetailController extends Controller
         $orderDetail-> save ();    // save
         $data[]= $orderDetail;
         if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, $msg = 'Detalle de orden no Actualizado.' );
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Detalle de orden no actualizado.' );
         }else{
-            return OS::frontendResponse('201','success', $data, $msg = 'Detalle de orden Actualizado correctamente.'); 
+            return OS::frontendResponse('200','success', $data, $msg = 'Detalle de orden actualizado correctamente.'); 
         }
     }
 
@@ -106,20 +106,15 @@ class OrderDetailController extends Controller
      */
     public function destroy(orderDetail $orderDetail, Request $request)
     {
+        $orderDetail = orderDetail::find($request->id);
 
         if ($orderDetail->param_state != 1652) {
             $orderDetail->param_state = 1652;
             $orderDetail->save();
             $data[] = $orderDetail;
-<<<<<<< 22c7e04c8f9e0f0bea947654cac78562729ba9bb
-            return OS::frontendResponse('200', 'success', $data, $msg = 'El detalle de la orden se desactivado correctamente.');
+            return OS::frontendResponse('200', 'success', $data, 'Detalle de orden desactivado correctamente.');
         }else{
-            return OS::frontendResponse('400', 'error', [], $msg = 'El detalle de la orden ya se encuentra inactivo.');
-=======
-            return OS::frontendResponse('200', 'success', $data, $msg = 'Usuario desactivado correctamente.');
-        }else{
-            return OS::frontendResponse('400', 'error', [], $msg = 'El usuario ya se encuentra inactivo.');
->>>>>>> API.V.2.0
+            return OS::frontendResponse('404', 'error', [], 'El detalle de orden ya se encuentra inactivo.');
         }
     }
 }

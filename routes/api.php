@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use  App\Http\Controllers\UserController;
+use  App\Http\controllers\UserController;
 use  App\Http\Controllers\ProductController;
 use  App\Http\Controllers\ParamController;
 use  App\Http\Controllers\ParamTypeController;
@@ -34,16 +34,16 @@ Route::middleware('X_API_KEY')->group(function () {
     Route::get('colors',[ParamController::class,'colorsList']);
     Route::get('paymentMethods',[ParamController::class,'paymentMethodsList']);
     Route::get('typesOrders',[ParamController::class,'typesOfordersList']);
-    Route::resource('users', UserController::class);
     Route::resource('products', ProductController::class);
     Route::resource('params', ParamController::class);
     Route::resource('providers', ProviderController::class);
     Route::resource('ratings', RatingController::class);
     Route::resource('paramTypes', ParamTypeController::class);
-    Route::resource('orders', OrderDetailController::class);
     Route::resource('orders', OrderController::class);
+    Route::resource('orders', OrderDetailController::class);
 });
 
+Route::resource('users', UserController::class);
 Route::controller(AuthController::class)->group(function () {
 Route::post('login', 'login');
 Route::post('register', 'register');

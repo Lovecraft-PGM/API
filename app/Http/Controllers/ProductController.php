@@ -74,7 +74,7 @@ class ProductController extends Controller
         if ($data == null) {
             return OS::frontendResponse('404', 'error',  $data, $msg = 'Producto no creado.' );
         }else{
-            return OS::frontendResponse('201','success', $data, $msg = 'Producto creado correctamente.'); 
+            return OS::frontendResponse('200','success', $data, $msg = 'Producto creado correctamente.'); 
         }
     }
 
@@ -122,30 +122,21 @@ class ProductController extends Controller
         $product-> save ();    // save
         $data[] = $product;
         if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, $msg = 'Producto no Actualizado.' );
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Producto no actualizado.' );
         }else{
-            return OS::frontendResponse('201','success', $data, $msg = 'Producto Actualizado correctamente.'); 
+            return OS::frontendResponse('200','success', $data, $msg = 'Producto actualizado correctamente.'); 
         }
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Product $product, Request $request)
+    public function destroy(Product $product)
     {
         if ($product->param_state != 1652) {
             $product->param_state = 1652;
             $product->save();
             $data[] = $product;
-<<<<<<< 22c7e04c8f9e0f0bea947654cac78562729ba9bb
             return OS::frontendResponse('200', 'success', $data, $msg = 'El producto se desactivado correctamente.');
         }else{
             return OS::frontendResponse('400', 'error', [], $msg = 'El producto ya se encuentra inactivo.');
-=======
-            return OS::frontendResponse('200', 'success', $data, $msg = 'Usuario desactivado correctamente.');
-        }else{
-            return OS::frontendResponse('400', 'error', [], $msg = 'El usuario ya se encuentra inactivo.');
->>>>>>> API.V.2.0
         }
     }
 }

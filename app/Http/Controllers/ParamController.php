@@ -22,9 +22,9 @@ class ParamController extends Controller
         }
 
         if (!empty($data)) {
-            return OS::frontendResponse('200', 'success', $data,  $msg = 'Encontrado');
+            return OS::frontendResponse('200', 'success', $data, $msg = 'Parametros no encontrados.');
         } else {
-            return OS::frontendResponse('404', 'error', $data = null,  $msg ='No encontrado.');
+            return OS::frontendResponse('404', 'error', $data, $msg = 'Parametros no encontrados.');
         }
     }
 
@@ -156,9 +156,9 @@ class ParamController extends Controller
             $data[] = $param;
         }
         if ($data == null) {
-            return OS::frontendResponse('404', 'error', $data,  $msg = 'Parametros no encontrados.');
+            return OS::frontendResponse('404', 'error', $data, $msg = 'Parametros no encontrados.');
         } else {
-            return OS::frontendResponse('200', 'success', $data, $msg = 'Parametros encontrados');
+            return OS::frontendResponse('200', 'success', $data, $msg = 'Parametros encontrados.');
         }
     }
 
@@ -170,7 +170,7 @@ class ParamController extends Controller
     public function store(Request $request )
     {
 
-        $typeParam = param::find($request->paramId);
+        $typeParam = Param::find($request->paramId);
         $lastParamId = Param::where('param_id', $typeParam->id)->max('id');
         $idParam = $lastParamId + 1;
 
@@ -185,9 +185,9 @@ class ParamController extends Controller
             $param->save(); // save
             $data[] = $param;
 
-            return OS::frontendResponse('200', 'success', $data, $msg = 'Parametro creado correctamente.');
+            return OS::frontendResponse('200', 'success', $data, $msg ='Parametro creado correctamente.');
         } else {
-            return OS::frontendResponse('400', 'error', [], $msg = 'Parametro no creado correctamente(no hay espacio dentro de los parametros)');
+            return OS::frontendResponse('404', 'error', [], $msg = 'Parametro no creado correctamente (no hay espacio dentro de los parametros)');
         }
     }
 
@@ -198,9 +198,9 @@ class ParamController extends Controller
     {
         $data[] = $param;
         if ($data == null) {
-            return OS::frontendResponse('404', 'error', $data, $msg = 'Parametro no encontrado.');
+            return OS::frontendResponse('404', 'error', $data, $msg = 'Parametros no encontrados.');
         } else {
-            return OS::frontendResponse('200', 'success', $data, $msg = 'Parametro encontrado.');
+            return OS::frontendResponse('200', 'success', $data, $msg = 'Parametros encontrados.');
         }
     }
 
@@ -221,11 +221,11 @@ class ParamController extends Controller
         $param->save(); // save
         $data[] = $param;
         if (!empty($data)) {
-        return OS::frontendResponse('200', 'success', $data, $msg = 'Parametro Actualizado correctamente.');
+        return OS::frontendResponse('200', 'success', $data, $msg = 'Parametro actualizado correctamente.');
 
         }else{
 
-        return OS::frontendResponse('404', 'error', $data=[], $msg = 'Parametro no Actualizado.');
+        return OS::frontendResponse('404', 'error', $data=[], $msg = 'Parametro no actualizado.');
         }
 
     }
@@ -233,19 +233,13 @@ class ParamController extends Controller
 
     public function destroy(Param $param)
     {
-<<<<<<< 22c7e04c8f9e0f0bea947654cac78562729ba9bb
         if ($param->param_state != 1652) {
             $param->param_state = 1652;
             $param->save();
             $data[] = $param;
-            return OS::frontendResponse('200', 'success', $data, $msg = 'El parametro desactivado correctamente.');
+            return OS::frontendResponse('200', 'success', $data, $msg = 'Parametro se desactivado correctamente.');
         }else{
-            return OS::frontendResponse('400', 'error', [], $msg = 'El parametro ya se encuentra inactivo.');
+            return OS::frontendResponse('404', 'error', [], $msg = 'El parametro ya se encuentra inactivo.');
         } 
-=======
-        $param->delete();
-        $data[] = $param;
-        return OS::frontendResponse('200', 'success', $data, $msg = 'Parametro eliminado');
->>>>>>> API.V.2.0
     }
 }

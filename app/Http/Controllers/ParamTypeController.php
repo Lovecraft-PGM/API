@@ -22,9 +22,9 @@ class ParamTypeController extends Controller
     }
     if (count($paramTypes) == null) {
         $data = $paramTypes;
-        return OS::frontendResponse('404', 'error',  $data,  $msg = 'Tipo de Parametro no encontrado.' );
+        return OS::frontendResponse('404', 'error',  $data,  $msg = 'Tipos de Parametros no encontrado.' );
     }else{
-        return OS::frontendResponse('200','success', $data, $msg = 'Tipo de Parametro encontrado.'); 
+        return OS::frontendResponse('200','success', $data, $msg = 'Tipos de Parametros no encontrado'); 
     }
 
     }
@@ -42,7 +42,6 @@ class ParamTypeController extends Controller
      */
     public function store(Request $request)
     {
-
         $lastRangeMax = ParamType::max('range_max')+1;
         $lastId = ParamType::latest('id')->first()->id;
         $newId = $lastId + 1;
@@ -70,9 +69,9 @@ class ParamTypeController extends Controller
 
             $data[] = $paramType;
         if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, $msg = 'tipos de parametros no encontrados.' );
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Tipo de parametro no encontrado.' );
         }else{
-            return OS::frontendResponse('200','success', $data, $msg = ' tipos de parametros Parametros encontrados.'); 
+            return OS::frontendResponse('200','success', $data, $msg = 'Tipo de parametro encontrado.'); 
         }
     }
 
@@ -95,9 +94,9 @@ class ParamTypeController extends Controller
         $paramType-> save ();    // save
         $data[] = $paramType;
         if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, $msg = 'Tipo de Parametro no Actualizado.' );
+            return OS::frontendResponse('404', 'error',  $data,  $msg = 'Tipo de Parametro no Actualizado.' );
         }else{
-            return OS::frontendResponse('200','success', $data, $msg = 'Tipo de Parametro Actualizado correctamente.'); 
+            return OS::frontendResponse('200','success', $data,  $msg = 'Tipo de Parametro Actualizado correctamente.'); 
         }
     }
     
@@ -105,15 +104,15 @@ class ParamTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ParamType $paramType, Request $request)
+    public function destroy(ParamType $paramType)
     {
         if ($paramType->param_state != 1652) {
             $paramType->param_state = 1652;
             $paramType->save();
             $data[] = $paramType;
-            return OS::frontendResponse('200', 'success', $data, $msg = 'Usuario desactivado correctamente.');
+            return OS::frontendResponse('200', 'success', $data,  $msg = 'Usuario se desactivado correctamente.');
         }else{
-            return OS::frontendResponse('400', 'error', [], $msg = 'El usuario ya se encuentra inactivo.');
+            return OS::frontendResponse('404', 'error', [],  $msg = 'El usuario ya se encuentra inactivo.');
         } 
     }
 }
