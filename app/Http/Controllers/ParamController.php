@@ -25,7 +25,7 @@ class ParamController extends Controller
         if (!empty($data)) {
             return OS::frontendResponse('200', 'success', $data, $msg = 'Parametros encontrados.');
         } else {
-            return OS::frontendResponse('404', 'error', [], $msg = 'Parametros no encontrados.');
+            return OS::frontendResponse('404', 'error', $data = [], $msg = 'Parametros no encontrados.');
         }
     }
 
@@ -168,30 +168,30 @@ class ParamController extends Controller
         //
     }
 
-    public function store(Request $request){
+    public function store(Request $request )
+    {
 
-        $typeParam = Param::find($request->paramId);
-        $lastParamId = Param::where('id', $typeParam->id)->max('id');
+        $typeParam = ParamType::find($request->paramTypeId);
+        $lastParamId = Param::where('Paramtype_id', $typeParam->id)->max('id');
         $idParam = $lastParamId + 1;
-        echo($idParam);
+
         if ($idParam >= $typeParam->range_min && $idParam <= $typeParam->range_max) {
-            echo(range_min);
+
             $param = new Param;
             $param->id = $idParam ;
-            $param->paramId = $typeParam-> id;
+            $param->paramtype_id = $typeParam-> id;
             $param->name = $request->name;
             $param->param_foreign = $request->param_foreign;
             $param->param_state = $request->param_state;
             $param->save(); // save
             $data[] = $param;
 
-            return OS::frontendResponse('200', 'success', $data, $msg ='Parametro creado correctamente.');
+            return OS::frontendResponse('200', 'success', $data, 'Parametro creado correctamente.');
         } else {
-            return OS::frontendResponse('404', 'error', [], $msg = 'Parametro no creado correctamente (no hay espacio dentro de los parametros)');
+            return OS::frontendResponse('400', 'error', [], 'Parametro no creado correctamente(no hay espacio dentro de los parametros)');
         }
     }
-    
-    
+
 
            
     
