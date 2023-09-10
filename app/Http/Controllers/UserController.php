@@ -79,13 +79,16 @@ class UserController extends Controller
     public function show(User $user)
     {
 
-        $data[] = $user;
-        if (!empty($data)) {
-            return OS::frontendResponse('200','success', $data, $msg = 'Usuario encontrado.'); 
-        }else{
-            return OS::frontendResponse('404', 'error',  $data, $msg = 'Usuario no encontrado.' );
+        // $data[] = $user;
 
-        }
+        dd('holius'); 
+
+        // if (!empty($data)) {
+        //     return OS::frontendResponse('200','success', $data, $msg = 'Usuario encontrado.'); 
+        // }else{
+        //     return OS::frontendResponse('404', 'error',  $data, $msg = 'Usuario no encontrado.' );
+
+        // }
     }
 
 

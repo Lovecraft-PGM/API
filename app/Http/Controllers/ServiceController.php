@@ -28,6 +28,7 @@ class ServiceController extends Controller
             if (!is_null($msg))
             $response['success'] = ['message' => $msg];
         }
+        return response()->json($response);
     }
 }
 
