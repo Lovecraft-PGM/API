@@ -1,32 +1,34 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Http\Controllers\ServiceController as OS;
 use Illuminate\Http\Request;
 use App\Models\ParamType;
+use App\Models\Param;
 
 class ParamTypeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+    
     public function index()
     {
         $paramTypes = ParamType::all()->sortBy('id');
 
-        foreach ($paramTypes as $paramType){
-        $paramType['name'] = $paramType -> name ;
-        $paramType['range_min']= $paramType ->range_min ;
-        $paramType['range_max'] = $paramType -> range_max  ;
-        $data[] = $paramType; 
-    }
-    if (count($paramTypes) == null) {
-        $data = $paramTypes;
-        return OS::frontendResponse('404', 'error',  $data,  $msg = 'Tipos de Parametros no encontrado.' );
-    }else{
-        return OS::frontendResponse('200','success', $data, $msg = 'Tipos de Parametros no encontrado'); 
-    }
-
+        foreach ($paramTypes as $paramType) {
+            $paramType['name'] = $paramType->name;
+            $paramType['range_min'] = $paramType->range_min;
+            $paramType['range_max'] = $paramType->range_max;
+            $data[] = $paramType;
+        }
+        if (count($paramTypes) == null) {
+            $data = $paramTypes;
+            return OS::frontendResponse('404', 'error',  $data,  $msg = 'Tipos de Parametros no encontrado.');
+        } else {
+            return OS::frontendResponse('200', 'success', $data, $msg = 'Tipos de Parametros no encontrado');
+        }
     }
 
     /**
@@ -42,22 +44,21 @@ class ParamTypeController extends Controller
      */
     public function store(Request $request)
     {
-        $lastRangeMax = ParamType::max('range_max')+1;
+        $lastRangeMax = ParamType::max('range_max') + 1;
         $lastId = ParamType::latest('id')->first()->id;
         $newId = $lastId + 1;
 
-        $paramType=new ParamType;   
+        $paramType = new ParamType;
         $paramType->id = $newId;
-        $paramType->name = $request -> name ;
-        $paramType->range_min = $lastRangeMax ;
+        $paramType->name = $request->name;
+        $paramType->range_min = $lastRangeMax;
         $paramType->range_max = $lastRangeMax + $request->input('amount');
-        if ($paramType-> save()) {
-               $data[] = $paramType;
-            return OS::frontendResponse('200','success', $data, $msg = 'Tipo de Parametro creado correctamente.'); 
-        }else{
-             $data[] = null;
-            return OS::frontendResponse('404', 'error',  $data, $msg = 'Tipo de Parametro no creado.' );
-            
+        if ($paramType->save()) {
+            $data[] = $paramType;
+            return OS::frontendResponse('200', 'success', $data, $msg = 'Tipo de Parametro creado correctamente.');
+        } else {
+            $data[] = null;
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Tipo de Parametro no creado.');
         }
     }
 
@@ -67,11 +68,11 @@ class ParamTypeController extends Controller
     public function show(ParamType $paramType)
     {
 
-            $data[] = $paramType;
+        $data[] = $paramType;
         if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, $msg = 'Tipo de parametro no encontrado.' );
-        }else{
-            return OS::frontendResponse('200','success', $data, $msg = 'Tipo de parametro encontrado.'); 
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Tipo de parametro no encontrado.');
+        } else {
+            return OS::frontendResponse('200', 'success', $data, $msg = 'Tipo de parametro encontrado.');
         }
     }
 
@@ -88,18 +89,18 @@ class ParamTypeController extends Controller
      */
     public function update(Request $request, ParamType $paramType)
     {
-        $paramType->name = $request -> name ;
-        $paramType->range_min= $request ->range_min ;
-        $paramType->range_max = $request -> range_max  ;
-        $paramType-> save ();    // save
+        $paramType->name = $request->name;
+        $paramType->range_min = $request->range_min;
+        $paramType->range_max = $request->range_max;
+        $paramType->save();    // save
         $data[] = $paramType;
         if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data,  $msg = 'Tipo de Parametro no Actualizado.' );
-        }else{
-            return OS::frontendResponse('200','success', $data,  $msg = 'Tipo de Parametro Actualizado correctamente.'); 
+            return OS::frontendResponse('404', 'error',  $data,  $msg = 'Tipo de Parametro no Actualizado.');
+        } else {
+            return OS::frontendResponse('200', 'success', $data,  $msg = 'Tipo de Parametro Actualizado correctamente.');
         }
     }
-    
+
 
     /**
      * Remove the specified resource from storage.

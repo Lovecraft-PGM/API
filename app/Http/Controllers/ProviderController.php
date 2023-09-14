@@ -1,40 +1,51 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Http\Controllers\ServiceController as OS;
 use Illuminate\Http\Request;
 use App\Models\Provider;
+use App\Models\Param;
+
 class ProviderController extends Controller
+
 {
     /**
      * Display a listing of the resource.
      */
+    private function getParamName($paramId)
+    {
+        $param = Param::find($paramId);
+
+        return $param ? $param->name : null;
+    }
+
     public function index()
     {
 
         $providers = provider::all()->sortBy('id');
 
-        foreach ($providers as $provider){
-        $provider['legal_name'] = $provider->legal_name ;
-        $provider['commercial_name']= $provider->commercial_name ;
-        $provider['email']= $provider-> email  ;
-        $provider['phone']= $provider-> phone  ;
-        $provider['address']= $provider-> address  ;
-        $provider['param_city']= $provider-> param_city   ;
-        $provider['name_contact']= $provider-> name_contact  ;
-        $provider['param_bank']= $provider-> param_bank   ;
-        $provider['param_account']= $provider-> param_account    ;
-        $provider['account']= $provider-> account    ;
-        $provider['param_state']= $provider->param_state;
-        $data[] = $provider; 
-
+        foreach ($providers as $provider) {
+            $provider['legal_name'] = $provider->legal_name;
+            $provider['commercial_name'] = $provider->commercial_name;
+            $provider['email'] = $provider->email;
+            $provider['phone'] = $provider->phone;
+            $provider['address'] = $provider->address;
+            $provider['param_city'] = $this->getParamName($provider->param_city);
+            $provider['name_contact'] = $provider->name_contact;
+            $provider['param_bank'] = $this->getParamName($provider->param_bank);
+            $provider['param_account'] = $this->getParamName($provider->param_account);
+            $provider['account'] = $provider->account;
+            $provider['param_state'] = $this->getParamName($provider->param_state);
+            $data[] = $provider;
         }
         if (count($providers) == null) {
             $data = $providers;
-            return OS::frontendResponse('404', 'error',  $data, $msg = 'Proveedores no encontrados.' );
-        }else{
-            return OS::frontendResponse('200','success', $data, $msg = 'Prooveedores encontrados.'); 
-        }    }
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Proveedores no encontrados.');
+        } else {
+            return OS::frontendResponse('200', 'success', $data, $msg = 'Prooveedores encontrados.');
+        }
+    }
 
     /**
      * Show the form for creating a new resource.
@@ -49,24 +60,24 @@ class ProviderController extends Controller
      */
     public function store(Request $request)
     {
-        $provider=new Provider;   
-        $provider->legal_name = $request -> legal_name ;
-        $provider->commercial_name= $request ->commercial_name ;
-        $provider->email= $request-> email  ;
-        $provider->phone= $request-> phone  ;
-        $provider->address= $request-> address  ;
-        $provider->param_city= $request-> param_city   ;
-        $provider->name_contact= $request-> name_contact  ;
-        $provider->param_bank= $request-> param_bank   ;
-        $provider->param_account= $request-> param_account    ;
-        $provider->account= $request-> account    ;
-        $provider->param_state= $request->param_state;
-        $provider-> save ();    // save
+        $provider = new Provider;
+        $provider->legal_name = $request->legal_name;
+        $provider->commercial_name = $request->commercial_name;
+        $provider->email = $request->email;
+        $provider->phone = $request->phone;
+        $provider->address = $request->address;
+        $provider->param_city = $request->param_city;
+        $provider->name_contact = $request->name_contact;
+        $provider->param_bank = $request->param_bank;
+        $provider->param_account = $request->param_account;
+        $provider->account = $request->account;
+        $provider->param_state = $request->param_state;
+        $provider->save();    // save
         $data[] = $provider;
         if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, $msg = 'Proveedor no creado.' );
-        }else{
-            return OS::frontendResponse('200','success', $data, $msg = 'Proveedor creado correctamente.'); 
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Proveedor no creado.');
+        } else {
+            return OS::frontendResponse('200', 'success', $data, $msg = 'Proveedor creado correctamente.');
         }
     }
 
@@ -91,20 +102,20 @@ class ProviderController extends Controller
      */
     public function update(Request $request, Provider $provider)
     {
-        $provider->legal_name = $request -> legal_name ;
-        $provider->commercial_name= $request ->commercial_name ;
-        $provider->email= $request-> email  ;
-        $provider->phone= $request-> phone  ;
-        $provider->address= $request-> address  ;
-        $provider->param_city= $request-> param_city   ;
-        $provider->name_contact= $request-> name_contact  ;
-        $provider->param_bank= $request-> param_bank   ;
-        $provider->param_account= $request-> param_account    ;
-        $provider->account= $request-> account    ;
-        $provider->param_state= $request->param_state;
-        $provider-> save ();    // save
-        $data[]= $provider;
-        return OS::frontendResponse('200','success', $data, $msg = 'Proveedor actualizado'); 
+        $provider->legal_name = $request->legal_name;
+        $provider->commercial_name = $request->commercial_name;
+        $provider->email = $request->email;
+        $provider->phone = $request->phone;
+        $provider->address = $request->address;
+        $provider->param_city = $request->param_city;
+        $provider->name_contact = $request->name_contact;
+        $provider->param_bank = $request->param_bank;
+        $provider->param_account = $request->param_account;
+        $provider->account = $request->account;
+        $provider->param_state = $request->param_state;
+        $provider->save();    // save
+        $data[] = $provider;
+        return OS::frontendResponse('200', 'success', $data, $msg = 'Proveedor actualizado');
     }
 
     /**
@@ -117,7 +128,7 @@ class ProviderController extends Controller
             $provider->save();
             $data[] = $provider;
             return OS::frontendResponse('200', 'success', $data, $msg = 'El proveedor se ha desactivado correctamente.');
-        }else{
+        } else {
             return OS::frontendResponse('404', 'error', [], $msg = 'El proveedor ya se encuentra inactivo.');
         }
     }

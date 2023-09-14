@@ -4,23 +4,32 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\ServiceController as OS;
 use Illuminate\Http\Request;
 use App\Models\Rating;
+use App\Models\Param;
 
 class RatingController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+     private function getParamName($paramId)
+     {
+         $param = Param::find($paramId);
+ 
+         return $param ? $param->name : null;
+     }
+ 
     public function index()
     {
+        
         $ratings = Rating::all()->sortBy('id');
         
         foreach ($ratings as $rating){
-        $rating['user_id']  = $rating -> user_id ;
-        $rating['product_id'] = $rating ->product_id ;
-        $rating['starts']= $rating-> starts  ;
-        $rating['comments']= $rating-> comments  ;
-        $rating['param_state']= $rating-> param_state  ;
-        $data[] = $rating; 
+            $rating['user_id'] = $rating->user_id;
+            $rating['product_id'] = $rating->product_id;
+            $rating['starts'] = $rating->starts;
+            $rating['comments'] = $rating->comments;
+            $rating['param_state'] = $this->getParamName($rating->param_state);
+            $data[] = $rating;
     }
     if (count($ratings) == null) {
         $data = $ratings;

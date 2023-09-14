@@ -4,12 +4,20 @@ use App\Http\Controllers\ServiceController as OS;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
+use App\Models\Param;
 
 class UserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+
+     private function getParamName($paramId)
+     {
+         $param = Param::find($paramId);
+ 
+         return $param ? $param->name : null;
+     }
     public function index()
     {
         $users = User::all()->sortBy('id');
@@ -20,14 +28,14 @@ class UserController extends Controller
                 $user['last_name'] = $user->last_name;
                 $user['birthday'] = $user->birthday;
                 $user['address'] = $user->address;
-                $user['param_city']  = $user->param_city;
-                $user['type_user'] = $user->type_user;
-                $user['email'] =   $user->email;
-                $user['image'] =   $user->image;
+                $user['param_city'] = $this->getParamName($user->param_city);
+                $user['type_user'] = $this->getParamName($user->type_user);
+                $user['email'] = $user->email;
+                $user['image'] = $user->image;
                 $user['password'] = $user->password;
-                $user['param_rol'] = $user->param_rol;
-                $user['param_gender'] = $user->param_gender;
-                $user['param_state'] = $user->param_state;
+                $user['param_rol'] = $this->getParamName($user->param_rol);
+                $user['param_gender'] = $this->getParamName($user->param_gender);
+                $user['param_state'] = $this->getParamName($user->param_state);
                 $data[] = $user;
             // }
         }

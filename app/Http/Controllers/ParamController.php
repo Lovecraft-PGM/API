@@ -10,6 +10,13 @@ use App\Models\ParamType;
 
 class ParamController extends Controller
 {
+    private function getParamName($paramId)
+    {
+        $param = Param::find($paramId);
+
+        return $param ? $param->name : null;
+    }
+
     public function orderList($params)
     {
         foreach ($params as $param) {
@@ -153,7 +160,7 @@ class ParamController extends Controller
             $param['paramtype_id'] = $param->paramtype_id;
             $param['name'] = $param->name;
             $param['param_foreign'] = $param->param_foreign;
-            $param['param_state'] = $param->param_state;
+            $param['param_state'] = $this->getParamName($param->param_state);
             $data[] = $param;
         }
         if ($data == null) {
@@ -168,7 +175,7 @@ class ParamController extends Controller
         //
     }
 
-    public function store(Request $request )
+    public function store(Request $request)
     {
 
         $typeParam = ParamType::find($request->paramTypeId);
@@ -178,8 +185,8 @@ class ParamController extends Controller
         if ($idParam >= $typeParam->range_min && $idParam <= $typeParam->range_max) {
 
             $param = new Param;
-            $param->id = $idParam ;
-            $param->paramtype_id = $typeParam-> id;
+            $param->id = $idParam;
+            $param->paramtype_id = $typeParam->id;
             $param->name = $request->name;
             $param->param_foreign = $request->param_foreign;
             $param->param_state = $request->param_state;
@@ -193,11 +200,11 @@ class ParamController extends Controller
     }
 
 
-           
-    
-        
 
-    
+
+
+
+
 
     /**
      * Display the specified resource.
@@ -229,25 +236,24 @@ class ParamController extends Controller
         $param->save(); // save
         $data[] = $param;
         if (!empty($data)) {
-        return OS::frontendResponse('200', 'success', $data, $msg = 'Parametro actualizado correctamente.');
+            return OS::frontendResponse('200', 'success', $data, $msg = 'Parametro actualizado correctamente.');
+        } else {
 
-        }else{
-
-        return OS::frontendResponse('404', 'error', [], $msg = 'Parametro no actualizado.');
+            return OS::frontendResponse('404', 'error', [], $msg = 'Parametro no actualizado.');
         }
-
     }
 
 
-    public function destroy(Param $param){   
-       
+    public function destroy(Param $param)
+    {
+
         if ($param->param_state != 1652) {
             $param->param_state = 1652;
             $param->save();
             $data[] = $param;
             return OS::frontendResponse('200', 'success', $data, $msg = 'El Parametro se ha desactivado correctamente.');
-        }else{
-            return OS::frontendResponse('404', 'error', NULL , $msg = 'El parametro ya se encuentra inactivo.');
-        } 
+        } else {
+            return OS::frontendResponse('404', 'error', NULL, $msg = 'El parametro ya se encuentra inactivo.');
+        }
     }
 }
