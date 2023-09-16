@@ -286,33 +286,43 @@ class OrderController extends Controller
     
 
     public function showOrders(Request $request)
-{ 
-    // Obtener el código del Request
-    $code = $request->input('code');
+    { 
+        // Obtener el código del Request
+        $code = $request->input('code');
+    
+       
+        // Buscar todas las órdenes cuyo código coincide con el código proporcionado
+        $orders = Order::where('code', $code)->get();
+       
+        if ($orders->isEmpty()) {
+            // Si no se encuentra ninguna coincidencia, retornar un mensaje de error
+            return OS::frontendResponse('404', 'error', [], 'Orden no encontrada.');
+        }
+    
+        // Inicializar una variable para almacenar el estado de la orden encontrada
+        $paramStatus = null;
+    
+        // Recorrer todas las órdenes para encontrar el estado de la orden
+        foreach ($orders as $order) {
+            $statusId = $order->param_status;
+            $paramStatus = Order::find($statusId);
+    
+            if ($paramStatus) {
+                // Si se encuentra el estado de la orden, salir del bucle
+                break;
+            }
+        }
+    
 
-    // Buscar todas las órdenes cuyo código coincide con el código proporcionado
-    $orders = Order::where('code', $code)->get();
-
-    if ($orders->isEmpty()) {
-        // Si no se encuentra ninguna coincidencia, retornar un mensaje de error
-        return response()->json(['message' => 'Orden no encontrada.'], 404);
+        if ($statusId) {
+            // Si se encuentra el ParamStatus, retornar como respuesta
+            return OS::frontendResponse('200', 'success', $statusId, 'Estado de la orden encontrado correctamente.');
+        } else {
+            // Si no se encuentra el ParamStatus, retornar un mensaje de error
+            return OS::frontendResponse('404', 'error', [], 'ParamStatus no encontrado.');
+        }
     }
-
-    // Obtener el estado de la primera orden encontrada (asumiendo que hay solo una coincidencia)
-    $firstOrder = $orders->first();
-    $statusId = $firstOrder->param_status;
-
-    // Buscar el ParamStatus correspondiente al estado (status)
-    $paramStatus = Order::find($statusId);
-
-    if ($paramStatus) {
-        // Si se encuentra el ParamStatus, retornar como respuesta
-        return response()->json($paramStatus, 200);
-    } else {
-        // Si no se encuentra el ParamStatus, retornar un mensaje de error
-        return response()->json(['message' => 'ParamStatus no encontrado.'], 404);
-    }
-}
+    
     
     
 }

@@ -118,7 +118,6 @@ class UserController extends Controller
         $user->type_user = $request->type_user;
         $user->email = $request->email;
         $user->param_gender = $request->param_gender;
-        $user->password = $request->password;
         $user->save();    // save
         $data[]= $user;
         if ($data == null) {
