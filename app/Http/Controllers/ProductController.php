@@ -118,13 +118,7 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
-        $product['provider_id']= $this->getProviderName($product->provider_id);
-        $product['param_size'] = $this->getParamName($product->param_size);
-        $product['param_gender'] = $this->getParamName($product->param_gender);
-        $product['param_mark'] = $this->getParamName($product->param_mark);
-        $product['param_subcategory'] = $this->getParamName($product->param_subcategory);
-        $product['param_color'] = $this->getParamName($product->param_color);
-        $product['param_state'] = $this->getParamName($product->param_state);
+
         $data[] = $product;
         if ($data == null) {
             return OS::frontendResponse('404', 'error',  $data, $msg = 'Producto no encontrado.');
