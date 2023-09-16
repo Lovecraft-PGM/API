@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Param;
 use App\Models\OrderDetail;
+use App\Models\Product;
 
 class OrderController extends Controller
 {
@@ -144,61 +145,47 @@ class OrderController extends Controller
 
     public function shoppingCardCreate(Order $order, Request $request)
     {
-
-
-        $orderexist = Order::where('user_id', $request->user_id)->where('param_status', 1701)->get();
-
-        if (!$orderexist) {
-            // Crear una nueva orden
+        $user_id = $request->user_id;
+        $product_ids = $request->input('product_ids', []); // Obtener un arreglo de IDs de productos
+        $param_state = $request->param_state;
+    
+        $data = []; // Para almacenar los detalles de órdenes creados
+    
+        // Crear una nueva orden si no existe una orden existente para el usuario
+        $existingOrder = Order::where('user_id', $user_id)
+            ->where('param_status', 1701) // Ajusta el estado según tus necesidades
+            ->first();
+    
+        if (!$existingOrder) {
             $newOrder = new Order();
-            $newOrder->user_id = $request->user_id;
+            $newOrder->user_id = $user_id;
             $newOrder->code = $request->code;
             $newOrder->date = $request->date;
             $newOrder->total = $request->total;
             $newOrder->param_paymethod = $request->param_paymethod;
-            $newOrder->param_status = 1701; // Esto puede variar según tu lógica
-            $newOrder->param_state = $request->param_state;
+            $newOrder->param_status = 1701; // Ajusta el estado según tus necesidades
+            $newOrder->param_state = $param_state;
             $newOrder->save();
-
-            // Crear un nuevo detalle de orden y relacionarlo con la orden
-            $orderDetail = new OrderDetail();
-            $orderDetail->o_id = $newOrder->id; // Asignar el ID de la nueva orden
-            $orderDetail->product_id = $request->product_id;
-            $orderDetail->qty = $request->qty;
-            $orderDetail->subtotal = $request->subtotal;
-            $orderDetail->param_state = $request->param_state;
-            $orderDetail->save();
-
-            $data = [
-                'order' => $newOrder,
-                'orderDetail' => $orderDetail,
-            ];
-
-            return OS::frontendResponse('200', 'success', $data, 'Detalle de orden creado.');
         } else {
-            // Si la orden ya existe, crea un nuevo detalle de orden asociado a esa orden
-            $existingOrder = Order::find($orderexist); // Suponiendo que $orderexist es el ID de la orden existente
-
-            if ($existingOrder) {
-                $orderDetail = new OrderDetail();
-                $orderDetail->o_id = $existingOrder->id; // Asignar el ID de la orden existente
-                $orderDetail->product_id = $request->product_id;
-                $orderDetail->qty = $request->qty;
-                $orderDetail->subtotal = $request->subtotal;
-                $orderDetail->param_state = $request->param_state;
-                $orderDetail->save();
-
-                $data = [
-                    'order' => $existingOrder,
-                    'orderDetail' => $orderDetail,
-                ];
-
-                return OS::frontendResponse('200', 'success', $data, 'Detalle de orden creado para la orden existente.');
-            } else {
-                return OS::frontendResponse('404', 'error', null, 'Orden existente no encontrada.');
-            }
+            $newOrder = $existingOrder;
         }
+    
+        foreach ($product_ids as $product_id) {
+            // Crear un nuevo detalle de orden para cada producto
+            $orderDetail = new OrderDetail();
+            $orderDetail->o_id = $newOrder->id;
+            $orderDetail->product_id = $product_id;
+            $orderDetail->qty = $request->qty; // Ajusta la cantidad según tus necesidades
+            $orderDetail->subtotal = $request->subtotal; // Ajusta el subtotal según tus necesidades
+            $orderDetail->param_state = $param_state;
+            $orderDetail->save();
+    
+            $data[] = $orderDetail;
+        }
+    
+        return OS::frontendResponse('200', 'success', $data, 'Detalles de orden creados.');
     }
+    
 
     public function shoppingCardUpdate(Order $order)
     {
@@ -216,47 +203,56 @@ class OrderController extends Controller
     {
         // Obtener el ID del usuario de la solicitud
         $userId = $request->user_id;
-
+    
         // Buscar todas las órdenes del usuario
         $orders = $order->where('user_id', $userId)->get();
-
+    
         if ($orders->isEmpty()) {
             // Si el usuario no tiene órdenes, puedes devolver un mensaje de error
             return OS::frontendResponse('404', 'error', null, 'El usuario no tiene órdenes.');
         }
-
+    
         $orderDetails = [];
         $totalValue = 0;
         $totalQuantity = 0;
-
+    
         // Iterar a través de las órdenes del usuario
         foreach ($orders as $order) {
             // Verificar si la orden tiene el estado de carrito
             if ($order->param_state === 'carrito') {
                 // Si la orden está en estado de carrito, obtener todas las OrderDetail asociadas a esa orden
                 $details = $orderDetail->where('o_id', $order->id)->get();
-
+    
+                // Obtener los productos asociados a los detalles de la orden
+                $products = $details->pluck('product_id')->unique(); // Obtener IDs únicos de productos
+    
+                // Obtener las imágenes de los productos asociados a estos detalles
+                $productImages = Product::whereIn('id', $products)->pluck('image');
+    
                 // Sumar el valor de los detalles de la orden y la cantidad total
                 foreach ($details as $detail) {
                     $totalValue += $detail->subtotal;
                     $totalQuantity += $detail->qty;
                 }
-
-                // Agregar los detalles de la orden al arreglo
-                $orderDetails[] = $details;
+    
+                // Agregar los detalles de la orden y las imágenes de los productos al arreglo
+                $orderDetails[] = [
+                    'details' => $details,
+                    'productImages' => $productImages,
+                ];
             }
         }
-
+    
         // Filtrar los detalles de la orden que tienen elementos
         $filteredOrderDetails = array_filter($orderDetails, function ($details) {
-            return !$details->isEmpty();
+            return !$details['details']->isEmpty();
         });
-
+    
         // Comprobar si se encontraron detalles de orden en estado de carrito
         if (empty($filteredOrderDetails)) {
             return OS::frontendResponse('200', 'success', null, 'El usuario no tiene detalles de órdenes en estado de carrito.');
         }
-
+    
         // Construir una respuesta con todas las órdenes del usuario, los detalles de las órdenes en estado de carrito, el total y la cantidad
         $data = [
             'orders' => $orders,
@@ -264,10 +260,10 @@ class OrderController extends Controller
             'totalValue' => $totalValue,
             'totalQuantity' => $totalQuantity,
         ];
-
+    
         return OS::frontendResponse('200', 'success', $data, 'Detalles de órdenes en estado de carrito encontrados.');
     }
-
+    
 
     public function showorders(Request $request)
 { 
