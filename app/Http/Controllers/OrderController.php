@@ -144,34 +144,46 @@ class OrderController extends Controller
 
 
     public function shoppingCardCreate(Order $order, Request $request)
-    {
-        $user_id = $request->user_id;
-        $product_ids = $request->input('product_ids', []); // Obtener un arreglo de IDs de productos
-        $param_state = $request->param_state;
-    
-        $data = []; // Para almacenar los detalles de órdenes creados
-    
-        // Crear una nueva orden si no existe una orden existente para el usuario
-        $existingOrder = Order::where('user_id', $user_id)
-            ->where('param_status', 1701) // Ajusta el estado según tus necesidades
+{
+    $user_id = $request->user_id;
+    $product_ids = $request->input('product_ids', []); // Obtener un arreglo de IDs de productos
+    $param_state = $request->param_state;
+
+    $data = []; // Para almacenar los detalles de órdenes creados
+
+    // Crear una nueva orden si no existe una orden existente para el usuario
+    $existingOrder = Order::where('user_id', $user_id)
+        ->where('param_status', 1701) // Ajusta el estado según tus necesidades
+        ->first();
+
+    if (!$existingOrder) {
+        $newOrder = new Order();
+        $newOrder->user_id = $user_id;
+        $newOrder->code = $request->code;
+        $newOrder->date = $request->date;
+        $newOrder->total = $request->total;
+        $newOrder->param_paymethod = $request->param_paymethod;
+        $newOrder->param_status = 1701; // Ajusta el estado según tus necesidades
+        $newOrder->param_state = $param_state;
+        $newOrder->save();
+    } else {
+        $newOrder = $existingOrder;
+    }
+
+    foreach ($product_ids as $product_id) {
+        // Verificar si ya existe un OrderDetail con el mismo product_id en la orden actual
+        $existingOrderDetail = OrderDetail::where('o_id', $newOrder->id)
+            ->where('product_id', $product_id)
             ->first();
-    
-        if (!$existingOrder) {
-            $newOrder = new Order();
-            $newOrder->user_id = $user_id;
-            $newOrder->code = $request->code;
-            $newOrder->date = $request->date;
-            $newOrder->total = $request->total;
-            $newOrder->param_paymethod = $request->param_paymethod;
-            $newOrder->param_status = 1701; // Ajusta el estado según tus necesidades
-            $newOrder->param_state = $param_state;
-            $newOrder->save();
+
+        if ($existingOrderDetail) {
+            // Si ya existe, actualiza la cantidad (qty) y el subtotal
+            $existingOrderDetail->qty += $request->qty; // Ajusta la cantidad según tus necesidades
+            $existingOrderDetail->subtotal += $request->subtotal; // Ajusta el subtotal según tus necesidades
+            $existingOrderDetail->save();
+            $data[] = $existingOrderDetail;
         } else {
-            $newOrder = $existingOrder;
-        }
-    
-        foreach ($product_ids as $product_id) {
-            // Crear un nuevo detalle de orden para cada producto
+            // Si no existe, crea un nuevo OrderDetail
             $orderDetail = new OrderDetail();
             $orderDetail->o_id = $newOrder->id;
             $orderDetail->product_id = $product_id;
@@ -179,12 +191,20 @@ class OrderController extends Controller
             $orderDetail->subtotal = $request->subtotal; // Ajusta el subtotal según tus necesidades
             $orderDetail->param_state = $param_state;
             $orderDetail->save();
-    
             $data[] = $orderDetail;
         }
-    
-        return OS::frontendResponse('200', 'success', $data, 'Detalles de orden creados.');
     }
+
+    //puede servir despues: 
+    // Recalcula el total sumando los subtotales de todos los detalles de orden
+    // $totalValue = $newOrder->orderDetails->sum('subtotal');
+    // $newOrder->total = $totalValue;
+    // $newOrder->save();
+
+    return OS::frontendResponse('200', 'success', $data, 'Detalles de orden creados o actualizados.');
+}
+
+    
     
 
     public function shoppingCardUpdate(Order $order)

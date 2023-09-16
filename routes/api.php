@@ -18,6 +18,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::middleware('X_API_KEY')->group(function () {
+    //rutas get para traer individual 
     Route::get('countries',[ParamController::class,'countriesList']);
     Route::get('departments',[ParamController::class,'departmentsList']);
     Route::get('cities',[ParamController::class,'citiesList']);
@@ -34,9 +35,11 @@ Route::middleware('X_API_KEY')->group(function () {
     Route::get('colors',[ParamController::class,'colorsList']);
     Route::get('paymentMethods',[ParamController::class,'paymentMethodsList']);
     Route::get('purchaseStatuses',[ParamController::class,'purchaseStatusesList']);
-    Route::get('showShopping',[OrderController::class,'showShopping']);
-    Route::get('shoppingCardCreate',[OrderController::class,'shoppingCardCreate']);
-    Route::get('shoppingCardUpdate',[OrderController::class,'shoppingCardUpdate']);
+    //rutas post para traer y retornar algo
+    Route::post('showShopping',[OrderController::class,'showShopping']);
+    Route::post('shoppingCardCreate', [OrderController::class, 'shoppingCardCreate']);
+    Route::post('shoppingCardUpdate',[OrderController::class,'shoppingCardUpdate']);
+    //recursos de todas los controladores 
     Route::resource('products', ProductController::class);
     Route::resource('params', ParamController::class);
     Route::resource('providers', ProviderController::class);

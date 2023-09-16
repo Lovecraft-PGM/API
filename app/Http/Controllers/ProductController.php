@@ -78,8 +78,8 @@ class ProductController extends Controller
     {
         $product = new Product;
         
-        if ($request->hasFile('image')) {
-            $imginput = $request->file('image');
+        if ($request->hasFile('images')) {
+            $imginput = $request->file('images');
             $imgExtension = $imginput->getClientOriginalExtension();
             // Generar un nombre único para el archivo
             $uniqueFileName = uniqid('imagen_') . '.' . $imgExtension;
@@ -97,7 +97,7 @@ class ProductController extends Controller
         $product->price = $request->price;
         $product->discount = $request->discount;
         $product->tax = $request->tax;
-        $product->image = 'img/products/' . $uniqueFileName;
+        $product->images = 'img/products/' . $uniqueFileName;
         $product->param_size  = $request->param_size;
         $product->param_gender  = $request->param_gender;
         $product->param_subcategory  = $request->param_subcategory;
@@ -140,8 +140,8 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        if ($request->hasFile('image')) {
-            $imginput = $request->file('image');
+        if ($request->hasFile('images')) {
+            $imginput = $request->file('images');
             $imgExtension = $imginput->getClientOriginalExtension();
             // Generar un nombre único para el archivo
             $uniqueFileName = uniqid('imagen_') . '.' . $imgExtension;
@@ -157,7 +157,7 @@ class ProductController extends Controller
         $product->price = $request->price;
         $product->discount = $request->discount;
         $product->tax = $request->tax;
-        $product->image ='img/products/' . $uniqueFileName;
+        $product->images ='img/products/' . $uniqueFileName;
         $product->param_size  = $request->param_size;
         $product->param_gender  = $request->param_gender;
         $product->param_subcategory  = $request->param_subcategory;
