@@ -39,6 +39,7 @@ Route::middleware('X_API_KEY')->group(function () {
     Route::post('showShopping',[OrderController::class,'showShopping']);
     Route::post('shoppingCardCreate', [OrderController::class, 'shoppingCardCreate']);
     Route::post('shoppingCardUpdate',[OrderController::class,'shoppingCardUpdate']);
+    Route::post('showorders', [OrderController::class, 'showOrders']);
     //recursos de todas los controladores 
     Route::resource('products', ProductController::class);
     Route::resource('params', ParamController::class);

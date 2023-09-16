@@ -285,7 +285,7 @@ class OrderController extends Controller
     }
     
 
-    public function showorders(Request $request)
+    public function showOrders(Request $request)
 { 
     // Obtener el código del Request
     $code = $request->input('code');
