@@ -20,10 +20,10 @@ class ProductController extends Controller
         return $param ? $param->name : null;
     }
 
-    private function getProviderName($provierid){
-        $provider = Provider::find($provierid);
+    private function getProviderName($providerId){-
+        $provider = Provider::find($providerId);
 
-        return $provider ? $provider->name : "pan";
+        return $provider ? $provider->legal_name : null;
     }
 
 
@@ -35,7 +35,7 @@ class ProductController extends Controller
         $products = Product::all()->sortBy('id');
 
         foreach ($products as $product) {
-            $product['provider_id']= $this->getProviderName($product->provider_id);
+            $product['provider_id']=$this->getProviderName($product->provider_id);
             $product['reference'] = $product->reference;
             $product['name'] = $product->name;
             $product['description'] = $product->description;
