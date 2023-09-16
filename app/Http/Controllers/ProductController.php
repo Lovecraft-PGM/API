@@ -7,7 +7,8 @@ use App\Http\Controllers\ServiceController as OS;
 use App\Models\Param;
 use Illuminate\Http\Request;
 use App\Models\Product;
-use App\Models\Provider; 
+use App\Models\Provider ;
+; 
 class ProductController extends Controller
 {
     /**
@@ -19,11 +20,10 @@ class ProductController extends Controller
         return $param ? $param->name : null;
     }
 
-    private function getProviderName($provider_id)
-    {
-        $provider = Provider::find($provider_id);
+    private function getProviderName($provierid){
+        $provider = Provider::find($provierid);
 
-        return $provider ? $provider->name : null;
+        return $provider ? $provider->name : "pan";
     }
 
 
@@ -46,6 +46,7 @@ class ProductController extends Controller
             $product['images'] = $product->images;
             $product['param_size'] = $this->getParamName($product->param_size);
             $product['param_gender'] = $this->getParamName($product->param_gender);
+            $product['param_mark'] = $this->getParamName($product->param_mark);
             $product['param_subcategory'] = $this->getParamName($product->param_subcategory);
             $product['param_color'] = $this->getParamName($product->param_color);
             $product['param_state'] = $this->getParamName($product->param_state);
@@ -76,6 +77,19 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $product = new Product;
+        
+        // if ($request->hasFile('image')) {
+        //     $imginput = $request->file('image');
+        //     $imgExtension = $imginput->getClientOriginalExtension();
+        //     // Generar un nombre único para el archivo
+        //     $uniqueFileName = uniqid('imagen_') . '.' . $imgExtension;
+        //     // Mover el archivo al directorio de destino con el nombre único
+        // //     $imginput->move(public_path('img/products'), $uniqueFileName);
+        
+        // //     // Ahora, $uniqueFileName contiene el nombre único del archivo
+        // }
+
+
         $product->provider_id = $request->provider_id;
         $product->reference = $request->reference;
         $product->name = $request->name;
@@ -84,7 +98,7 @@ class ProductController extends Controller
         $product->price = $request->price;
         $product->discount = $request->discount;
         $product->tax = $request->tax;
-        $product->images = $request->images;
+        $product->image = $request->image;
         $product->param_size  = $request->param_size;
         $product->param_gender  = $request->param_gender;
         $product->param_subcategory  = $request->param_subcategory;
@@ -105,6 +119,13 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+        $product['provider_id']= $this->getProviderName($product->provider_id);
+        $product['param_size'] = $this->getParamName($product->param_size);
+        $product['param_gender'] = $this->getParamName($product->param_gender);
+        $product['param_mark'] = $this->getParamName($product->param_mark);
+        $product['param_subcategory'] = $this->getParamName($product->param_subcategory);
+        $product['param_color'] = $this->getParamName($product->param_color);
+        $product['param_state'] = $this->getParamName($product->param_state);
         $data[] = $product;
         if ($data == null) {
             return OS::frontendResponse('404', 'error',  $data, $msg = 'Producto no encontrado.');

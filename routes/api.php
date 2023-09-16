@@ -11,7 +11,7 @@ use  App\Http\Controllers\OrderDetailController;
 use  App\Http\Controllers\OrderController;
 use  App\Http\Controllers\RatingController;
 use App\Http\Controllers\API\AuthController;
-
+use App\Models\Order;
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
@@ -34,6 +34,9 @@ Route::middleware('X_API_KEY')->group(function () {
     Route::get('colors',[ParamController::class,'colorsList']);
     Route::get('paymentMethods',[ParamController::class,'paymentMethodsList']);
     Route::get('purchaseStatuses',[ParamController::class,'purchaseStatusesList']);
+    Route::get('showShopping',[OrderController::class,'showShopping']);
+    Route::get('shoppingCardCreate',[OrderController::class,'shoppingCardCreate']);
+    Route::get('shoppingCardUpdate',[OrderController::class,'shoppingCardUpdate']);
     Route::resource('products', ProductController::class);
     Route::resource('params', ParamController::class);
     Route::resource('providers', ProviderController::class);
@@ -41,9 +44,10 @@ Route::middleware('X_API_KEY')->group(function () {
     Route::resource('paramTypes', ParamTypeController::class);
     Route::resource('orders', OrderController::class);
     Route::resource('ordersDetail', OrderDetailController::class);
+    Route::resource('users', UserController::class);
 });
 
-Route::resource('users', UserController::class);
+
 Route::controller(AuthController::class)->group(function () {
 Route::post('login', 'login');
 Route::post('register', 'register');
