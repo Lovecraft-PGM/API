@@ -146,7 +146,15 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-
+        if ($request->hasFile('image')) {
+            $imginput = $request->file('image');
+            $imgExtension = $imginput->getClientOriginalExtension();
+            // Generar un nombre único para el archivo
+            $uniqueFileName = uniqid('imagen_') . '.' . $imgExtension;
+            // Mover el archivo al directorio de destino con el nombre único
+            $imginput->move(public_path('img/products'), $uniqueFileName);
+        //     // Ahora, $uniqueFileName contiene el nombre único del archivo
+        }
         $product->provider_id = $request->provider_id;
         $product->reference = $request->reference;
         $product->name = $request->name;
@@ -155,7 +163,7 @@ class ProductController extends Controller
         $product->price = $request->price;
         $product->discount = $request->discount;
         $product->tax = $request->tax;
-        $product->images = $request->images;
+        $product->image ='img/products/' . $uniqueFileName;
         $product->param_size  = $request->param_size;
         $product->param_gender  = $request->param_gender;
         $product->param_subcategory  = $request->param_subcategory;
