@@ -7,25 +7,26 @@ use App\Http\Controllers\ServiceController as OS;
 use App\Models\Param;
 use Illuminate\Http\Request;
 use App\Models\Product;
-use App\Models\Provider ;
-; 
+use App\Models\Provider;;
 class ProductController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    private function getParamName($paramId){
+    private function getParamName($paramId)
+    {
         $param = Param::find($paramId);
 
         return $param ? $param->name : null;
     }
 
-    private function getProviderName($providerId) {
+    private function getProviderName($providerId)
+    {
         $provider = Provider::find($providerId);
-    
+
         return $provider ? $provider->legal_name : null;
     }
-    
+
 
 
 
@@ -106,9 +107,17 @@ class ProductController extends Controller
      */
     public function show(Product $product)
     {
+        $product['provider_id'] = $this->getProviderName($product->provider_id);
+        $product['param_size'] = $this->getParamName($product->param_size);
+        $product['param_gender'] = $this->getParamName($product->param_gender);
+        $product['param_mark'] = $this->getParamName($product->param_mark);
+        $product['param_subcategory'] = $this->getParamName($product->param_subcategory);
+        $product['param_color'] = $this->getParamName($product->param_color);
+        $product['param_state'] = $this->getParamName($product->param_state);
+
         $data[] = $product;
         if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, $msg = 'Producto no encontrado.');
+            return OS::frontendResponse('404', 'error',  [], $msg = 'Producto no encontrado.');
         } else {
             return OS::frontendResponse('200', 'success', $data, $msg = 'Producto encontrado.');
         }
@@ -125,7 +134,8 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update( Request $request, Product $product){
+    public function update(Request $request, Product $product)
+    {
 
         $product->provider_id = $request->provider_id;
         $product->reference = $request->reference;

@@ -76,8 +76,12 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      */
+    
     public function show(Order $order)
     {
+        $order['param_paymethod'] = $this->getParamName($order->param_paymethod);
+        $order['param_status'] = $this->getParamName($order->param_status);
+        $order['param_state'] = $this->getParamName($order->param_state);
         $data[] = $order;
         if ($data == null) {
             return OS::frontendResponse('404', 'error',  $data, $msg = 'Orden no encontrada.');

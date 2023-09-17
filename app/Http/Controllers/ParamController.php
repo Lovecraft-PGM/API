@@ -211,6 +211,7 @@ class ParamController extends Controller
      */
     public function show(Param $param)
     {
+        $param['param_state'] = $this->getParamName($param->param_state);
         $data[] = $param;
         if ($data == null) {
             return OS::frontendResponse('404', 'error', $data, $msg = 'Parametro no encontrado.');

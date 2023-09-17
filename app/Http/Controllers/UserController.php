@@ -85,6 +85,12 @@ class UserController extends Controller
      * Display the specified resource.
      */
     public function show(User $user){
+        $user['param_city'] = $this->getParamName($user->param_city);
+        $user['type_user'] = $this->getParamName($user->type_user);
+        
+        $user['param_rol'] = $this->getParamName($user->param_rol);
+        $user['param_gender'] = $this->getParamName($user->param_gender);
+        $user['param_state'] = $this->getParamName($user->param_state);
         $data[] = $user;
         if (!empty($data)) {
             return OS::frontendResponse('200','success', $data, $msg = 'Usuario encontrado.'); 

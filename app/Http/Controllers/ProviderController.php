@@ -86,7 +86,16 @@ class ProviderController extends Controller
      */
     public function show(Provider $provider)
     {
-        return response()->json($provider);
+        $provider['param_city'] = $this->getParamName($provider->param_city);
+        $provider['param_bank'] = $this->getParamName($provider->param_bank);
+        $provider['param_account'] = $this->getParamName($provider->param_account);
+        $provider['param_state'] = $this->getParamName($provider->param_state);
+        $data[] = $provider;
+        if ($data == null) {
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Proveedor no encontrado.' );
+        }else{
+            return OS::frontendResponse('200','success', $data, $msg = 'Proveedor encontrado.'); 
+        }
     }
 
     /**
