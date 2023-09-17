@@ -36,9 +36,10 @@ Route::middleware('X_API_KEY')->group(function () {
     Route::get('paymentMethods',[ParamController::class,'paymentMethodsList']);
     Route::get('purchaseStatuses',[ParamController::class,'purchaseStatusesList']);
     //rutas post para traer y retornar algo
-    Route::post('showShopping',[OrderController::class,'showShopping']);
+    Route::post('showshopping',[OrderController::class,'showShopping']);
     Route::post('shoppingCardCreate', [OrderController::class, 'shoppingCardCreate']);
     Route::post('shoppingCardUpdate',[OrderController::class,'shoppingCardUpdate']);
+    //muestra la orden (es para flutter)
     Route::post('showorders', [OrderController::class, 'showOrders']);
     //recursos de todas los controladores 
     Route::resource('products', ProductController::class);

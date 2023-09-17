@@ -219,84 +219,74 @@ class OrderController extends Controller
         }
     }
 
-    public function showcarrito(Request $request, Order $order, OrderDetail $orderDetail)
-    {
-        // Obtener el ID del usuario de la solicitud
-        $userId = $request->user_id;
-    
-        // Buscar todas las órdenes del usuario
-        $orders = $order->where('user_id', $userId)->get();
-    
-        if ($orders->isEmpty()) {
-            // Si el usuario no tiene órdenes, puedes devolver un mensaje de error
-            return OS::frontendResponse('404', 'error', null, 'El usuario no tiene órdenes.');
-        }
-    
-        $orderDetails = [];
-        $totalValue = 0;
-        $totalQuantity = 0;
-    
-        // Iterar a través de las órdenes del usuario
-        foreach ($orders as $order) {
-            // Verificar si la orden tiene el estado de carrito
-            if ($order->param_state === 'carrito') {
-                // Si la orden está en estado de carrito, obtener todas las OrderDetail asociadas a esa orden
+    public function showshopping(Request $request, Order $order, OrderDetail $orderDetail){
+        
+            // Obtener el ID del usuario de la solicitud
+            $userId = $request->user_id;
+        
+            // Buscar todas las órdenes del usuario que coinciden con el param_status igual a 1701
+            $orders = $order->where('user_id', $userId)
+                            ->where('param_status', 1701)
+                            ->get();
+        
+            if ($orders->isEmpty()) {
+                // Si no se encuentran órdenes que cumplan con los criterios, devuelve un mensaje de error
+                return OS::frontendResponse('404', 'error', null, 'El usuario no tiene órdenes con estado 1701.');
+            }
+        
+            $totalQty = 0;      // Variable para la suma total de qty
+            $totalSubtotal = 0; // Variable para la suma total de subtotal
+        
+            $orderDetails = [];
+        
+            // Iterar a través de las órdenes encontradas
+            foreach ($orders as $order) {
+                // Obtener todas las OrderDetail asociadas a esa orden
                 $details = $orderDetail->where('o_id', $order->id)->get();
-    
-                // Obtener los productos asociados a los detalles de la orden
-                $products = $details->pluck('product_id')->unique(); // Obtener IDs únicos de productos
-    
-                // Obtener las imágenes de los productos asociados a estos detalles
-                $productImages = Product::whereIn('id', $products)->pluck('image');
-    
-                // Sumar el valor de los detalles de la orden y la cantidad total
+        
+                // Verificar si el `o_id` coincide con el `product_id` y obtener el producto correspondiente
+                $products = [];
                 foreach ($details as $detail) {
-                    $totalValue += $detail->subtotal;
-                    $totalQuantity += $detail->qty;
+                    $product = Product::find($detail->product_id);
+                    if ($product) {
+                        $products[] = $product;
+                    }
+                    $totalQty += $detail->qty;
+                    $totalSubtotal += $detail->subtotal;
                 }
-    
-                // Agregar los detalles de la orden y las imágenes de los productos al arreglo
+        
+                // Agregar los detalles de la orden y los productos al arreglo
                 $orderDetails[] = [
                     'details' => $details,
-                    'productImages' => $productImages,
+                    'products' => $products,
                 ];
             }
+        
+            // Devolver la respuesta con los detalles de las órdenes encontradas, el total de qty y el total de subtotal
+            $response = [
+                'orderDetails' => $orderDetails,
+                'totalQty' => $totalQty,
+                'totalSubtotal' => $totalSubtotal,
+            ];
+        
+            return OS::frontendResponse('200', 'success', $response, 'Detalles de las órdenes con estado 1701 y totales.');
         }
+        
     
-        // Filtrar los detalles de la orden que tienen elementos
-        $filteredOrderDetails = array_filter($orderDetails, function ($details) {
-            return !$details['details']->isEmpty();
-        });
-    
-        // Comprobar si se encontraron detalles de orden en estado de carrito
-        if (empty($filteredOrderDetails)) {
-            return OS::frontendResponse('200', 'success', null, 'El usuario no tiene detalles de órdenes en estado de carrito.');
-        }
-    
-        // Construir una respuesta con todas las órdenes del usuario, los detalles de las órdenes en estado de carrito, el total y la cantidad
-        $data = [
-            'orders' => $orders,
-            'orderDetails' => $filteredOrderDetails,
-            'totalValue' => $totalValue,
-            'totalQuantity' => $totalQuantity,
-        ];
-    
-        return OS::frontendResponse('200', 'success', $data, 'Detalles de órdenes en estado de carrito encontrados.');
-    }
     
 
     public function showOrders(Request $request)
     { 
         // Obtener el código del Request
-        $code = $request->input('code');
+        $code = $request->input("code");
     
        
         // Buscar todas las órdenes cuyo código coincide con el código proporcionado
-        $orders = Order::where('code', $code)->get();
+        $orders = Order::where("code", $code)->get();
        
         if ($orders->isEmpty()) {
             // Si no se encuentra ninguna coincidencia, retornar un mensaje de error
-            return OS::frontendResponse('404', 'error', [], 'Orden no encontrada.');
+            return OS::frontendResponse("404", "error", [], "Orden no encontrada.");
         }
     
         // Inicializar una variable para almacenar el estado de la orden encontrada
@@ -307,19 +297,20 @@ class OrderController extends Controller
             $statusId = $order->param_status;
             $paramStatus = Order::find($statusId);
     
+
             if ($paramStatus) {
                 // Si se encuentra el estado de la orden, salir del bucle
                 break;
             }
         }
-    
+        $data[]=$statusId;
 
         if ($statusId) {
             // Si se encuentra el ParamStatus, retornar como respuesta
-            return OS::frontendResponse('200', 'success', $statusId, 'Estado de la orden encontrado correctamente.');
+            return OS::frontendResponse("200", "success", $data, "Estado de la orden encontrado correctamente.");
         } else {
             // Si no se encuentra el ParamStatus, retornar un mensaje de error
-            return OS::frontendResponse('404', 'error', [], 'ParamStatus no encontrado.');
+            return OS::frontendResponse("404", "error", [], "ParamStatus no encontrado.");
         }
     }
     

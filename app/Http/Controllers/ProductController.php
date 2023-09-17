@@ -77,17 +77,6 @@ class ProductController extends Controller
     public function store(Request $request)
     {
         $product = new Product;
-        
-        if ($request->hasFile('images')) {
-            $imginput = $request->file('images');
-            $imgExtension = $imginput->getClientOriginalExtension();
-            // Generar un nombre único para el archivo
-            $uniqueFileName = uniqid('imagen_') . '.' . $imgExtension;
-            // Mover el archivo al directorio de destino con el nombre único
-            $imginput->move(public_path('img/products'), $uniqueFileName);
-        //     // Ahora, $uniqueFileName contiene el nombre único del archivo
-        }
-
 
         $product->provider_id = $request->provider_id;
         $product->reference = $request->reference;
@@ -97,14 +86,13 @@ class ProductController extends Controller
         $product->price = $request->price;
         $product->discount = $request->discount;
         $product->tax = $request->tax;
-        $product->images = 'img/products/' . $uniqueFileName;
-        $product->param_size  = $request->param_size;
-        $product->param_gender  = $request->param_gender;
-        $product->param_subcategory  = $request->param_subcategory;
-        $product->param_mark  = $request->param_mark;
-        $product->param_color   = $request->param_color;
-        $product->param_state  = $request->param_state;
-        $product->save();    // save
+        $product->images = $request->images;
+        $product->param_size = $request->param_size;
+        $product->param_gender = $request->param_gender;
+        $product->param_subcategory = $request->param_subcategory;
+        $product->param_color = $request->param_color;
+        $product->param_state = $request->param_state;
+        $product->save();    //
         $data[] = $product;
         if ($data == null) {
             return OS::frontendResponse('404', 'error',  $data, $msg = 'Producto no creado.');
@@ -137,17 +125,8 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
-    {
-        if ($request->hasFile('images')) {
-            $imginput = $request->file('images');
-            $imgExtension = $imginput->getClientOriginalExtension();
-            // Generar un nombre único para el archivo
-            $uniqueFileName = uniqid('imagen_') . '.' . $imgExtension;
-            // Mover el archivo al directorio de destino con el nombre único
-            $imginput->move(public_path('img/products'), $uniqueFileName);
-        //     // Ahora, $uniqueFileName contiene el nombre único del archivo
-        }
+    public function update( Request $request, Product $product){
+
         $product->provider_id = $request->provider_id;
         $product->reference = $request->reference;
         $product->name = $request->name;
@@ -156,12 +135,12 @@ class ProductController extends Controller
         $product->price = $request->price;
         $product->discount = $request->discount;
         $product->tax = $request->tax;
-        $product->images ='img/products/' . $uniqueFileName;
-        $product->param_size  = $request->param_size;
-        $product->param_gender  = $request->param_gender;
-        $product->param_subcategory  = $request->param_subcategory;
-        $product->param_color   = $request->param_color;
-        $product->param_state  = $request->param_state;
+        $product->images = $request->images;
+        $product->param_size = $request->param_size;
+        $product->param_gender = $request->param_gender;
+        $product->param_subcategory = $request->param_subcategory;
+        $product->param_color = $request->param_color;
+        $product->param_state = $request->param_state;
         $product->save();    // save
         $data[] = $product;
         if ($data == null) {

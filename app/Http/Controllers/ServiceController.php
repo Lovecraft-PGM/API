@@ -13,20 +13,20 @@ class ServiceController extends Controller
     {
 
         $response = [
-            'status' => $status,
-            'type' => $type
+            "status" => $status,
+            "type" => $type
             
         ];
         if (!is_null($data))
-            $response['data'] = $data;
+            $response["data"] = $data;
             
-        if ($response['type'] == 'error') {
+        if ($response["type"] == "error") {
             if (!is_null($msg))
-                $response['error'] = ['message' => $msg];
+                $response["error"] = ["message" => $msg];
         }
-        if ($response['type'] == 'success') {
+        if ($response["type"] == "success") {
             if (!is_null($msg))
-            $response['success'] = ['message' => $msg];
+            $response["success"] = ["message" => $msg];
         }
         return response()->json($response);
     }
