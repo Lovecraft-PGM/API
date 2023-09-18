@@ -277,6 +277,45 @@ class OrderController extends Controller
         }
         
     
+
+        public function shoppingCardDelete(Order $order, Request $request)
+        {
+            $user_id = $request->user_id;
+            $product_ids = $request->input('product_ids', []); // Obtener un arreglo de IDs de productos
+        
+            // Buscar la orden existente para el usuario
+            $existingOrder = Order::where('user_id', $user_id)
+                ->where('param_status', 1701) // Ajusta el estado según tus necesidades
+                ->first();
+        
+            if (!$existingOrder) {
+                // Si no existe una orden para el usuario, puedes manejar este caso según tus necesidades.
+                return OS::frontendResponse('404', 'error', null, 'No se encontró la orden para el usuario.');
+            }
+        
+            foreach ($product_ids as $product_id) {
+                // Buscar el OrderDetail con el product_id en la orden actual
+                $existingOrderDetail = OrderDetail::where('o_id', $existingOrder->id)
+                    ->where('product_id', $product_id)
+                    ->first();
+        
+                if ($existingOrderDetail) {
+                    // Si existe, elimina el OrderDetail
+                    $existingOrderDetail->delete();
+                }
+            }
+        
+            // Puedes realizar un recálculo del total aquí si lo deseas.
+            // $totalValue = $existingOrder->orderDetails->sum('subtotal');
+            // $existingOrder->total = $totalValue;
+            // $existingOrder->save();
+        
+            return OS::frontendResponse('200', 'success', null, 'Productos eliminados de la orden exitosamente.');
+        }
+
+
+
+
     
 
     public function showOrders(Request $request)

@@ -39,6 +39,7 @@ Route::middleware('X_API_KEY')->group(function () {
     Route::post('showshopping',[OrderController::class,'showShopping']);
     Route::post('shoppingCardCreate', [OrderController::class, 'shoppingCardCreate']);
     Route::post('shoppingCardUpdate',[OrderController::class,'shoppingCardUpdate']);
+    Route::delete('shopping-card/delete', [OrderController::class, 'shoppingCardDelete']);
     //muestra la orden (es para flutter)
     Route::post('showorders', [OrderController::class, 'showOrders']);
     //recursos de todas los controladores 
