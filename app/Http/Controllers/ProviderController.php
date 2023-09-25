@@ -60,6 +60,16 @@ class ProviderController extends Controller
      */
     public function store(Request $request)
     {
+        // Verificar si ya existe un proveedor con el mismo correo electrónico o número de teléfono en la base de datos
+        $existingProvider = Provider::where('email', $request->email)
+                                    ->orWhere('phone', $request->phone)
+                                    ->first();
+    
+        if ($existingProvider) {
+            return OS::frontendResponse('400', 'error', null, 'El proveedor con este correo electrónico o número de teléfono ya existe.');
+        }
+    
+        // Si el proveedor no existe, crea un nuevo proveedor
         $provider = new Provider;
         $provider->legal_name = $request->legal_name;
         $provider->commercial_name = $request->commercial_name;
@@ -72,24 +82,17 @@ class ProviderController extends Controller
         $provider->param_account = $request->param_account;
         $provider->account = $request->account;
         $provider->param_state = $request->param_state;
-        $provider->save();    // save
-        $data[] = $provider;
-        if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, $msg = 'Proveedor no creado.');
-        } else {
-            return OS::frontendResponse('200', 'success', $data, $msg = 'Proveedor creado correctamente.');
-        }
+    
+        $provider->save();
+    
+        return OS::frontendResponse('200', 'success', $provider, 'Proveedor creado correctamente');
     }
-
     /**
      * Display the specified resource.
      */
     public function show(Provider $provider)
     {
-        $provider['param_city'] = $this->getParamName($provider->param_city);
-        $provider['param_bank'] = $this->getParamName($provider->param_bank);
-        $provider['param_account'] = $this->getParamName($provider->param_account);
-        $provider['param_state'] = $this->getParamName($provider->param_state);
+
         $data[] = $provider;
         if ($data == null) {
             return OS::frontendResponse('404', 'error',  $data, $msg = 'Proveedor no encontrado.' );

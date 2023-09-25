@@ -60,6 +60,14 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
+        // Verificar si el correo electrónico ya existe en la base de datos
+        $existingUser = User::where('email', $request->email)->first();
+    
+        if ($existingUser) {
+            return OS::frontendResponse('400', 'error', null, 'El correo electrónico ya está registrado.');
+        }
+    
+        // Si el correo electrónico no existe, crea un nuevo usuario
         $user = new User;
         $user->first_name = $request->first_name;
         $user->last_name = $request->last_name;
@@ -72,13 +80,10 @@ class UserController extends Controller
         $user->param_rol = $request->param_rol;
         $user->param_gender = $request->param_gender;
         $user->param_state = $request->param_state;
-        $user->save(); 
-        $data[] = $user;
-        if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, $msg = 'Usuario no creado.' );
-        }else{
-            return OS::frontendResponse('200','success', $data, $msg = 'Usuario creado correctamente.'); 
-        }
+    
+        $user->save();
+    
+        return OS::frontendResponse('200', 'success', $user, 'Usuario creado correctamente');
     }
 
     /**

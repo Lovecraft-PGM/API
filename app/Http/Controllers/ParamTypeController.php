@@ -43,25 +43,33 @@ class ParamTypeController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        $lastRangeMax = ParamType::max('range_max') + 1;
-        $lastId = ParamType::latest('id')->first()->id;
-        $newId = $lastId + 1;
+{
+    // Verificar si ya existe un tipo de parámetro con el mismo nombre en la base de datos
+    $existingParamType = ParamType::where('name', $request->name)->first();
 
-        $paramType = new ParamType;
-        $paramType->id = $newId;
-        $paramType->name = $request->name;
-        $paramType->range_min = $lastRangeMax;
-        $paramType->range_max = $lastRangeMax + $request->input('amount');
-        if ($paramType->save()) {
-            $data[] = $paramType;
-            return OS::frontendResponse('200', 'success', $data, $msg = 'Tipo de Parametro creado correctamente.');
-        } else {
-            $data[] = null;
-            return OS::frontendResponse('404', 'error',  $data, $msg = 'Tipo de Parametro no creado.');
-        }
+    if ($existingParamType) {
+        $data[] = null;
+        return OS::frontendResponse('400', 'error', $data, 'El tipo de parámetro con este nombre ya existe.');
     }
 
+    $lastRangeMax = ParamType::max('range_max') + 1;
+    $lastId = ParamType::latest('id')->first()->id;
+    $newId = $lastId + 1;
+
+    $paramType = new ParamType;
+    $paramType->id = $newId;
+    $paramType->name = $request->name;
+    $paramType->range_min = $lastRangeMax;
+    $paramType->range_max = $lastRangeMax + $request->input('amount');
+
+    if ($paramType->save()) {
+        $data[] = $paramType;
+        return OS::frontendResponse('200', 'success', $data, 'Tipo de Parametro creado correctamente.');
+    } else {
+        $data[] = null;
+        return OS::frontendResponse('404', 'error', $data, 'Tipo de Parametro no creado.');
+    }
+}
     /**
      * Display the specified resource.
      */
@@ -105,7 +113,7 @@ class ParamTypeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    /*public function destroy(ParamType $paramType){
+    public function destroy(ParamType $paramType){
         if ($paramType->param_state != 1652) {
             $paramType->param_state = 1652;
             $paramType->save();
@@ -114,5 +122,5 @@ class ParamTypeController extends Controller
         }else{
             return OS::frontendResponse('404', 'error', [],  $msg = 'El usuario ya se encuentra inactivo.');
         } 
-    }*/
+    }
 }

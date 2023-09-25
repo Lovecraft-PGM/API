@@ -76,7 +76,7 @@ class orderDetailController extends Controller
      */
     public function show(OrderDetail $orderDetail, $id)
     {
-        $orderDetail['param_state'] = $this->getParamName($orderDetail->param_state);
+       
         //$orderDetail = orderDetail::find(request('id'));
         $data = orderDetail::find($id);
         if (!empty($data)) {

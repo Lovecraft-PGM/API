@@ -176,29 +176,34 @@ class ParamController extends Controller
     }
 
     public function store(Request $request)
-    {
+{
+    $typeParam = ParamType::find($request->paramTypeId);
 
-        $typeParam = ParamType::find($request->paramTypeId);
-        $lastParamId = Param::where('Paramtype_id', $typeParam->id)->max('id');
-        $idParam = $lastParamId + 1;
-
-        if ($idParam >= $typeParam->range_min && $idParam <= $typeParam->range_max) {
-
-            $param = new Param;
-            $param->id = $idParam;
-            $param->paramtype_id = $typeParam->id;
-            $param->name = $request->name;
-            $param->param_foreign = $request->param_foreign;
-            $param->param_state = $request->param_state;
-            $param->save(); // save
-            $data[] = $param;
-
-            return OS::frontendResponse('200', 'success', $data, 'Parametro creado correctamente.');
-        } else {
-            return OS::frontendResponse('400', 'error', [], 'Parametro no creado correctamente(no hay espacio dentro de los parametros)');
-        }
+    if (!$typeParam) {
+        return OS::frontendResponse('400', 'error', [], 'Tipo de Parámetro no encontrado.');
     }
 
+    $lastParamId = Param::where('paramtype_id', $typeParam->id)->max('id');
+    $idParam = $lastParamId + 1;
+
+    if ($idParam >= $typeParam->range_min && $idParam <= $typeParam->range_max) {
+        $param = new Param;
+        $param->id = $idParam;
+        $param->paramtype_id = $typeParam->id;
+        $param->name = $request->name;
+        $param->param_foreign = $request->param_foreign;
+        $param->param_state = $request->param_state;
+
+        if ($param->save()) {
+            $data[] = $param;
+            return OS::frontendResponse('200', 'success', $data, 'Parámetro creado correctamente.');
+        } else {
+            return OS::frontendResponse('404', 'error', [], 'Parámetro no creado.');
+        }
+    } else {
+        return OS::frontendResponse('400', 'error', [], 'Parámetro no creado (no hay espacio dentro de los parámetros)');
+    }
+}
 
 
 
@@ -211,7 +216,7 @@ class ParamController extends Controller
      */
     public function show(Param $param)
     {
-        $param['param_state'] = $this->getParamName($param->param_state);
+    
         $data[] = $param;
         if ($data == null) {
             return OS::frontendResponse('404', 'error', $data, $msg = 'Parametro no encontrado.');

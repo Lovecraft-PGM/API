@@ -76,45 +76,42 @@ class ProductController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        $product = new Product;
+{
+    // Verificar si ya existe un producto con el mismo nombre y referencia en la base de datos
+    $existingProduct = Product::where('name', $request->name)
+                                ->where('reference', $request->reference)
+                                ->first();
 
-        $product->provider_id = $request->provider_id;
-        $product->reference = $request->reference;
-        $product->name = $request->name;
-        $product->description = $request->description;
-        $product->stock = $request->stock;
-        $product->price = $request->price;
-        $product->discount = $request->discount;
-        $product->tax = $request->tax;
-        $product->images = $request->images;
-        $product->param_size = $request->param_size;
-        $product->param_gender = $request->param_gender;
-        $product->param_subcategory = $request->param_subcategory;
-        $product->param_color = $request->param_color;
-        $product->param_state = $request->param_state;
-        $product->save();    //
-        $data[] = $product;
-        if ($data == null) {
-            return OS::frontendResponse('404', 'error',  $data, $msg = 'Producto no creado.');
-        } else {
-            return OS::frontendResponse('200', 'success', $data, $msg = 'Producto creado correctamente.');
-        }
+    if ($existingProduct) {
+        return OS::frontendResponse('400', 'error', null, 'El producto con este nombre y referencia ya existe.');
     }
 
+    // Si el producto no existe, crea un nuevo producto
+    $product = new Product;
+    $product->provider_id = $request->provider_id;
+    $product->reference = $request->reference;
+    $product->name = $request->name;
+    $product->description = $request->description;
+    $product->stock = $request->stock;
+    $product->price = $request->price;
+    $product->discount = $request->discount;
+    $product->tax = $request->tax;
+    $product->images = $request->images;
+    $product->param_size = $request->param_size;
+    $product->param_gender = $request->param_gender;
+    $product->param_subcategory = $request->param_subcategory;
+    $product->param_color = $request->param_color;
+    $product->param_state = $request->param_state;
+
+    $product->save();
+
+    return OS::frontendResponse('200', 'success', $product, 'Producto creado correctamente');
+}
     /**
      * Display the specified resource.
      */
     public function show(Product $product)
     {
-        $product['provider_id'] = $this->getProviderName($product->provider_id);
-        $product['param_size'] = $this->getParamName($product->param_size);
-        $product['param_gender'] = $this->getParamName($product->param_gender);
-        $product['param_mark'] = $this->getParamName($product->param_mark);
-        $product['param_subcategory'] = $this->getParamName($product->param_subcategory);
-        $product['param_color'] = $this->getParamName($product->param_color);
-        $product['param_state'] = $this->getParamName($product->param_state);
-
         $data[] = $product;
         if ($data == null) {
             return OS::frontendResponse('404', 'error',  [], $msg = 'Producto no encontrado.');

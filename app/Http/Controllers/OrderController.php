@@ -157,7 +157,7 @@ class OrderController extends Controller
 
     // Crear una nueva orden si no existe una orden existente para el usuario
     $existingOrder = Order::where('user_id', $user_id)
-        ->where('param_status', 1701) // Ajusta el estado según tus necesidades
+        ->where('param_status', 1704) // Ajusta el estado según tus necesidades
         ->first();
 
     if (!$existingOrder) {
@@ -208,18 +208,44 @@ class OrderController extends Controller
     return OS::frontendResponse('200', 'success', $data, 'Detalles de orden creados o actualizados.');
 }
 
-    
-    
 
-    public function shoppingCardUpdate(Order $order)
+    public function shoppingCardBuy(Order $order)
     {
-        if ($order->param_status = 1701) {
+        if ($order->param_status == 1704) {
             $order->param_state = 1700;
             $order->save();
-            $data[] = $order;
-            return OS::frontendResponse('200', 'success', $data, $msg = 'La orden se ha desactivado correctamente.');
+        
+            // Busca todos los detalles del pedido relacionados con este pedido
+            $orderDetails = OrderDetail::where('order_id', $order->id)->get();
+        
+            $purchaseSuccessful = true; // Variable para verificar si la compra es exitosa
+        
+            foreach ($orderDetails as $orderDetail) {
+                // Busca el producto relacionado con el orderDetail
+                $product = Product::find($orderDetail->product_id);
+        
+                if ($product) {
+                    // Verifica si la cantidad a restar es menor o igual al stock disponible
+                    if ($orderDetail->qty <= $product->stock) {
+                        // Resta la cantidad del orderDetail al stock del producto
+                        $product->stock -= $orderDetail->qty;
+                        $product->save();
+                    } else {
+                        // Si la cantidad a restar es mayor que el stock, la compra no es exitosa
+                        $purchaseSuccessful = false;
+                        break; // Sale del bucle
+                    }
+                }
+            }
+        
+            if ($purchaseSuccessful) {
+                $data[] = $order;
+                return OS::frontendResponse('200', 'success', $data, 'Compra realizada');
+            } else {
+                return OS::frontendResponse('404', 'error', [], 'No se puede comprar, no hay suficiente stock.');
+            }
         } else {
-            return OS::frontendResponse('404', 'error', [], $msg = 'La orden ya se encuentra inactiva.');
+            return OS::frontendResponse('404', 'error', [], 'No se pudo realizar la compra');
         }
     }
 
@@ -230,7 +256,7 @@ class OrderController extends Controller
         
             // Buscar todas las órdenes del usuario que coinciden con el param_status igual a 1701
             $orders = $order->where('user_id', $userId)
-                            ->where('param_status', 1701)
+                            ->where('param_status', 1704)
                             ->get();
         
             if ($orders->isEmpty()) {
@@ -285,7 +311,7 @@ class OrderController extends Controller
         
             // Buscar la orden existente para el usuario
             $existingOrder = Order::where('user_id', $user_id)
-                ->where('param_status', 1701) // Ajusta el estado según tus necesidades
+                ->where('param_status', 1704) // Ajusta el estado según tus necesidades
                 ->first();
         
             if (!$existingOrder) {
@@ -317,46 +343,44 @@ class OrderController extends Controller
 
 
     
-
-    public function showOrders(Request $request)
-    { 
-        // Obtener el código del Request
-        $code = $request->input("code");
+        public function showOrders(Request $request)
+        { 
+            // Obtener el código del Request
+            $code = $request->input("code");
+        
+           
+            // Buscar todas las órdenes cuyo código coincide con el código proporcionado
+            $orders = Order::where("code", $code)->get();
+           
+            if ($orders->isEmpty()) {
+                // Si no se encuentra ninguna coincidencia, retornar un mensaje de error
+                return OS::frontendResponse("404", "error", [], "Orden no encontrada.");
+            }
+        
+            // Inicializar una variable para almacenar el estado de la orden encontrada
+            $paramStatus = null;
+        
+            // Recorrer todas las órdenes para encontrar el estado de la orden
+            foreach ($orders as $order) {
+                $statusId = $order->param_status;
+                $paramStatus = Order::find($statusId);
+        
     
-       
-        // Buscar todas las órdenes cuyo código coincide con el código proporcionado
-        $orders = Order::where("code", $code)->get();
-       
-        if ($orders->isEmpty()) {
-            // Si no se encuentra ninguna coincidencia, retornar un mensaje de error
-            return OS::frontendResponse("404", "error", [], "Orden no encontrada.");
-        }
+                if ($paramStatus) {
+                    // Si se encuentra el estado de la orden, salir del bucle
+                    break;
+                }
+            }
+            $data[]=$statusId;
     
-        // Inicializar una variable para almacenar el estado de la orden encontrada
-        $paramStatus = null;
-    
-        // Recorrer todas las órdenes para encontrar el estado de la orden
-        foreach ($orders as $order) {
-            $statusId = $order->param_status;
-            $paramStatus = Order::find($statusId);
-    
-
-            if ($paramStatus) {
-                // Si se encuentra el estado de la orden, salir del bucle
-                break;
+            if ($statusId) {
+                // Si se encuentra el ParamStatus, retornar como respuesta
+                return OS::frontendResponse("200", "success", $data, "Estado de la orden encontrado correctamente.");
+            } else {
+                // Si no se encuentra el ParamStatus, retornar un mensaje de error
+                return OS::frontendResponse("404", "error", [], "ParamStatus no encontrado.");
             }
         }
-        $data[]=$statusId;
-
-        if ($statusId) {
-            // Si se encuentra el ParamStatus, retornar como respuesta
-            return OS::frontendResponse("200", "success", $data, "Estado de la orden encontrado correctamente.");
-        } else {
-            // Si no se encuentra el ParamStatus, retornar un mensaje de error
-            return OS::frontendResponse("404", "error", [], "ParamStatus no encontrado.");
-        }
-    }
-    
     
     
 }
