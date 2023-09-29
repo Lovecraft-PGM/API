@@ -9,6 +9,7 @@ use App\Models\Order;
 use App\Models\Param;
 use App\Models\OrderDetail;
 use App\Models\Product;
+use Illuminate\Support\Str;
 
 class OrderController extends Controller
 {
@@ -76,7 +77,7 @@ class OrderController extends Controller
     /**
      * Display the specified resource.
      */
-    
+
     public function show(Order $order)
     {
         $order['param_paymethod'] = $this->getParamName($order->param_paymethod);
@@ -161,9 +162,11 @@ class OrderController extends Controller
         ->first();
 
     if (!$existingOrder) {
+        // Generar un código único para la orden
+        $code = 'ORD' . Str::random(8); // Genera una cadena aleatoria de 8 caracteres
         $newOrder = new Order();
         $newOrder->user_id = $user_id;
-        $newOrder->code = $request->code;
+        $newOrder->code = $code; // Asigna el código generado
         $newOrder->date = $request->date;
         $newOrder->total = $request->total;
         $newOrder->param_paymethod = $request->param_paymethod;
@@ -199,188 +202,197 @@ class OrderController extends Controller
         }
     }
 
-    //puede servir despues: 
+
+//puede servir despues: 
     // Recalcula el total sumando los subtotales de todos los detalles de orden
     // $totalValue = $newOrder->orderDetails->sum('subtotal');
     // $newOrder->total = $totalValue;
     // $newOrder->save();
 
-    return OS::frontendResponse('200', 'success', $data, 'Detalles de orden creados o actualizados.');
+    // Resto del código para agregar detalles de la orden...
+
+    return OS::frontendResponse('200', 'success', $data, 'Detalles de orden creados o actualizados. Código de orden: ' . $newOrder->code);
 }
 
+public function shoppingCardBuy(Request $request)
+{
+    $request->validate([
+        'order_id' => 'required|integer',
+    ]);
 
-    public function shoppingCardBuy(Order $order)
-    {
-        if ($order->param_status == 1704) {
-            $order->param_state = 1700;
-            $order->save();
-        
-            // Busca todos los detalles del pedido relacionados con este pedido
-            $orderDetails = OrderDetail::where('order_id', $order->id)->get();
-        
-            $purchaseSuccessful = true; // Variable para verificar si la compra es exitosa
-        
-            foreach ($orderDetails as $orderDetail) {
-                // Busca el producto relacionado con el orderDetail
-                $product = Product::find($orderDetail->product_id);
-        
-                if ($product) {
-                    // Verifica si la cantidad a restar es menor o igual al stock disponible
-                    if ($orderDetail->qty <= $product->stock) {
-                        // Resta la cantidad del orderDetail al stock del producto
-                        $product->stock -= $orderDetail->qty;
-                        $product->save();
-                    } else {
-                        // Si la cantidad a restar es mayor que el stock, la compra no es exitosa
-                        $purchaseSuccessful = false;
-                        break; // Sale del bucle
-                    }
-                }
-            }
-        
-            if ($purchaseSuccessful) {
-                $data[] = $order;
-                return OS::frontendResponse('200', 'success', $data, 'Compra realizada');
+    $order_id = $request->json('order_id');
+
+    $order = Order::find($order_id);
+
+    if (!$order) {
+        return OS::frontendResponse('404', 'error', null, 'Orden no encontrada');
+    }
+
+    // Actualiza el valor de param_status a 1700
+    $order->param_status = 1700;
+    $order->save();
+
+    $orderDetails = OrderDetail::where('order_id', $order->id)->get();
+
+    $purchaseSuccessful = true;
+
+    foreach ($orderDetails as $orderDetail) {
+        $product = Product::find($orderDetail->product_id);
+
+        if ($product) {
+            if ($orderDetail->qty <= $product->stock) {
+                $product->stock -= $orderDetail->qty;
+                $product->save();
             } else {
-                return OS::frontendResponse('404', 'error', [], 'No se puede comprar, no hay suficiente stock.');
+                $purchaseSuccessful = false;
+                break;
             }
-        } else {
-            return OS::frontendResponse('404', 'error', [], 'No se pudo realizar la compra');
         }
     }
 
-    public function showshopping(Request $request, Order $order, OrderDetail $orderDetail){
-        
-            // Obtener el ID del usuario de la solicitud
-            $userId = $request->user_id;
-        
-            // Buscar todas las órdenes del usuario que coinciden con el param_status igual a 1701
-            $orders = $order->where('user_id', $userId)
-                            ->where('param_status', 1704)
-                            ->get();
-        
-            if ($orders->isEmpty()) {
-                // Si no se encuentran órdenes que cumplan con los criterios, devuelve un mensaje de error
-                return OS::frontendResponse('404', 'error', null, 'El usuario no tiene órdenes con estado 1701.');
-            }
-        
-            $totalQty = 0;      // Variable para la suma total de qty
-            $totalSubtotal = 0; // Variable para la suma total de subtotal
-        
-            $orderDetails = [];
-        
-            // Iterar a través de las órdenes encontradas
-            foreach ($orders as $order) {
-                // Obtener todas las OrderDetail asociadas a esa orden
-                $details = $orderDetail->where('o_id', $order->id)->get();
-        
-                // Verificar si el `o_id` coincide con el `product_id` y obtener el producto correspondiente
-                $products = [];
-                foreach ($details as $detail) {
-                    $product = Product::find($detail->product_id);
-                    if ($product) {
-                        $products[] = $product;
-                    }
-                    $totalQty += $detail->qty;
-                    $totalSubtotal += $detail->subtotal;
+    if ($purchaseSuccessful) {
+        $data[] = $order;
+        return OS::frontendResponse('200', 'success', $data, 'Compra realizada');
+    } else {
+        return OS::frontendResponse('404', 'error', null, 'No se puede comprar, no hay suficiente stock.');
+    }
+}
+
+
+    public function showshopping(Request $request, Order $order, OrderDetail $orderDetail)
+    {
+
+        // Obtener el ID del usuario de la solicitud
+        $userId = $request->user_id;
+
+        // Buscar todas las órdenes del usuario que coinciden con el param_status igual a 1701
+        $orders = $order->where('user_id', $userId)
+            ->where('param_status', 1704)
+            ->get();
+
+        if ($orders->isEmpty()) {
+            // Si no se encuentran órdenes que cumplan con los criterios, devuelve un mensaje de error
+            return OS::frontendResponse('404', 'error', null, 'El usuario no tiene órdenes con estado 1701.');
+        }
+
+        $totalQty = 0;      // Variable para la suma total de qty
+        $totalSubtotal = 0; // Variable para la suma total de subtotal
+
+        $orderDetails = [];
+
+        // Iterar a través de las órdenes encontradas
+        foreach ($orders as $order) {
+            // Obtener todas las OrderDetail asociadas a esa orden
+            $details = $orderDetail->where('o_id', $order->id)->get();
+
+            // Verificar si el `o_id` coincide con el `product_id` y obtener el producto correspondiente
+            $products = [];
+            foreach ($details as $detail) {
+                $product = Product::find($detail->product_id);
+                if ($product) {
+                    $products[] = $product;
                 }
-        
-                // Agregar los detalles de la orden y los productos al arreglo
-                $orderDetails[] = [
-                    'details' => $details,
-                    'products' => $products,
-                ];
+                $totalQty += $detail->qty;
+                $totalSubtotal += $detail->subtotal;
             }
-        
-            // Devolver la respuesta con los detalles de las órdenes encontradas, el total de qty y el total de subtotal
-            $response = [
-                'orderDetails' => $orderDetails,
-                'totalQty' => $totalQty,
-                'totalSubtotal' => $totalSubtotal,
+
+            // Agregar los detalles de la orden y los productos al arreglo
+            $orderDetails[] = [
+                'details' => $details,
+                'products' => $products,
             ];
-        
-            return OS::frontendResponse('200', 'success', $response, 'Detalles de las órdenes con estado 1701 y totales.');
         }
-        
-    
 
-        public function shoppingCardDelete(Order $order, Request $request)
-        {
-            $user_id = $request->user_id;
-            $product_ids = $request->input('product_ids', []); // Obtener un arreglo de IDs de productos
-        
-            // Buscar la orden existente para el usuario
-            $existingOrder = Order::where('user_id', $user_id)
-                ->where('param_status', 1704) // Ajusta el estado según tus necesidades
+        // Devolver la respuesta con los detalles de las órdenes encontradas, el total de qty y el total de subtotal
+        $response = [
+            'orderDetails' => $orderDetails,
+            'totalQty' => $totalQty,
+            'totalSubtotal' => $totalSubtotal,
+        ];
+
+        return OS::frontendResponse('200', 'success', $response, 'Detalles de las órdenes con estado 1704 y totales.');
+    }
+
+
+
+    public function shoppingCardDelete(Order $order, Request $request)
+    {
+        $user_id = $request->user_id;
+        $order_detail_ids = $request->input('order_detail_ids', []); // Obtener un arreglo de IDs de OrderDetail
+    
+        // Buscar la orden existente para el usuario con el estado 1704
+        $existingOrder = Order::where('user_id', $user_id)
+            ->where('param_status', 1704)
+            ->first();
+    
+        if (!$existingOrder) {
+            return OS::frontendResponse('404', 'error', null, 'No se encontró la orden para el usuario.');
+        }
+    
+        $deletedOrderDetailIds = [];
+    
+        foreach ($order_detail_ids as $order_detail_id) {
+            // Buscar el OrderDetail por su ID en la orden actual
+            $existingOrderDetail = OrderDetail::where('o_id', $existingOrder->id)
+                ->where('id', $order_detail_id)
                 ->first();
-        
-            if (!$existingOrder) {
-                // Si no existe una orden para el usuario, puedes manejar este caso según tus necesidades.
-                return OS::frontendResponse('404', 'error', null, 'No se encontró la orden para el usuario.');
-            }
-        
-            foreach ($product_ids as $product_id) {
-                // Buscar el OrderDetail con el product_id en la orden actual
-                $existingOrderDetail = OrderDetail::where('o_id', $existingOrder->id)
-                    ->where('product_id', $product_id)
-                    ->first();
-        
-                if ($existingOrderDetail) {
-                    // Si existe, elimina el OrderDetail
-                    $existingOrderDetail->delete();
-                }
-            }
-        
-            // Puedes realizar un recálculo del total aquí si lo deseas.
-            // $totalValue = $existingOrder->orderDetails->sum('subtotal');
-            // $existingOrder->total = $totalValue;
-            // $existingOrder->save();
-        
-            return OS::frontendResponse('200', 'success', null, 'Productos eliminados de la orden exitosamente.');
-        }
-
-
-
-
     
-        public function showOrders(Request $request)
-        { 
-            // Obtener el código del Request
-            $code = $request->input("code");
-        
-           
-            // Buscar todas las órdenes cuyo código coincide con el código proporcionado
-            $orders = Order::where("code", $code)->get();
-           
-            if ($orders->isEmpty()) {
-                // Si no se encuentra ninguna coincidencia, retornar un mensaje de error
-                return OS::frontendResponse("404", "error", [], "Orden no encontrada.");
-            }
-        
-            // Inicializar una variable para almacenar el estado de la orden encontrada
-            $paramStatus = null;
-        
-            // Recorrer todas las órdenes para encontrar el estado de la orden
-            foreach ($orders as $order) {
-                $statusId = $order->param_status;
-                $paramStatus = Order::find($statusId);
-        
-    
-                if ($paramStatus) {
-                    // Si se encuentra el estado de la orden, salir del bucle
-                    break;
-                }
-            }
-            $data[]=$statusId;
-    
-            if ($statusId) {
-                // Si se encuentra el ParamStatus, retornar como respuesta
-                return OS::frontendResponse("200", "success", $data, "Estado de la orden encontrado correctamente.");
-            } else {
-                // Si no se encuentra el ParamStatus, retornar un mensaje de error
-                return OS::frontendResponse("404", "error", [], "ParamStatus no encontrado.");
+            if ($existingOrderDetail) {
+                // Eliminar el OrderDetail
+                $existingOrderDetail->delete();
+                $deletedOrderDetailIds[] = $order_detail_id;
             }
         }
     
-    
+        if (!empty($deletedOrderDetailIds)) {
+            // Al menos un OrderDetail fue eliminado con éxito
+            return OS::frontendResponse('200', 'success', ['deleted_order_detail_ids' => $deletedOrderDetailIds], 'OrderDetail eliminados de la orden exitosamente.');
+        } else {
+            // Ningún OrderDetail pudo ser eliminado
+            return OS::frontendResponse('500', 'error', null, 'Ningún OrderDetail pudo ser eliminado de la orden.');
+        }
+    }
+
+
+
+
+
+    public function showOrders(Request $request)
+    {
+        // Obtener el código del Request
+        $code = $request->input("code");
+
+
+        // Buscar todas las órdenes cuyo código coincide con el código proporcionado
+        $orders = Order::where("code", $code)->get();
+
+        if ($orders->isEmpty()) {
+            // Si no se encuentra ninguna coincidencia, retornar un mensaje de error
+            return OS::frontendResponse("404", "error", [], "Orden no encontrada.");
+        }
+
+        // Inicializar una variable para almacenar el estado de la orden encontrada
+        $paramStatus = null;
+
+        // Recorrer todas las órdenes para encontrar el estado de la orden
+        foreach ($orders as $order) {
+            $statusId = $order->param_status;
+            $paramStatus = Order::find($statusId);
+
+
+            if ($paramStatus) {
+                // Si se encuentra el estado de la orden, salir del bucle
+                break;
+            }
+        }
+        $data[] = $statusId;
+
+        if ($statusId) {
+            // Si se encuentra el ParamStatus, retornar como respuesta
+            return OS::frontendResponse("200", "success", $data, "Estado de la orden encontrado correctamente.");
+        } else {
+            // Si no se encuentra el ParamStatus, retornar un mensaje de error
+            return OS::frontendResponse("404", "error", [], "ParamStatus no encontrado.");
+        }
+    }
 }

@@ -44,31 +44,40 @@ class AuthController extends Controller
     {
         $request->validate([
             'first_name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
+            'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:8',
         ]);
-
-        $user = User::create([
-            'first_name' => $request->first_name,
-            "last_name" => $request->last_name,
-            "birthday" => $request->birthday,
-            "address"=> $request->address,
-            'email' => $request->email,
-            "param_city" => $request->param_city,
-            "param_rol" => $request->param_rol,
-            "param_state" => $request->param_state,
-            "image" => $request->image,
-            "gender" => $request->gender,
-            "type_user" => $request->type_user,
-            'password' => Hash::make($request->password),
-        ]);
-
-        return response()->json([
-            'message' => 'User created successfully',
-            'user' => $user
-        ]);
+    
+        // Verifica si ya existe un usuario con el mismo correo electrónico
+        $existingUser = User::where('email', $request->email)->first();
+    
+        if ($existingUser) {
+            return response()->json([
+                'message' => 'El usuario ya existe',
+                'user' => $existingUser
+            ], 422); // Devuelve un código de estado 422 (Unprocessable Entity) para indicar un error de validación
+        }else{
+            $user = User::create([
+                'first_name' => $request->first_name,
+                "last_name" => $request->last_name,
+                "birthday" => $request->birthday,
+                "address" => $request->address,
+                'email' => $request->email,
+                "param_city" => $request->param_city,
+                "param_rol" => $request->param_rol,
+                "param_state" => $request->param_state,
+                "image" => $request->image,
+                "gender" => $request->gender,
+                "type_user" => $request->type_user,
+                'password' => Hash::make($request->password),
+            ]);
+        
+            return response()->json([
+                'message' => 'Usuario creado exitosamente',
+                'user' => $user
+            ]);
+        }
     }
-
     public function logout()
     {
         Auth::logout();
