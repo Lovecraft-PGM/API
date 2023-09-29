@@ -1,19 +1,43 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Controllers\ServiceController as OS;
 use Illuminate\Http\Request;
 use App\Models\Rating;
+use App\Models\Param;
 
 class RatingController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
+     private function getParamName($paramId)
+     {
+         $param = Param::find($paramId);
+ 
+         return $param ? $param->name : null;
+     }
+ 
     public function index()
     {
-        $rating = Rating ::all() ; 
-        return response()->json($rating) ;
+        
+        $ratings = Rating::all()->sortBy('id');
+        
+        foreach ($ratings as $rating){
+            $rating['user_id'] = $rating->user_id;
+            $rating['product_id'] = $rating->product_id;
+            $rating['starts'] = $rating->starts;
+            $rating['comments'] = $rating->comments;
+            $rating['param_state'] = $this->getParamName($rating->param_state);
+            $data[] = $rating;
+    }
+    if (count($ratings) == null) {
+        $data = $ratings;
+        return OS::frontendResponse('404', 'error',  $data, $msg = 'Calificaiones encontradas.' );
+    }else{
+        return OS::frontendResponse('200','success', $data, $msg = 'Calificaiones encontradas.'); 
+    }
+
     }
 
     /**
@@ -34,13 +58,14 @@ class RatingController extends Controller
         $rating->product_id = $request ->product_id ;
         $rating->starts= $request-> starts  ;
         $rating->comments= $request-> comments  ;
-        $rating->param_state= $request-> addrparam_stateess  ;
-        $rating-> save ();    // save
-        $data=[
-          'message' => 'Orderdetail created successfully',
-          'orderdetail' => $rating,
-        ];
-        return response()->json($data);
+        $rating->param_state= $request-> param_state  ;
+        $rating->save(); 
+        $data[] = $rating;
+        if ($data == null) {
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Calificaión no creada.' );
+        }else{
+            return OS::frontendResponse('200','success', $data, $msg = 'Calificaión creada correctamente.'); 
+        }
     }
 
     /**
@@ -48,7 +73,12 @@ class RatingController extends Controller
      */
     public function show(Rating $rating)
     {
-        return response()->json($rating);
+        $data[] = $rating;
+        if ($data == null) {
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Calificaión no encontrado.' );
+        }else{
+            return OS::frontendResponse('200','success', $data, $msg = 'Calificaión encontrado.'); 
+        }
     }
 
     /**
@@ -68,13 +98,14 @@ class RatingController extends Controller
         $rating->product_id = $request ->product_id ;
         $rating->starts= $request-> starts  ;
         $rating->comments= $request-> comments  ;
-        $rating->param_state= $request-> addrparam_stateess  ;
+        $rating->param_state= $request-> param_state  ;
         $rating-> save ();    // save
-        $data=[
-          'message' => 'Orderdetail update successfully',
-          'orderdetail' => $rating,
-        ];
-        return response()->json($data);
+        $data[]= $rating;
+        if ($data == null) {
+            return OS::frontendResponse('404', 'error',  $data, $msg = 'Calificaión no actualizado.' );
+        }else{
+            return OS::frontendResponse('200','success', $data, $msg = 'Calificaión actualizado correctamente.'); 
+        }
     }
 
     /**
@@ -82,11 +113,13 @@ class RatingController extends Controller
      */
     public function destroy(Rating $rating)
     {
-        $rating->delete();
-        $data = [
-            'message' => 'orders deleted successfully',
-            'order' => $rating
-        ];
-        return response()->json($rating);
+        if ($rating->param_state != 1652) {
+            $rating->param_state = 1652;
+            $rating->save();
+            $data[] = $rating;
+            return OS::frontendResponse('200', 'success', $data, $msg = 'La calificaión se ha desactivado correctamente.');
+        }else{
+            return OS::frontendResponse('404', 'error', [], $msg = 'La calificaión ya se encuentra inactiva.');
+        }
     }
 }

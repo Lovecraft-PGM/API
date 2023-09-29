@@ -10,16 +10,15 @@ class Param extends Model
     use HasFactory;
 
     protected $fillable = [
-
         "paramtype_id",
         "name",
-        "param_foreing",
+        "param_foreign",
         "param_state",
-        
+
     ];
 
     public function param (){
         return $this->belongsToMany(Param::class);
     }
-    
+
 }
